@@ -1,0 +1,88 @@
+---
+title: "Reproducible Research Practices"
+subtitle: "Day 1 | WISE Workshop"
+author: "Sean Sylvia"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    preview-links: auto
+---
+
+## Why Reproducibility Matters
+
+- Science requires verification
+- Your future self will thank you
+- Collaboration becomes possible
+- Errors are easier to find
+
+---
+
+## The Reproducibility Crisis
+
+> "More than 70% of researchers have tried and failed to reproduce another scientist's experiments."
+>
+> — Nature Survey, 2016
+
+---
+
+## What Makes Research Reproducible?
+
+1. **Code** - All analysis steps documented
+2. **Data** - Raw data preserved and accessible
+3. **Environment** - Software versions recorded
+4. **Documentation** - Clear explanations
+
+---
+
+## Project Structure
+
+```
+my-project/
+├── data/
+│   ├── raw/           # Never modify
+│   └── processed/     # Derived data
+├── notebooks/         # Analysis notebooks
+├── src/               # Reusable code
+├── outputs/           # Results, figures
+├── README.md          # Project overview
+└── requirements.txt   # Dependencies
+```
+
+---
+
+## Version Control with Git
+
+- Track changes over time
+- Collaborate without conflicts
+- Revert mistakes easily
+- Document your reasoning
+
+---
+
+## Google Colab for Reproducibility
+
+**Advantages:**
+
+- Consistent environment
+- Easy sharing
+- No setup required
+- Free compute resources
+
+---
+
+## Best Practices
+
+1. **Never modify raw data**
+2. **Document everything**
+3. **Use relative paths**
+4. **Record package versions**
+5. **Write code for humans**
+
+---
+
+## Hands-on: Setting Up Your Project
+
+Let's create a reproducible project structure together.
+
+[Open Notebook](notebook-setup.qmd){.btn .btn-primary}

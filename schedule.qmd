@@ -1,0 +1,94 @@
+---
+title: "Workshop Schedule"
+subtitle: "February 2-7, 2026 | Addis Ababa University"
+---
+
+## Day 1: Foundations & Reproducible Research {#day1}
+**Monday, February 2, 2026** | Lead: Joint (Ozawa & Sylvia)
+
+| Time | Session | Materials |
+|------|---------|-----------|
+| 8:30-9:30 | Registration, Welcome, Introductions | |
+| 9:30-10:30 | Fundamentals of Data Science | |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | **Reproducible Research Practices** | [Slides](day-1/slides-repro.qmd) |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-3:00 | Data Science in Public Health Policy | |
+| 3:00-3:20 | *Break* | |
+| 3:20-5:00 | **Hands-on: Setting Up Your Project** | [Notebook](day-1/notebook-setup.qmd) |
+
+: {.striped .hover}
+
+---
+
+## Day 2: Machine Learning Pipeline {#day2}
+**Tuesday, February 3, 2026** | Lead: **Sylvia**
+
+| Time | Session | Materials |
+|------|---------|-----------|
+| 8:30-10:30 | **Introduction to Machine Learning** | [Slides](day-2/slides-ml-intro.qmd) |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | **Families of ML Algorithms** | [Slides](day-2/slides-ml-algorithms.qmd) |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-3:00 | **Hands-on: Demand Forecasting with ML** | [Notebook](day-2/notebook-forecasting.qmd) |
+| 3:00-3:20 | *Break* | |
+| 3:20-5:00 | **Hands-on: Model Selection & Tuning** | [Notebook](day-2/notebook-tuning.qmd) |
+
+: {.striped .hover}
+
+---
+
+## Day 3: Modeling Concepts & Integration {#day3}
+**Wednesday, February 4, 2026** | Lead: Joint (Ozawa & Sylvia)
+
+| Time | Session | Materials |
+|------|---------|-----------|
+| 8:30-10:30 | **Modeling Concepts** (SD vs ABM) | [Slides](day-3/slides-modeling.qmd) |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | **Integration: ML Predictions to Simulation** | |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-3:00 | Supply Chain Simulation Foundations | |
+| 3:00-3:20 | *Break* | |
+| 3:20-5:00 | **Hands-on: Introduction to ABM** | [Notebook](day-3/notebook-integration.qmd) |
+
+: {.striped .hover}
+
+---
+
+## Day 4: ABM Deep Dive {#day4}
+**Thursday, February 5, 2026** | Lead: **Ozawa**
+
+| Time | Session | Materials |
+|------|---------|-----------|
+| 8:30-10:30 | Agent-Based Modeling for Supply Chains | |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | ABM Implementation | |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-5:00 | Cultural Exchange / Sightseeing | |
+
+: {.striped .hover}
+
+---
+
+## Days 5-6: HTA & Economic Evaluation {#day5-6}
+**Friday-Saturday, February 6-7, 2026** | Lead: **Dr. Gebretekle**
+
+*Schedule to be provided by Dr. Gebretekle*
+
+---
+
+## Daily Format
+
+- **Morning sessions**: 8:30 AM - 12:30 PM
+- **Lunch break**: 12:30 PM - 1:30 PM
+- **Afternoon sessions**: 1:30 PM - 5:00 PM
+- **Coffee breaks**: 20 minutes mid-morning and mid-afternoon
+
+## Preparation Checklist
+
+Before the workshop, please:
+
+- [ ] Create a Google account (for Google Colab access)
+- [ ] Complete the [Computing Setup](computing.qmd) guide
+- [ ] Review the [pre-workshop readings](resources/readings.qmd)
+- [ ] Bring your laptop (fully charged)

@@ -1,0 +1,77 @@
+---
+title: "Datasets"
+subtitle: "Workshop Data Resources"
+---
+
+## Supply Chain Dataset
+
+The primary dataset for hands-on exercises simulates pharmaceutical supply chain data in Ethiopia.
+
+### Description
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `facility_id` | string | Unique facility identifier |
+| `region` | string | Geographic region |
+| `facility_type` | categorical | Hospital, Health Center, Clinic |
+| `date` | date | Month of observation |
+| `medication_class` | categorical | Type of medication |
+| `demand` | numeric | Units demanded |
+| `stock_level` | numeric | Units in stock |
+| `orders_placed` | numeric | Units ordered |
+| `lead_time_days` | numeric | Days to delivery |
+
+### Data Dictionary
+
+Full data dictionary available in the [Google Drive](https://drive.google.com/drive/folders/FOLDER_ID).
+
+### Loading the Data
+
+In Google Colab:
+
+```python
+import pandas as pd
+
+# Option 1: From GitHub
+url = "https://raw.githubusercontent.com/ssylvia/ethiopia-ds-workshop-2026/main/data/supply-chain-sample.csv"
+df = pd.read_csv(url)
+
+# Option 2: From Google Drive (if connected)
+from google.colab import drive
+drive.mount('/content/drive')
+df = pd.read_csv('/content/drive/MyDrive/Addis Training/data/supply-chain.csv')
+```
+
+## Sample Data Preview
+
+```python
+df.head()
+```
+
+| facility_id | region | facility_type | date | medication_class | demand |
+|-------------|--------|---------------|------|------------------|--------|
+| ETH001 | Addis Ababa | Hospital | 2025-01 | Antibiotics | 450 |
+| ETH001 | Addis Ababa | Hospital | 2025-02 | Antibiotics | 520 |
+| ETH002 | Oromia | Health Center | 2025-01 | Antimalarials | 180 |
+
+## Data Characteristics
+
+- **Time range**: 2023-01 to 2025-12 (synthetic)
+- **Facilities**: ~50 facilities across 6 regions
+- **Medication classes**: 5 major categories
+- **Observations**: ~3,000 rows
+
+## Data Quality Notes
+
+- This is **synthetic data** created for educational purposes
+- Patterns are inspired by real-world supply chain dynamics
+- Missing values have been intentionally included for learning
+- No actual health data or PHI is included
+
+## Additional Datasets
+
+Additional datasets may be shared via Google Drive during the workshop:
+
+- ABM parameter files
+- Historical consumption patterns
+- Regional characteristics

@@ -1,0 +1,141 @@
+---
+title: "Computing Setup"
+subtitle: "Google Colab for Hands-on Exercises"
+---
+
+## Overview
+
+All hands-on exercises in this workshop use **Google Colab**, a free cloud-based Python environment. This means:
+
+- No software installation required
+- Works on any computer with a web browser
+- All packages are pre-installed
+- Your work is automatically saved to Google Drive
+
+## Getting Started
+
+### Step 1: Google Account
+
+You need a Google account to use Colab. If you don't have one:
+
+1. Go to [accounts.google.com](https://accounts.google.com)
+2. Click "Create account"
+3. Follow the setup instructions
+
+### Step 2: Access Google Colab
+
+1. Go to [colab.research.google.com](https://colab.research.google.com)
+2. Sign in with your Google account
+3. You should see the Colab welcome screen
+
+### Step 3: Test Your Setup
+
+Click the button below to open a test notebook:
+
+[![Open Test Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/00-test-setup.ipynb)
+
+Run all cells to verify your environment is working.
+
+## Workshop Notebooks
+
+During the workshop, you'll access notebooks via badges like this:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com)
+
+Each hands-on session page includes a Colab badge linking directly to that exercise.
+
+## Saving Your Work
+
+### Option 1: Save to Google Drive (Recommended)
+
+1. Click **File > Save a copy in Drive**
+2. Your copy is saved to "Colab Notebooks" in your Drive
+3. You can rename and organize as needed
+
+### Option 2: Download
+
+1. Click **File > Download > Download .ipynb**
+2. Save the file to your computer
+
+## Colab Basics
+
+### Running Code
+
+- **Run a cell**: Click the play button or press `Shift+Enter`
+- **Run all cells**: Click **Runtime > Run all**
+- **Stop execution**: Click **Runtime > Interrupt execution**
+
+### Adding Cells
+
+- **Code cell**: Click `+ Code`
+- **Text cell**: Click `+ Text`
+
+### Runtime
+
+Colab provides a free GPU/CPU runtime:
+
+- Sessions disconnect after ~90 minutes of inactivity
+- Maximum session length is ~12 hours
+- Your code is saved, but runtime state is lost on disconnect
+
+## Troubleshooting
+
+### "Notebook not found"
+
+- Check your internet connection
+- Make sure you're signed into Google
+- Try opening in a new incognito window
+
+### "Runtime disconnected"
+
+- This is normal after inactivity
+- Click **Reconnect** to get a new runtime
+- Re-run your code cells from the beginning
+
+### Slow performance
+
+- Check if you're using GPU: **Runtime > Change runtime type**
+- For ML exercises, select **T4 GPU**
+
+## Backup: Local Installation
+
+If Google Colab is unavailable, you can run notebooks locally:
+
+### Requirements
+
+- Python 3.9 or higher
+- pip package manager
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ssylvia/ethiopia-ds-workshop-2026.git
+cd ethiopia-ds-workshop-2026
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start Jupyter
+jupyter notebook
+```
+
+### Required Packages
+
+The main packages we'll use:
+
+- `pandas` - Data manipulation
+- `numpy` - Numerical computing
+- `scikit-learn` - Machine learning
+- `matplotlib` - Visualization
+- `seaborn` - Statistical visualization
+
+## Need Help?
+
+During the workshop, raise your hand and an instructor will assist you.
+
+Before the workshop, contact: [workshop-support@email.com]

@@ -1,0 +1,111 @@
+---
+title: "Hands-on: Model Selection & Tuning"
+subtitle: "Day 2 | Hyperparameters and Cross-Validation"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this exercise in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
+
+## Alternative: Download
+
+- [Download .ipynb file](../notebooks/03-model-tuning.ipynb)
+- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Implement k-fold cross-validation
+2. Tune hyperparameters using grid search
+3. Prevent overfitting with regularization
+4. Select the best model for deployment
+
+## Prerequisites
+
+Complete the [Demand Forecasting Notebook](notebook-forecasting.qmd) first.
+
+## Exercise Overview
+
+### Part 1: Cross-Validation (20 min)
+
+- Implement 5-fold cross-validation
+- Compare CV scores across models
+- Understand variance in performance
+
+### Part 2: Hyperparameter Tuning (30 min)
+
+- Define parameter grids
+- Run grid search with cross-validation
+- Analyze tuning results
+
+### Part 3: Model Comparison (20 min)
+
+- Compare tuned models
+- Evaluate on held-out test set
+- Make final model selection
+
+### Part 4: Feature Importance (20 min)
+
+- Extract feature importance from best model
+- Visualize top predictors
+- Discuss domain implications
+
+## Key Code Snippets
+
+### Cross-Validation
+
+```python
+from sklearn.model_selection import cross_val_score
+
+scores = cross_val_score(model, X_train, y_train, cv=5, scoring='neg_mean_squared_error')
+rmse_scores = (-scores) ** 0.5
+print(f"RMSE: {rmse_scores.mean():.2f} (+/- {rmse_scores.std():.2f})")
+```
+
+### Grid Search
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [5, 10, 20, None],
+    'min_samples_split': [2, 5, 10]
+}
+
+grid_search = GridSearchCV(
+    RandomForestRegressor(random_state=42),
+    param_grid,
+    cv=5,
+    scoring='neg_mean_squared_error',
+    n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+
+print(f"Best parameters: {grid_search.best_params_}")
+```
+
+### Feature Importance
+
+```python
+import pandas as pd
+
+feature_importance = pd.DataFrame({
+    'feature': X_train.columns,
+    'importance': best_model.feature_importances_
+}).sort_values('importance', ascending=False)
+
+print(feature_importance.head(10))
+```
+
+## After This Session
+
+You will have:
+
+- A tuned, validated ML model
+- Understanding of hyperparameter tuning
+- Confidence in model selection process
+- Ready for integration with simulation models (Day 3)

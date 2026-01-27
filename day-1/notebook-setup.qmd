@@ -1,0 +1,59 @@
+---
+title: "Hands-on: Project Setup"
+subtitle: "Day 1 | Setting Up Your Analysis Environment"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this exercise in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/01-project-setup.ipynb)
+
+## Alternative: Download
+
+- [Download .ipynb file](../notebooks/01-project-setup.ipynb)
+- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/01-project-setup.ipynb)
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Set up a Google Colab notebook
+2. Create a reproducible project structure
+3. Load and explore the workshop dataset
+4. Practice basic Python and pandas operations
+
+## Prerequisites
+
+- Google account with Colab access
+- Completed [Computing Setup](../computing.qmd) guide
+
+## Exercise Overview
+
+### Part 1: Environment Setup (15 min)
+
+- Install required packages
+- Verify your setup
+- Connect to Google Drive (optional)
+
+### Part 2: Project Structure (20 min)
+
+- Create folder structure
+- Understand data organization
+- Set up paths and configurations
+
+### Part 3: Data Exploration (25 min)
+
+- Load the supply chain dataset
+- Basic data inspection
+- Summary statistics
+- Initial visualizations
+
+## After This Session
+
+You will have:
+
+- A working Colab environment
+- Understanding of reproducible project structure
+- Familiarity with the workshop dataset
+- Confidence in basic Python operations

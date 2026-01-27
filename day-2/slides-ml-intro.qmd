@@ -1,0 +1,122 @@
+---
+title: "Introduction to Machine Learning"
+subtitle: "Day 2 | WISE Workshop"
+author: "Sean Sylvia"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+---
+
+## What is Machine Learning?
+
+> "Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed."
+>
+> — Arthur Samuel, 1959
+
+---
+
+## ML vs Statistics vs Econometrics
+
+| Approach | Goal | Focus |
+|----------|------|-------|
+| Statistics | Inference | Uncertainty quantification |
+| Econometrics | Causation | Identification strategies |
+| Machine Learning | Prediction | Out-of-sample performance |
+
+---
+
+## Prediction vs Causation
+
+**Prediction**: What will Y be given X?
+
+- Weather forecasting
+- Disease risk prediction
+- Demand forecasting
+
+**Causation**: Does X cause Y?
+
+- Treatment effects
+- Policy evaluation
+- Impact assessment
+
+---
+
+## The Fundamental Tradeoff
+
+```
+                    ↑ Model Complexity
+                    |
+    Underfitting    |    Overfitting
+    (High Bias)     |    (High Variance)
+                    |
+    ←───────────────┼───────────────→
+       Training     │    Test
+       Performance  │    Performance
+```
+
+---
+
+## Train / Validate / Test
+
+1. **Training set** (60-70%): Learn patterns
+2. **Validation set** (15-20%): Tune hyperparameters
+3. **Test set** (15-20%): Final evaluation
+
+**Golden Rule**: Never touch test set until the end!
+
+---
+
+## Cross-Validation
+
+```
+Fold 1: [TRAIN] [TRAIN] [TRAIN] [TRAIN] [VAL]
+Fold 2: [TRAIN] [TRAIN] [TRAIN] [VAL] [TRAIN]
+Fold 3: [TRAIN] [TRAIN] [VAL] [TRAIN] [TRAIN]
+Fold 4: [TRAIN] [VAL] [TRAIN] [TRAIN] [TRAIN]
+Fold 5: [VAL] [TRAIN] [TRAIN] [TRAIN] [TRAIN]
+```
+
+More robust than a single split.
+
+---
+
+## Evaluation Metrics: Regression
+
+- **MSE**: Mean Squared Error
+- **RMSE**: Root Mean Squared Error
+- **MAE**: Mean Absolute Error
+- **R²**: Coefficient of determination
+
+---
+
+## Evaluation Metrics: Classification
+
+- **Accuracy**: Overall correct predictions
+- **Precision**: True positives / Predicted positives
+- **Recall**: True positives / Actual positives
+- **F1 Score**: Harmonic mean of precision and recall
+- **AUC-ROC**: Area under ROC curve
+
+---
+
+## The ML Workflow
+
+```
+1. Define the problem
+2. Collect and prepare data
+3. Feature engineering
+4. Train candidate models
+5. Evaluate and compare
+6. Tune best model
+7. Final evaluation on test set
+8. Deploy and monitor
+```
+
+---
+
+## Next: Algorithm Families
+
+Let's explore the different types of algorithms we can use.
+
+[Continue to Algorithms](slides-ml-algorithms.qmd){.btn}

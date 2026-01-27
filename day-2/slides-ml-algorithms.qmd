@@ -1,0 +1,148 @@
+---
+title: "Families of ML Algorithms"
+subtitle: "Day 2 | WISE Workshop"
+author: "Sean Sylvia"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+---
+
+## Algorithm Families Overview
+
+1. **Linear Models**
+2. **Tree-Based Methods**
+3. **Ensemble Methods**
+4. **Other Approaches**
+
+---
+
+## Linear Models
+
+$$\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p$$
+
+**Types:**
+
+- Linear Regression
+- Ridge Regression (L2 penalty)
+- Lasso (L1 penalty)
+- Elastic Net (L1 + L2)
+
+---
+
+## When to Use Linear Models
+
+**Advantages:**
+
+- Interpretable coefficients
+- Fast training
+- Works well with many features
+- Good baseline
+
+**Limitations:**
+
+- Assumes linear relationships
+- Sensitive to outliers
+- May underfit complex patterns
+
+---
+
+## Decision Trees
+
+Split data recursively based on feature thresholds.
+
+```
+        [Feature X < 5?]
+           /        \
+        Yes          No
+         |            |
+    [Feature Y < 3?]  Predict: A
+       /      \
+     Yes       No
+      |         |
+  Predict: B  Predict: C
+```
+
+---
+
+## Tree Advantages & Limitations
+
+**Advantages:**
+
+- Easy to interpret
+- Handles non-linear relationships
+- No feature scaling needed
+- Captures interactions automatically
+
+**Limitations:**
+
+- Prone to overfitting
+- Unstable (small data changes → different tree)
+- May not generalize well
+
+---
+
+## Random Forest
+
+**Idea**: Combine many trees to reduce variance.
+
+1. Create many bootstrap samples
+2. Train a tree on each sample
+3. Use random subset of features at each split
+4. Average predictions (regression) or vote (classification)
+
+---
+
+## Gradient Boosting
+
+**Idea**: Build trees sequentially, each correcting previous errors.
+
+1. Train initial model
+2. Compute residuals (errors)
+3. Train new tree to predict residuals
+4. Add to ensemble (with learning rate)
+5. Repeat
+
+**Popular implementations**: XGBoost, LightGBM, CatBoost
+
+---
+
+## Ensemble Comparison
+
+| Method | Trees | Training | Overfitting Risk |
+|--------|-------|----------|------------------|
+| Random Forest | Parallel | Fast | Lower |
+| Gradient Boosting | Sequential | Slower | Higher |
+
+Both typically outperform single trees.
+
+---
+
+## Choosing an Algorithm
+
+| Data Characteristics | Recommended |
+|---------------------|-------------|
+| Linear relationships | Linear models |
+| Non-linear, interactions | Tree-based |
+| High dimensionality | Lasso, Ridge |
+| Large dataset | Gradient Boosting |
+| Need interpretability | Linear, Single Tree |
+| Best accuracy | Ensemble methods |
+
+---
+
+## Today's Approach
+
+1. Start with a **baseline** (linear model)
+2. Try **Random Forest**
+3. Try **Gradient Boosting**
+4. Compare using cross-validation
+5. Tune the best performer
+
+---
+
+## Let's Practice!
+
+Time for hands-on exercises.
+
+[Demand Forecasting Notebook](notebook-forecasting.qmd){.btn .btn-primary}

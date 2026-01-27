@@ -1,0 +1,54 @@
+---
+title: "Data Sciences for Modeling and Health Technology Assessment"
+subtitle: "WISE Project Training Workshop | Addis Ababa University"
+---
+
+## Welcome
+
+This workshop brings together researchers and practitioners from across Africa to build capacity in data science methods for health technology assessment and supply chain modeling.
+
+::: {.callout-note}
+## Workshop Dates
+**February 2-7, 2026** | Addis Ababa University, Ethiopia
+:::
+
+## Quick Links
+
+| Resource | Link |
+|----------|------|
+| **Schedule** | [Full Schedule](schedule.qmd) |
+| **Computing Setup** | [Google Colab Guide](computing.qmd) |
+| **Shared Materials** | [Google Drive](https://drive.google.com/drive/folders/FOLDER_ID) |
+| **Instructors** | [Meet the Team](instructors.qmd) |
+
+## Workshop Overview
+
+This intensive 6-day workshop covers:
+
+- **Days 1-3**: Data Science Foundations, Machine Learning, and Integration
+- **Day 4**: Agent-Based Modeling for Supply Chains
+- **Days 5-6**: Health Technology Assessment & Economic Evaluation
+
+## Schedule at a Glance
+
+| Day | Date | Focus | Lead |
+|-----|------|-------|------|
+| 1 | Feb 2 (Mon) | Foundations & Reproducible Research | Ozawa & Sylvia |
+| 2 | Feb 3 (Tue) | Machine Learning Pipeline | Sylvia |
+| 3 | Feb 4 (Wed) | Modeling Concepts & Integration | Ozawa & Sylvia |
+| 4 | Feb 5 (Thu) | ABM Deep Dive | Ozawa |
+| 5-6 | Feb 6-7 | HTA & Economic Evaluation | Gebretekle |
+
+## Computing Environment
+
+All hands-on exercises use **Google Colab** - a free, cloud-based Python environment. No software installation required.
+
+[Get Started with Computing Setup](computing.qmd){.btn .btn-primary}
+
+## Funding
+
+This workshop is supported by the **Gates Grand Challenges Award** through the WISE (Workforce Information Supply chain strengthening in Ethiopia) Project.
+
+::: {.d-flex .justify-content-center}
+![](images/gates-logo.png){width="200px"}
+:::

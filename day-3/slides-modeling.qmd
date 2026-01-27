@@ -1,0 +1,134 @@
+---
+title: "Modeling Concepts"
+subtitle: "Day 3 | System Dynamics vs Agent-Based Models"
+author: "Sachiko Ozawa"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+---
+
+## Why Simulation?
+
+- Test policies before implementation
+- Understand complex system behavior
+- Explore "what-if" scenarios
+- Identify intervention leverage points
+
+---
+
+## Two Paradigms
+
+1. **System Dynamics (SD)**: Focus on flows and stocks
+2. **Agent-Based Modeling (ABM)**: Focus on individual entities
+
+---
+
+## System Dynamics
+
+Think of a river system:
+
+- **Stocks**: Water levels at different points
+- **Flows**: Movement between locations
+- **Feedback**: How flows affect stocks
+
+Good for understanding **aggregate behavior** and **bottlenecks**.
+
+---
+
+## Agent-Based Modeling
+
+Think of individual water molecules:
+
+- **Agents**: Individual entities with rules
+- **Interactions**: How agents affect each other
+- **Emergence**: System-level patterns from individual behavior
+
+Good for understanding **heterogeneity** and **emergence**.
+
+---
+
+## Comparison
+
+| Aspect | System Dynamics | Agent-Based |
+|--------|-----------------|-------------|
+| Unit of analysis | Aggregate | Individual |
+| Data requirements | Lower | Higher |
+| Computational cost | Lower | Higher |
+| Heterogeneity | Limited | Full |
+| Emergence | Not captured | Captured |
+
+---
+
+## Supply Chain Example: SD
+
+```
+[Manufacturer] → Flow → [Warehouse] → Flow → [Facility]
+                  ↑                     ↑
+             Orders ←←←←←←←←←←←←←← Demand
+```
+
+Tracks **aggregate** quantities flowing through the system.
+
+---
+
+## Supply Chain Example: ABM
+
+- Each facility is an **agent**
+- Each medication lot is tracked
+- Agents make decisions based on rules
+- Can track specific medications, expiry dates
+
+---
+
+## Why ABM for WISE?
+
+1. **Heterogeneity**: Facilities vary in size, location, capacity
+2. **Tracking**: Need to follow specific medications
+3. **Targeted interventions**: Different policies for different agents
+4. **Emergence**: System-wide patterns from local decisions
+
+---
+
+## The Integration Challenge
+
+How do we connect ML predictions to ABM?
+
+- ML: "Demand will be X next month"
+- ABM: Agent ordering behavior
+
+**Bridge**: Use predictions to parameterize agent decision rules.
+
+---
+
+## Integration Architecture
+
+```
+┌─────────────────┐     ┌─────────────────┐
+│   ML Model      │────►│   Predictions   │
+│ (Demand Forecast)│     │ (By region/time)│
+└─────────────────┘     └────────┬────────┘
+                                 │
+                                 ▼
+┌─────────────────┐     ┌─────────────────┐
+│   ABM Simulation│◄────│  Agent Params   │
+│ (Supply Chain)  │     │ (Order rules)   │
+└─────────────────┘     └─────────────────┘
+```
+
+---
+
+## Hands-on Preview
+
+In the next session, we'll:
+
+1. Generate predictions from our ML model
+2. Format predictions for ABM input
+3. Explore a simplified ABM
+4. Connect the components
+
+---
+
+## Questions?
+
+Let's discuss before moving to the hands-on session.

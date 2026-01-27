@@ -1,0 +1,32 @@
+---
+title: "Instructors"
+---
+
+## Workshop Faculty
+
+### Sachiko Ozawa, PhD
+**University of North Carolina at Chapel Hill**
+
+Dr. Ozawa is a health economist and Associate Professor in the Eshelman School of Pharmacy. She leads the WISE project and specializes in pharmaceutical supply chain modeling and agent-based simulation methods.
+
+**Teaching**: Days 1, 3, 4 (Agent-Based Modeling, Supply Chain Simulation)
+
+### Sean Sylvia, PhD
+**University of North Carolina at Chapel Hill**
+
+Dr. Sylvia is an Associate Professor in the Gillings School of Global Public Health. His research focuses on health economics, experimental methods, and machine learning applications in health policy.
+
+**Teaching**: Days 1, 2, 3 (Reproducible Research, Machine Learning, Integration)
+
+### Gebremedhin Beedemariam Gebretekle, PhD
+**Addis Ababa University**
+
+Dr. Gebretekle is a faculty member at Addis Ababa University specializing in health technology assessment and pharmacoeconomics.
+
+**Teaching**: Days 5-6 (Health Technology Assessment, Economic Evaluation)
+
+---
+
+## Contact
+
+For workshop logistics, please contact the WISE Project team through the organizers at Addis Ababa University.

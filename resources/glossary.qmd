@@ -1,0 +1,122 @@
+---
+title: "Glossary"
+subtitle: "Key Terms and Definitions"
+---
+
+## Machine Learning Terms
+
+**Algorithm**
+: A set of rules or instructions for solving a problem or making predictions.
+
+**Cross-validation**
+: A technique for evaluating model performance by training and testing on different subsets of data.
+
+**Feature**
+: An input variable used to make predictions (also called predictor or independent variable).
+
+**Feature Engineering**
+: The process of creating new features from raw data to improve model performance.
+
+**Gradient Boosting**
+: An ensemble method that builds trees sequentially, with each tree correcting errors from previous ones.
+
+**Hyperparameter**
+: A setting that controls the learning process (e.g., number of trees, learning rate).
+
+**Overfitting**
+: When a model learns the training data too well, including noise, and performs poorly on new data.
+
+**Random Forest**
+: An ensemble method that combines many decision trees trained on random subsets of data.
+
+**Regularization**
+: Techniques to prevent overfitting by penalizing model complexity (e.g., L1/Lasso, L2/Ridge).
+
+**Target**
+: The output variable being predicted (also called dependent variable or label).
+
+**Train/Test Split**
+: Dividing data into separate sets for training and evaluating the model.
+
+**Underfitting**
+: When a model is too simple to capture patterns in the data.
+
+## Modeling & Simulation Terms
+
+**Agent**
+: An autonomous entity in a simulation that follows rules and interacts with its environment.
+
+**Agent-Based Model (ABM)**
+: A simulation approach where system behavior emerges from individual agent interactions.
+
+**Deterministic Model**
+: A model that produces the same output given the same inputs (no randomness).
+
+**Emergence**
+: Complex system-level patterns arising from simple individual-level rules.
+
+**Monte Carlo Simulation**
+: Using random sampling to understand system behavior and uncertainty.
+
+**Stochastic Model**
+: A model that includes random elements, producing different outputs each run.
+
+**System Dynamics (SD)**
+: A modeling approach focusing on feedback loops and flows between system components.
+
+## Supply Chain Terms
+
+**Buffer Stock**
+: Extra inventory held to protect against uncertainty (also called safety stock).
+
+**Lead Time**
+: The time between placing an order and receiving the goods.
+
+**Stockout**
+: When inventory reaches zero and demand cannot be met.
+
+**Wastage**
+: Loss of products due to expiration, damage, or other factors.
+
+**Reorder Point**
+: The inventory level at which a new order should be placed.
+
+**Service Level**
+: The probability of meeting demand without a stockout.
+
+## Data Science Terms
+
+**Categorical Variable**
+: A variable with discrete categories (e.g., region, facility type).
+
+**Data Wrangling**
+: The process of cleaning and transforming raw data for analysis.
+
+**Encoding**
+: Converting categorical variables to numerical format for modeling.
+
+**Imputation**
+: Filling in missing values using statistical methods.
+
+**Normalization/Scaling**
+: Transforming variables to a common scale.
+
+**Outlier**
+: An observation that differs significantly from other observations.
+
+## Python/Programming Terms
+
+**DataFrame**
+: A two-dimensional data structure in pandas (like a spreadsheet).
+
+**Function**
+: A reusable block of code that performs a specific task.
+
+**Library/Package**
+: A collection of pre-written code for specific tasks (e.g., pandas, scikit-learn).
+
+**Loop**
+: Code that repeats a set of instructions multiple times.
+
+**Variable**
+: A named storage location for data in a program.

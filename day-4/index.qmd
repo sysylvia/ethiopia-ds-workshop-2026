@@ -1,0 +1,59 @@
+---
+title: "Day 4: ABM Deep Dive"
+subtitle: "Thursday, February 5, 2026"
+---
+
+## Overview
+
+Day 4 provides an in-depth exploration of Agent-Based Modeling for supply chain applications. Dr. Ozawa will lead this session, building on the foundations from Days 1-3.
+
+::: {.callout-note}
+## Note
+Dr. Sylvia departs on Day 4. Dr. Ozawa leads all sessions.
+:::
+
+## Learning Objectives
+
+By the end of Day 4, you will be able to:
+
+- Design agent behaviors for supply chain modeling
+- Implement ordering rules and inventory policies
+- Run and analyze supply chain simulations
+- Interpret ABM outputs for policy recommendations
+
+## Schedule
+
+| Time | Session |
+|------|---------|
+| 8:30-10:30 | Agent-Based Modeling for Supply Chains |
+| 10:30-10:50 | *Break* |
+| 10:50-12:30 | ABM Implementation Workshop |
+| 12:30-1:30 | *Lunch* |
+| 1:30-5:00 | Cultural Exchange / Sightseeing |
+
+## Materials
+
+*Materials will be provided by Dr. Ozawa via the shared Google Drive folder.*
+
+[Access Shared Drive](https://drive.google.com/drive/folders/FOLDER_ID){.btn .btn-primary}
+
+## Preview
+
+### Morning Sessions
+
+- Deep dive into ABM architecture
+- Agent decision rules
+- Simulation parameters
+- Hands-on: Build supply chain components
+
+### Afternoon
+
+Cultural exchange and sightseeing in Addis Ababa.
+
+## Preparation
+
+Before this session:
+
+1. Complete the Day 3 integration notebook
+2. Review the [ABM glossary terms](../resources/glossary.qmd)
+3. Bring questions from Days 1-3

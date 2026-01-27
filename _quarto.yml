@@ -1,0 +1,100 @@
+project:
+  type: website
+  output-dir: _site
+
+format:
+  html:
+    theme:
+      light: [cosmo, style/workshop.scss]
+    mainfont: "Source Sans Pro"
+    highlight-style: a11y-light
+
+website:
+  page-navigation: true
+  title: "Data Science for HTA Workshop"
+  description: "Data Sciences for Modeling and Health Technology Assessment | Addis Ababa, Feb 2-7, 2026"
+
+  sidebar:
+    background: "#F5F5F5"
+    logo: images/logo.png
+    pinned: true
+    align: center
+    tools:
+      - icon: github
+        href: https://github.com/ssylvia/ethiopia-ds-workshop-2026
+        text: "GitHub"
+      - icon: cloud
+        href: https://colab.research.google.com
+        text: "Google Colab"
+      - icon: folder
+        href: https://drive.google.com/drive/folders/FOLDER_ID
+        text: "Shared Drive"
+
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+      - href: index.qmd
+        text: "Home"
+      - href: schedule.qmd
+        text: "Schedule"
+      - section: "Getting Started"
+        contents:
+          - href: computing.qmd
+            text: "Computing Setup"
+          - href: instructors.qmd
+            text: "Instructors"
+      - section: "Day 1: Foundations"
+        contents:
+          - href: day-1/index.qmd
+            text: "Overview"
+          - href: day-1/slides-repro.qmd
+            text: "Slides: Reproducible Research"
+          - href: day-1/notebook-setup.qmd
+            text: "Hands-on: Project Setup"
+      - section: "Day 2: Machine Learning"
+        contents:
+          - href: day-2/index.qmd
+            text: "Overview"
+          - href: day-2/slides-ml-intro.qmd
+            text: "Slides: ML Foundations"
+          - href: day-2/slides-ml-algorithms.qmd
+            text: "Slides: ML Algorithms"
+          - href: day-2/notebook-forecasting.qmd
+            text: "Hands-on: Demand Forecasting"
+          - href: day-2/notebook-tuning.qmd
+            text: "Hands-on: Model Tuning"
+      - section: "Day 3: Integration"
+        contents:
+          - href: day-3/index.qmd
+            text: "Overview"
+          - href: day-3/slides-modeling.qmd
+            text: "Slides: Modeling Concepts"
+          - href: day-3/notebook-integration.qmd
+            text: "Hands-on: ML to ABM"
+      - section: "Day 4: ABM Deep Dive"
+        contents:
+          - href: day-4/index.qmd
+            text: "Overview"
+      - section: "Resources"
+        contents:
+          - href: resources/readings.qmd
+            text: "Readings"
+          - href: resources/datasets.qmd
+            text: "Datasets"
+          - href: resources/glossary.qmd
+            text: "Glossary"
+
+  page-footer:
+    right: 'Built with [Quarto](https://quarto.org/)'
+    left: "WISE Project | Gates Grand Challenges Award"
+    background: "#F5F5F5"
+
+linkcolor: "#4A7C59"
+toc: true
+code-copy: hover
+code-link: true
+code-overflow: wrap
+
+execute:
+  freeze: auto

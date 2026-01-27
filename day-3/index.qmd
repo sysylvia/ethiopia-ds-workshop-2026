@@ -1,0 +1,82 @@
+---
+title: "Day 3: Modeling Concepts & Integration"
+subtitle: "Wednesday, February 4, 2026"
+---
+
+## Overview
+
+Day 3 bridges machine learning and simulation modeling. We'll explore different modeling paradigms and learn how to use ML predictions as inputs to agent-based models.
+
+## Learning Objectives
+
+By the end of Day 3, you will be able to:
+
+- Distinguish between System Dynamics and Agent-Based modeling approaches
+- Understand when to use each modeling paradigm
+- Generate predictions from ML models for simulation inputs
+- Design the interface between ML and ABM components
+
+## Schedule
+
+| Time | Session | Lead | Materials |
+|------|---------|------|-----------|
+| 8:30-10:30 | Modeling Concepts (SD vs ABM) | Ozawa | [Slides](slides-modeling.qmd) |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | Integration: ML to Simulation | Joint | |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-3:00 | Supply Chain Simulation Foundations | Ozawa | |
+| 3:00-3:20 | *Break* | | |
+| 3:20-5:00 | Hands-on: Introduction to ABM | Joint | [Notebook](notebook-integration.qmd) |
+
+## Materials
+
+### Slides
+
+- [Modeling Concepts](slides-modeling.qmd) - System Dynamics vs Agent-Based approaches
+
+### Hands-on Exercise
+
+- [ML to ABM Integration Notebook](notebook-integration.qmd)
+
+## Key Concepts
+
+### System Dynamics vs Agent-Based Models
+
+| Aspect | System Dynamics | Agent-Based |
+|--------|-----------------|-------------|
+| Focus | Aggregate flows | Individual agents |
+| Perspective | Top-down | Bottom-up |
+| Data needs | Lower | Higher |
+| Complexity | Simpler | More complex |
+| Emergence | Not captured | Captured |
+
+### Integration Workflow
+
+```
+ML Model (Demand Forecasting)
+        ↓
+    Predictions
+        ↓
+ABM Inputs (Agent behaviors, demand parameters)
+        ↓
+    Simulation
+        ↓
+   Policy Insights
+```
+
+## The WISE Project Context
+
+The WISE project aims to reduce wastage and shortages in Ethiopia's pharmaceutical supply chain. The modeling approach:
+
+1. **ML Component**: Forecast demand at different levels
+2. **ABM Component**: Simulate supply chain dynamics
+3. **Integration**: Use forecasts to parameterize agent behaviors
+4. **Policy**: Test interventions in silico
+
+## Preparation
+
+Before this session:
+
+1. Complete Day 2 hands-on exercises
+2. Have your trained ML model saved
+3. Review [glossary](../resources/glossary.qmd) of simulation terms

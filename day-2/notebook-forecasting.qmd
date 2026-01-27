@@ -1,0 +1,101 @@
+---
+title: "Hands-on: Demand Forecasting with ML"
+subtitle: "Day 2 | Build Your First ML Model"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this exercise in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-demand-forecasting.ipynb)
+
+## Alternative: Download
+
+- [Download .ipynb file](../notebooks/02-demand-forecasting.ipynb)
+- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-demand-forecasting.ipynb)
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Load and preprocess supply chain data
+2. Engineer features for demand prediction
+3. Train multiple ML models
+4. Evaluate and compare model performance
+
+## The Problem
+
+You are a data scientist working with the Ethiopian pharmaceutical supply chain. Your task is to build a model that predicts **demand** for essential medications based on:
+
+- Historical consumption data
+- Facility characteristics
+- Seasonal patterns
+- Regional factors
+
+## Exercise Overview
+
+### Part 1: Data Preparation (20 min)
+
+- Load the supply chain dataset
+- Handle missing values
+- Create train/test split
+
+### Part 2: Feature Engineering (20 min)
+
+- Create time-based features (month, quarter, year)
+- Encode categorical variables
+- Scale numerical features
+
+### Part 3: Model Training (30 min)
+
+- Train a linear regression baseline
+- Train a Random Forest model
+- Train a Gradient Boosting model
+- Compare performance
+
+### Part 4: Interpretation (20 min)
+
+- Examine feature importance
+- Analyze prediction errors
+- Discuss implications for supply chain
+
+## Key Code Snippets
+
+### Train/Test Split
+
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+```
+
+### Train a Model
+
+```python
+from sklearn.ensemble import RandomForestRegressor
+
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+```
+
+### Evaluate
+
+```python
+from sklearn.metrics import mean_squared_error, r2_score
+
+rmse = mean_squared_error(y_test, predictions, squared=False)
+r2 = r2_score(y_test, predictions)
+print(f"RMSE: {rmse:.2f}, R²: {r2:.3f}")
+```
+
+## After This Session
+
+You will have:
+
+- Built and evaluated multiple ML models
+- Understanding of the full ML pipeline
+- A baseline model for demand forecasting
+- Readiness for model tuning in the next session

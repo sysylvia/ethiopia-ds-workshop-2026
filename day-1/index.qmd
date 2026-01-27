@@ -1,0 +1,48 @@
+---
+title: "Day 1: Foundations & Reproducible Research"
+subtitle: "Monday, February 2, 2026"
+---
+
+## Overview
+
+Day 1 establishes the foundation for the entire workshop. We'll cover fundamental concepts in data science, introduce reproducible research practices, and get everyone set up with the computing environment.
+
+## Learning Objectives
+
+By the end of Day 1, you will be able to:
+
+- Distinguish between machine learning, statistics, and econometrics approaches
+- Set up a reproducible research project with proper structure
+- Use Google Colab for Python-based analysis
+- Understand the role of data science in health policy decisions
+
+## Schedule
+
+| Time | Session | Lead |
+|------|---------|------|
+| 8:30-9:30 | Registration, Welcome, Introductions | Team |
+| 9:30-10:30 | Fundamentals of Data Science | Joint |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | Reproducible Research Practices | Sylvia |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-3:00 | Data Science in Public Health Policy | Ozawa |
+| 3:00-3:20 | *Break* | |
+| 3:20-5:00 | Hands-on: Setting Up Your Project | Joint |
+
+## Materials
+
+### Slides
+
+- [Reproducible Research Practices](slides-repro.qmd)
+
+### Hands-on Exercise
+
+- [Project Setup Notebook](notebook-setup.qmd)
+
+## Preparation
+
+Before this session:
+
+1. Complete the [Computing Setup](../computing.qmd) guide
+2. Ensure you can access Google Colab
+3. Review the [pre-workshop readings](../resources/readings.qmd)

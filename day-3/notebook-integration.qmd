@@ -1,0 +1,107 @@
+---
+title: "Hands-on: ML to ABM Integration"
+subtitle: "Day 3 | Connecting Predictions to Simulation"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this exercise in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/04-ml-to-abm.ipynb)
+
+## Alternative: Download
+
+- [Download .ipynb file](../notebooks/04-ml-to-abm.ipynb)
+- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/04-ml-to-abm.ipynb)
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Load your trained ML model from Day 2
+2. Generate demand predictions for future periods
+3. Format predictions as ABM input parameters
+4. Run a simplified supply chain simulation
+5. Analyze simulation outputs
+
+## Prerequisites
+
+- Completed Day 2 notebooks (trained demand forecasting model)
+- Understanding of modeling concepts from today's lecture
+
+## Exercise Overview
+
+### Part 1: Generate Predictions (20 min)
+
+- Load the trained model
+- Create feature data for future periods
+- Generate demand forecasts
+- Visualize predictions
+
+### Part 2: Format for ABM (20 min)
+
+- Structure predictions by facility and time
+- Create agent parameter files
+- Validate data format
+
+### Part 3: Simple ABM Introduction (30 min)
+
+- Understand the ABM structure
+- Define agent behaviors
+- Run baseline simulation
+- Visualize supply chain dynamics
+
+### Part 4: Integration (20 min)
+
+- Connect ML predictions to ABM inputs
+- Compare scenarios:
+  - Static demand estimates
+  - ML-based demand forecasts
+- Analyze impact on wastage/shortages
+
+## The Integration Pipeline
+
+```python
+# 1. Load trained model
+import joblib
+model = joblib.load('demand_model.pkl')
+
+# 2. Generate predictions
+future_features = create_future_features(start='2026-03', periods=12)
+predictions = model.predict(future_features)
+
+# 3. Format for ABM
+agent_params = format_for_abm(predictions, facilities)
+
+# 4. Run ABM with predictions
+simulation = SupplyChainABM(agent_params)
+results = simulation.run(steps=365)
+```
+
+## Key Concepts
+
+### Agent Parameters
+
+Each facility agent needs:
+
+- **Expected demand**: ML predictions by month
+- **Order policy**: When and how much to order
+- **Capacity constraints**: Storage limits
+- **Lead time expectations**: Delivery delays
+
+### Connecting the Pieces
+
+The ML model provides demand forecasts that inform:
+
+1. **Order quantities**: How much to request
+2. **Order timing**: When to place orders
+3. **Buffer stock**: Safety margins based on forecast uncertainty
+
+## After This Session
+
+You will have:
+
+- Experience with the ML-ABM integration workflow
+- Understanding of how predictions parameterize simulations
+- Foundation for Day 4's deeper ABM exploration
+- Insight into the WISE project modeling approach
