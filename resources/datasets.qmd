@@ -5,25 +5,36 @@ subtitle: "Workshop Data Resources"
 
 ## Supply Chain Dataset
 
-The primary dataset for hands-on exercises simulates pharmaceutical supply chain data in Ethiopia.
+The primary dataset for hands-on exercises simulates pharmaceutical supply chain data across Ethiopia's health facilities.
 
 ### Description
 
 | Variable | Type | Description |
 |----------|------|-------------|
-| `facility_id` | string | Unique facility identifier |
-| `region` | string | Geographic region |
-| `facility_type` | categorical | Hospital, Health Center, Clinic |
-| `date` | date | Month of observation |
-| `medication_class` | categorical | Type of medication |
-| `demand` | numeric | Units demanded |
-| `stock_level` | numeric | Units in stock |
-| `orders_placed` | numeric | Units ordered |
-| `lead_time_days` | numeric | Days to delivery |
+| `facility_id` | string | Unique facility identifier (F001-F020) |
+| `facility_name` | string | Facility name |
+| `facility_type` | categorical | Hospital, Health Center, or Clinic |
+| `region` | string | Geographic region (5 regions) |
+| `population_served` | numeric | Population catchment area |
+| `month` | numeric | Month of observation (1-12) |
+| `year` | numeric | Year of observation |
+| `previous_demand` | numeric | Demand in the previous month |
+| `distance_to_warehouse` | numeric | Distance to regional warehouse (km) |
+| `season` | categorical | Dry or Rainy season |
+| `stockout_last_month` | binary | 1 if stockout occurred last month |
+| `avg_delivery_days` | numeric | Average delivery time (days) |
+| `storage_capacity` | numeric | Maximum storage capacity (units) |
+| `actual_demand` | numeric | Actual demand for the month (target variable) |
 
-### Data Dictionary
+### Regional Coverage
 
-Full data dictionary available in the [Google Drive](https://drive.google.com/drive/folders/FOLDER_ID).
+| Region | Facilities | Facility Types |
+|--------|-----------|----------------|
+| Addis Ababa | 4 | 2 Hospitals, 2 Health Centers |
+| Oromia | 4 | 2 Hospitals, 1 Health Center, 1 Clinic |
+| Amhara | 4 | 2 Hospitals, 1 Health Center, 1 Clinic |
+| SNNP | 4 | 2 Hospitals, 1 Health Center, 1 Clinic |
+| Tigray | 4 | 2 Hospitals, 1 Health Center, 1 Clinic |
 
 ### Loading the Data
 
@@ -32,41 +43,58 @@ In Google Colab:
 ```python
 import pandas as pd
 
-# Option 1: From GitHub
-url = "https://raw.githubusercontent.com/ssylvia/ethiopia-ds-workshop-2026/main/data/supply-chain-sample.csv"
+# From GitHub (recommended)
+url = "https://raw.githubusercontent.com/sysylvia/ethiopia-ds-workshop-2026/main/data/supply-chain-sample.csv"
 df = pd.read_csv(url)
 
-# Option 2: From Google Drive (if connected)
-from google.colab import drive
-drive.mount('/content/drive')
-df = pd.read_csv('/content/drive/MyDrive/Addis Training/data/supply-chain.csv')
+print(f"Loaded {len(df)} records from {df['facility_id'].nunique()} facilities")
 ```
 
-## Sample Data Preview
+### Data Characteristics
+
+- **Time range**: January - December 2024 (12 months)
+- **Facilities**: 20 facilities across 5 regions
+- **Observations**: 240 rows (20 facilities × 12 months)
+- **Target variable**: `actual_demand` (units of medication)
+
+### Key Patterns in the Data
+
+1. **Seasonal effects**: Demand decreases during rainy season (months 5-8)
+2. **Facility type effects**: Hospitals have higher demand than clinics
+3. **Regional variation**: Distance to warehouse affects delivery times
+4. **Temporal autocorrelation**: Previous demand predicts current demand
+
+### Sample Data Preview
 
 ```python
-df.head()
+df[['facility_name', 'region', 'month', 'previous_demand', 'actual_demand']].head(10)
 ```
 
-| facility_id | region | facility_type | date | medication_class | demand |
-|-------------|--------|---------------|------|------------------|--------|
-| ETH001 | Addis Ababa | Hospital | 2025-01 | Antibiotics | 450 |
-| ETH001 | Addis Ababa | Hospital | 2025-02 | Antibiotics | 520 |
-| ETH002 | Oromia | Health Center | 2025-01 | Antimalarials | 180 |
-
-## Data Characteristics
-
-- **Time range**: 2023-01 to 2025-12 (synthetic)
-- **Facilities**: ~50 facilities across 6 regions
-- **Medication classes**: 5 major categories
-- **Observations**: ~3,000 rows
+| facility_name | region | month | previous_demand | actual_demand |
+|---------------|--------|-------|-----------------|---------------|
+| Yekatit 12 Hospital | Addis Ababa | 1 | 180 | 195 |
+| Yekatit 12 Hospital | Addis Ababa | 2 | 195 | 188 |
+| Yekatit 12 Hospital | Addis Ababa | 3 | 188 | 201 |
+| ... | ... | ... | ... | ... |
 
 ## Data Quality Notes
 
 - This is **synthetic data** created for educational purposes
-- Patterns are inspired by real-world supply chain dynamics
-- Missing values have been intentionally included for learning
+- Patterns are inspired by real-world Ethiopian supply chain dynamics
+- The data includes realistic features like:
+  - Seasonal demand patterns
+  - Facility-type effects
+  - Stockout events
+  - Regional infrastructure differences
 - No actual health data or PHI is included
+
+## Relationship to ABM
+
+The ML predictions from this dataset feed into the agent-based model:
+
+- **Facility agents** use `expected_demand` to determine order quantities
+- **Warehouse agents** manage regional stock based on aggregate forecasts
+- **Uncertainty estimates** from ML models inform safety stock levels
 
 ## Additional Datasets
 
@@ -74,4 +102,4 @@ Additional datasets may be shared via Google Drive during the workshop:
 
 - ABM parameter files
 - Historical consumption patterns
-- Regional characteristics
+- Regional infrastructure characteristics

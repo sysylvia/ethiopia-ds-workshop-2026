@@ -7,12 +7,12 @@ subtitle: "Day 2 | Hyperparameters and Cross-Validation"
 
 Click the badge below to open this exercise in Google Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
 
 ## Alternative: Download
 
 - [Download .ipynb file](../notebooks/03-model-tuning.ipynb)
-- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
+- [View on GitHub](https://github.com/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning.ipynb)
 
 ## Learning Objectives
 

@@ -17,7 +17,7 @@ This folder contains all hands-on exercise notebooks for the WISE Workshop.
 Click the "Open in Colab" badge on any workshop page, or use this URL pattern:
 
 ```
-https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/NOTEBOOK_NAME.ipynb
+https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/NOTEBOOK_NAME.ipynb
 ```
 
 ## Local Development

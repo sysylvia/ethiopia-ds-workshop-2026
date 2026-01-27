@@ -1,0 +1,241 @@
+facility_id,facility_name,facility_type,region,population_served,month,year,previous_demand,distance_to_warehouse,season,stockout_last_month,avg_delivery_days,storage_capacity,actual_demand
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,1,2024,180,15,dry,0,3,500,195
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,2,2024,195,15,dry,0,3,500,188
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,3,2024,188,15,dry,0,3,500,201
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,4,2024,201,15,dry,0,3,500,178
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,5,2024,178,15,rainy,0,3,500,165
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,6,2024,165,15,rainy,0,3,500,145
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,7,2024,145,15,rainy,0,3,500,138
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,8,2024,138,15,rainy,0,3,500,142
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,9,2024,142,15,dry,0,3,500,168
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,10,2024,168,15,dry,0,3,500,185
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,11,2024,185,15,dry,0,3,500,192
+F001,Yekatit 12 Hospital,Hospital,Addis Ababa,250000,12,2024,192,15,dry,0,3,500,198
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,1,2024,145,20,dry,0,3,400,152
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,2,2024,152,20,dry,0,3,400,148
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,3,2024,148,20,dry,0,3,400,159
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,4,2024,159,20,dry,0,3,400,141
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,5,2024,141,20,rainy,0,3,400,128
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,6,2024,128,20,rainy,0,3,400,115
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,7,2024,115,20,rainy,0,3,400,108
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,8,2024,108,20,rainy,0,3,400,112
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,9,2024,112,20,dry,0,3,400,135
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,10,2024,135,20,dry,0,3,400,148
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,11,2024,148,20,dry,0,3,400,155
+F002,Ras Desta Hospital,Hospital,Addis Ababa,180000,12,2024,155,20,dry,0,3,400,160
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,1,2024,52,8,dry,0,2,150,58
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,2,2024,58,8,dry,0,2,150,55
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,3,2024,55,8,dry,0,2,150,62
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,4,2024,62,8,dry,0,2,150,51
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,5,2024,51,8,rainy,0,2,150,45
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,6,2024,45,8,rainy,0,2,150,38
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,7,2024,38,8,rainy,0,2,150,35
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,8,2024,35,8,rainy,0,2,150,39
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,9,2024,39,8,dry,0,2,150,48
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,10,2024,48,8,dry,0,2,150,55
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,11,2024,55,8,dry,0,2,150,59
+F003,Kirkos Health Center,Health Center,Addis Ababa,45000,12,2024,59,8,dry,0,2,150,61
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,1,2024,45,12,dry,0,2,120,48
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,2,2024,48,12,dry,0,2,120,46
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,3,2024,46,12,dry,0,2,120,52
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,4,2024,52,12,dry,0,2,120,42
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,5,2024,42,12,rainy,0,2,120,38
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,6,2024,38,12,rainy,0,2,120,32
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,7,2024,32,12,rainy,0,2,120,28
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,8,2024,28,12,rainy,0,2,120,31
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,9,2024,31,12,dry,0,2,120,40
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,10,2024,40,12,dry,0,2,120,46
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,11,2024,46,12,dry,0,2,120,49
+F004,Lideta Health Center,Health Center,Addis Ababa,38000,12,2024,49,12,dry,0,2,120,51
+F005,Adama Hospital,Hospital,Oromia,320000,1,2024,210,85,dry,0,5,600,225
+F005,Adama Hospital,Hospital,Oromia,320000,2,2024,225,85,dry,0,5,600,218
+F005,Adama Hospital,Hospital,Oromia,320000,3,2024,218,85,dry,0,5,600,232
+F005,Adama Hospital,Hospital,Oromia,320000,4,2024,232,85,dry,0,5,600,205
+F005,Adama Hospital,Hospital,Oromia,320000,5,2024,205,85,rainy,0,5,600,185
+F005,Adama Hospital,Hospital,Oromia,320000,6,2024,185,85,rainy,1,5,600,162
+F005,Adama Hospital,Hospital,Oromia,320000,7,2024,162,85,rainy,0,5,600,155
+F005,Adama Hospital,Hospital,Oromia,320000,8,2024,155,85,rainy,0,5,600,161
+F005,Adama Hospital,Hospital,Oromia,320000,9,2024,161,85,dry,0,5,600,192
+F005,Adama Hospital,Hospital,Oromia,320000,10,2024,192,85,dry,0,5,600,212
+F005,Adama Hospital,Hospital,Oromia,320000,11,2024,212,85,dry,0,5,600,221
+F005,Adama Hospital,Hospital,Oromia,320000,12,2024,221,85,dry,0,5,600,228
+F006,Bishoftu Health Center,Health Center,Oromia,65000,1,2024,72,45,dry,0,4,180,78
+F006,Bishoftu Health Center,Health Center,Oromia,65000,2,2024,78,45,dry,0,4,180,75
+F006,Bishoftu Health Center,Health Center,Oromia,65000,3,2024,75,45,dry,0,4,180,82
+F006,Bishoftu Health Center,Health Center,Oromia,65000,4,2024,82,45,dry,0,4,180,68
+F006,Bishoftu Health Center,Health Center,Oromia,65000,5,2024,68,45,rainy,0,4,180,58
+F006,Bishoftu Health Center,Health Center,Oromia,65000,6,2024,58,45,rainy,0,4,180,48
+F006,Bishoftu Health Center,Health Center,Oromia,65000,7,2024,48,45,rainy,0,4,180,42
+F006,Bishoftu Health Center,Health Center,Oromia,65000,8,2024,42,45,rainy,0,4,180,46
+F006,Bishoftu Health Center,Health Center,Oromia,65000,9,2024,46,45,dry,0,4,180,62
+F006,Bishoftu Health Center,Health Center,Oromia,65000,10,2024,62,45,dry,0,4,180,72
+F006,Bishoftu Health Center,Health Center,Oromia,65000,11,2024,72,45,dry,0,4,180,77
+F006,Bishoftu Health Center,Health Center,Oromia,65000,12,2024,77,45,dry,0,4,180,80
+F007,Jimma Hospital,Hospital,Oromia,280000,1,2024,185,120,dry,0,6,550,198
+F007,Jimma Hospital,Hospital,Oromia,280000,2,2024,198,120,dry,0,6,550,192
+F007,Jimma Hospital,Hospital,Oromia,280000,3,2024,192,120,dry,0,6,550,205
+F007,Jimma Hospital,Hospital,Oromia,280000,4,2024,205,120,dry,0,6,550,182
+F007,Jimma Hospital,Hospital,Oromia,280000,5,2024,182,120,rainy,1,6,550,158
+F007,Jimma Hospital,Hospital,Oromia,280000,6,2024,158,120,rainy,0,6,550,142
+F007,Jimma Hospital,Hospital,Oromia,280000,7,2024,142,120,rainy,0,6,550,135
+F007,Jimma Hospital,Hospital,Oromia,280000,8,2024,135,120,rainy,0,6,550,141
+F007,Jimma Hospital,Hospital,Oromia,280000,9,2024,141,120,dry,0,6,550,168
+F007,Jimma Hospital,Hospital,Oromia,280000,10,2024,168,120,dry,0,6,550,188
+F007,Jimma Hospital,Hospital,Oromia,280000,11,2024,188,120,dry,0,6,550,196
+F007,Jimma Hospital,Hospital,Oromia,280000,12,2024,196,120,dry,0,6,550,202
+F008,Nekemte Clinic,Clinic,Oromia,22000,1,2024,28,95,dry,0,5,80,32
+F008,Nekemte Clinic,Clinic,Oromia,22000,2,2024,32,95,dry,0,5,80,30
+F008,Nekemte Clinic,Clinic,Oromia,22000,3,2024,30,95,dry,0,5,80,35
+F008,Nekemte Clinic,Clinic,Oromia,22000,4,2024,35,95,dry,0,5,80,28
+F008,Nekemte Clinic,Clinic,Oromia,22000,5,2024,28,95,rainy,0,5,80,22
+F008,Nekemte Clinic,Clinic,Oromia,22000,6,2024,22,95,rainy,1,5,80,18
+F008,Nekemte Clinic,Clinic,Oromia,22000,7,2024,18,95,rainy,0,5,80,15
+F008,Nekemte Clinic,Clinic,Oromia,22000,8,2024,15,95,rainy,0,5,80,17
+F008,Nekemte Clinic,Clinic,Oromia,22000,9,2024,17,95,dry,0,5,80,24
+F008,Nekemte Clinic,Clinic,Oromia,22000,10,2024,24,95,dry,0,5,80,29
+F008,Nekemte Clinic,Clinic,Oromia,22000,11,2024,29,95,dry,0,5,80,31
+F008,Nekemte Clinic,Clinic,Oromia,22000,12,2024,31,95,dry,0,5,80,33
+F009,Gondar Hospital,Hospital,Amhara,350000,1,2024,230,180,dry,0,7,650,245
+F009,Gondar Hospital,Hospital,Amhara,350000,2,2024,245,180,dry,0,7,650,238
+F009,Gondar Hospital,Hospital,Amhara,350000,3,2024,238,180,dry,0,7,650,252
+F009,Gondar Hospital,Hospital,Amhara,350000,4,2024,252,180,dry,0,7,650,225
+F009,Gondar Hospital,Hospital,Amhara,350000,5,2024,225,180,rainy,0,7,650,202
+F009,Gondar Hospital,Hospital,Amhara,350000,6,2024,202,180,rainy,0,7,650,178
+F009,Gondar Hospital,Hospital,Amhara,350000,7,2024,178,180,rainy,0,7,650,168
+F009,Gondar Hospital,Hospital,Amhara,350000,8,2024,168,180,rainy,0,7,650,175
+F009,Gondar Hospital,Hospital,Amhara,350000,9,2024,175,180,dry,0,7,650,208
+F009,Gondar Hospital,Hospital,Amhara,350000,10,2024,208,180,dry,0,7,650,232
+F009,Gondar Hospital,Hospital,Amhara,350000,11,2024,232,180,dry,0,7,650,242
+F009,Gondar Hospital,Hospital,Amhara,350000,12,2024,242,180,dry,0,7,650,248
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,1,2024,92,150,dry,0,6,220,98
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,2,2024,98,150,dry,0,6,220,95
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,3,2024,95,150,dry,0,6,220,102
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,4,2024,102,150,dry,0,6,220,88
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,5,2024,88,150,rainy,0,6,220,75
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,6,2024,75,150,rainy,0,6,220,62
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,7,2024,62,150,rainy,0,6,220,55
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,8,2024,55,150,rainy,0,6,220,59
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,9,2024,59,150,dry,0,6,220,78
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,10,2024,78,150,dry,0,6,220,92
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,11,2024,92,150,dry,0,6,220,97
+F010,Bahir Dar Health Center,Health Center,Amhara,85000,12,2024,97,150,dry,0,6,220,100
+F011,Dessie Hospital,Hospital,Amhara,290000,1,2024,195,140,dry,0,6,580,208
+F011,Dessie Hospital,Hospital,Amhara,290000,2,2024,208,140,dry,0,6,580,202
+F011,Dessie Hospital,Hospital,Amhara,290000,3,2024,202,140,dry,0,6,580,215
+F011,Dessie Hospital,Hospital,Amhara,290000,4,2024,215,140,dry,0,6,580,192
+F011,Dessie Hospital,Hospital,Amhara,290000,5,2024,192,140,rainy,0,6,580,168
+F011,Dessie Hospital,Hospital,Amhara,290000,6,2024,168,140,rainy,1,6,580,148
+F011,Dessie Hospital,Hospital,Amhara,290000,7,2024,148,140,rainy,0,6,580,138
+F011,Dessie Hospital,Hospital,Amhara,290000,8,2024,138,140,rainy,0,6,580,145
+F011,Dessie Hospital,Hospital,Amhara,290000,9,2024,145,140,dry,0,6,580,175
+F011,Dessie Hospital,Hospital,Amhara,290000,10,2024,175,140,dry,0,6,580,198
+F011,Dessie Hospital,Hospital,Amhara,290000,11,2024,198,140,dry,0,6,580,206
+F011,Dessie Hospital,Hospital,Amhara,290000,12,2024,206,140,dry,0,6,580,212
+F012,Debre Markos Clinic,Clinic,Amhara,28000,1,2024,35,125,dry,0,6,90,38
+F012,Debre Markos Clinic,Clinic,Amhara,28000,2,2024,38,125,dry,0,6,90,36
+F012,Debre Markos Clinic,Clinic,Amhara,28000,3,2024,36,125,dry,0,6,90,42
+F012,Debre Markos Clinic,Clinic,Amhara,28000,4,2024,42,125,dry,0,6,90,34
+F012,Debre Markos Clinic,Clinic,Amhara,28000,5,2024,34,125,rainy,0,6,90,28
+F012,Debre Markos Clinic,Clinic,Amhara,28000,6,2024,28,125,rainy,0,6,90,22
+F012,Debre Markos Clinic,Clinic,Amhara,28000,7,2024,22,125,rainy,0,6,90,18
+F012,Debre Markos Clinic,Clinic,Amhara,28000,8,2024,18,125,rainy,0,6,90,21
+F012,Debre Markos Clinic,Clinic,Amhara,28000,9,2024,21,125,dry,0,6,90,32
+F012,Debre Markos Clinic,Clinic,Amhara,28000,10,2024,32,125,dry,0,6,90,36
+F012,Debre Markos Clinic,Clinic,Amhara,28000,11,2024,36,125,dry,0,6,90,38
+F012,Debre Markos Clinic,Clinic,Amhara,28000,12,2024,38,125,dry,0,6,90,40
+F013,Hawassa Hospital,Hospital,SNNP,310000,1,2024,205,95,dry,0,5,620,218
+F013,Hawassa Hospital,Hospital,SNNP,310000,2,2024,218,95,dry,0,5,620,212
+F013,Hawassa Hospital,Hospital,SNNP,310000,3,2024,212,95,dry,0,5,620,225
+F013,Hawassa Hospital,Hospital,SNNP,310000,4,2024,225,95,dry,0,5,620,198
+F013,Hawassa Hospital,Hospital,SNNP,310000,5,2024,198,95,rainy,0,5,620,178
+F013,Hawassa Hospital,Hospital,SNNP,310000,6,2024,178,95,rainy,0,5,620,155
+F013,Hawassa Hospital,Hospital,SNNP,310000,7,2024,155,95,rainy,0,5,620,145
+F013,Hawassa Hospital,Hospital,SNNP,310000,8,2024,145,95,rainy,0,5,620,152
+F013,Hawassa Hospital,Hospital,SNNP,310000,9,2024,152,95,dry,0,5,620,182
+F013,Hawassa Hospital,Hospital,SNNP,310000,10,2024,182,95,dry,0,5,620,205
+F013,Hawassa Hospital,Hospital,SNNP,310000,11,2024,205,95,dry,0,5,620,215
+F013,Hawassa Hospital,Hospital,SNNP,310000,12,2024,215,95,dry,0,5,620,222
+F014,Arba Minch Health Center,Health Center,SNNP,72000,1,2024,78,110,dry,0,5,200,85
+F014,Arba Minch Health Center,Health Center,SNNP,72000,2,2024,85,110,dry,0,5,200,82
+F014,Arba Minch Health Center,Health Center,SNNP,72000,3,2024,82,110,dry,0,5,200,88
+F014,Arba Minch Health Center,Health Center,SNNP,72000,4,2024,88,110,dry,0,5,200,75
+F014,Arba Minch Health Center,Health Center,SNNP,72000,5,2024,75,110,rainy,0,5,200,62
+F014,Arba Minch Health Center,Health Center,SNNP,72000,6,2024,62,110,rainy,0,5,200,52
+F014,Arba Minch Health Center,Health Center,SNNP,72000,7,2024,52,110,rainy,0,5,200,45
+F014,Arba Minch Health Center,Health Center,SNNP,72000,8,2024,45,110,rainy,0,5,200,49
+F014,Arba Minch Health Center,Health Center,SNNP,72000,9,2024,49,110,dry,0,5,200,68
+F014,Arba Minch Health Center,Health Center,SNNP,72000,10,2024,68,110,dry,0,5,200,78
+F014,Arba Minch Health Center,Health Center,SNNP,72000,11,2024,78,110,dry,0,5,200,83
+F014,Arba Minch Health Center,Health Center,SNNP,72000,12,2024,83,110,dry,0,5,200,87
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,1,2024,175,130,dry,0,6,520,188
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,2,2024,188,130,dry,0,6,520,182
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,3,2024,182,130,dry,0,6,520,195
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,4,2024,195,130,dry,0,6,520,172
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,5,2024,172,130,rainy,0,6,520,152
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,6,2024,152,130,rainy,0,6,520,132
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,7,2024,132,130,rainy,0,6,520,122
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,8,2024,122,130,rainy,0,6,520,128
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,9,2024,128,130,dry,0,6,520,158
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,10,2024,158,130,dry,0,6,520,178
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,11,2024,178,130,dry,0,6,520,186
+F015,Wolaita Sodo Hospital,Hospital,SNNP,260000,12,2024,186,130,dry,0,6,520,192
+F016,Dilla Clinic,Clinic,SNNP,25000,1,2024,32,85,dry,0,5,85,35
+F016,Dilla Clinic,Clinic,SNNP,25000,2,2024,35,85,dry,0,5,85,33
+F016,Dilla Clinic,Clinic,SNNP,25000,3,2024,33,85,dry,0,5,85,38
+F016,Dilla Clinic,Clinic,SNNP,25000,4,2024,38,85,dry,0,5,85,31
+F016,Dilla Clinic,Clinic,SNNP,25000,5,2024,31,85,rainy,0,5,85,25
+F016,Dilla Clinic,Clinic,SNNP,25000,6,2024,25,85,rainy,0,5,85,20
+F016,Dilla Clinic,Clinic,SNNP,25000,7,2024,20,85,rainy,0,5,85,16
+F016,Dilla Clinic,Clinic,SNNP,25000,8,2024,16,85,rainy,0,5,85,18
+F016,Dilla Clinic,Clinic,SNNP,25000,9,2024,18,85,dry,0,5,85,28
+F016,Dilla Clinic,Clinic,SNNP,25000,10,2024,28,85,dry,0,5,85,33
+F016,Dilla Clinic,Clinic,SNNP,25000,11,2024,33,85,dry,0,5,85,35
+F016,Dilla Clinic,Clinic,SNNP,25000,12,2024,35,85,dry,0,5,85,37
+F017,Mekelle Hospital,Hospital,Tigray,340000,1,2024,225,210,dry,0,8,640,240
+F017,Mekelle Hospital,Hospital,Tigray,340000,2,2024,240,210,dry,0,8,640,232
+F017,Mekelle Hospital,Hospital,Tigray,340000,3,2024,232,210,dry,0,8,640,248
+F017,Mekelle Hospital,Hospital,Tigray,340000,4,2024,248,210,dry,0,8,640,218
+F017,Mekelle Hospital,Hospital,Tigray,340000,5,2024,218,210,rainy,0,8,640,195
+F017,Mekelle Hospital,Hospital,Tigray,340000,6,2024,195,210,rainy,1,8,640,172
+F017,Mekelle Hospital,Hospital,Tigray,340000,7,2024,172,210,rainy,0,8,640,162
+F017,Mekelle Hospital,Hospital,Tigray,340000,8,2024,162,210,rainy,0,8,640,168
+F017,Mekelle Hospital,Hospital,Tigray,340000,9,2024,168,210,dry,0,8,640,202
+F017,Mekelle Hospital,Hospital,Tigray,340000,10,2024,202,210,dry,0,8,640,228
+F017,Mekelle Hospital,Hospital,Tigray,340000,11,2024,228,210,dry,0,8,640,238
+F017,Mekelle Hospital,Hospital,Tigray,340000,12,2024,238,210,dry,0,8,640,245
+F018,Axum Health Center,Health Center,Tigray,58000,1,2024,65,240,dry,0,8,170,72
+F018,Axum Health Center,Health Center,Tigray,58000,2,2024,72,240,dry,0,8,170,68
+F018,Axum Health Center,Health Center,Tigray,58000,3,2024,68,240,dry,0,8,170,75
+F018,Axum Health Center,Health Center,Tigray,58000,4,2024,75,240,dry,0,8,170,62
+F018,Axum Health Center,Health Center,Tigray,58000,5,2024,62,240,rainy,0,8,170,52
+F018,Axum Health Center,Health Center,Tigray,58000,6,2024,52,240,rainy,0,8,170,42
+F018,Axum Health Center,Health Center,Tigray,58000,7,2024,42,240,rainy,0,8,170,35
+F018,Axum Health Center,Health Center,Tigray,58000,8,2024,35,240,rainy,0,8,170,38
+F018,Axum Health Center,Health Center,Tigray,58000,9,2024,38,240,dry,0,8,170,55
+F018,Axum Health Center,Health Center,Tigray,58000,10,2024,55,240,dry,0,8,170,68
+F018,Axum Health Center,Health Center,Tigray,58000,11,2024,68,240,dry,0,8,170,72
+F018,Axum Health Center,Health Center,Tigray,58000,12,2024,72,240,dry,0,8,170,76
+F019,Adigrat Hospital,Hospital,Tigray,270000,1,2024,180,190,dry,0,7,540,192
+F019,Adigrat Hospital,Hospital,Tigray,270000,2,2024,192,190,dry,0,7,540,186
+F019,Adigrat Hospital,Hospital,Tigray,270000,3,2024,186,190,dry,0,7,540,198
+F019,Adigrat Hospital,Hospital,Tigray,270000,4,2024,198,190,dry,0,7,540,175
+F019,Adigrat Hospital,Hospital,Tigray,270000,5,2024,175,190,rainy,0,7,540,155
+F019,Adigrat Hospital,Hospital,Tigray,270000,6,2024,155,190,rainy,0,7,540,135
+F019,Adigrat Hospital,Hospital,Tigray,270000,7,2024,135,190,rainy,0,7,540,125
+F019,Adigrat Hospital,Hospital,Tigray,270000,8,2024,125,190,rainy,0,7,540,132
+F019,Adigrat Hospital,Hospital,Tigray,270000,9,2024,132,190,dry,0,7,540,162
+F019,Adigrat Hospital,Hospital,Tigray,270000,10,2024,162,190,dry,0,7,540,182
+F019,Adigrat Hospital,Hospital,Tigray,270000,11,2024,182,190,dry,0,7,540,190
+F019,Adigrat Hospital,Hospital,Tigray,270000,12,2024,190,190,dry,0,7,540,196
+F020,Shire Clinic,Clinic,Tigray,20000,1,2024,25,220,dry,0,8,75,28
+F020,Shire Clinic,Clinic,Tigray,20000,2,2024,28,220,dry,0,8,75,26
+F020,Shire Clinic,Clinic,Tigray,20000,3,2024,26,220,dry,0,8,75,30
+F020,Shire Clinic,Clinic,Tigray,20000,4,2024,30,220,dry,0,8,75,24
+F020,Shire Clinic,Clinic,Tigray,20000,5,2024,24,220,rainy,0,8,75,19
+F020,Shire Clinic,Clinic,Tigray,20000,6,2024,19,220,rainy,0,8,75,15
+F020,Shire Clinic,Clinic,Tigray,20000,7,2024,15,220,rainy,0,8,75,12
+F020,Shire Clinic,Clinic,Tigray,20000,8,2024,12,220,rainy,0,8,75,14
+F020,Shire Clinic,Clinic,Tigray,20000,9,2024,14,220,dry,0,8,75,22
+F020,Shire Clinic,Clinic,Tigray,20000,10,2024,22,220,dry,0,8,75,26
+F020,Shire Clinic,Clinic,Tigray,20000,11,2024,26,220,dry,0,8,75,28
+F020,Shire Clinic,Clinic,Tigray,20000,12,2024,28,220,dry,0,8,75,30
