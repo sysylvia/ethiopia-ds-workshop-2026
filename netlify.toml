@@ -1,0 +1,12 @@
+[build]
+  # Build is handled by GitHub Actions workflow (.github/workflows/deploy.yml)
+  # which installs Quarto and renders the site before deploying.
+  # Using ":" (shell no-op) to skip Netlify's build since we deploy pre-built files.
+  command = ":"
+  publish = "_site"
+  # Always skip automatic git-triggered builds (exit 0 = skip, exit 1 = build)
+  # Deployment is handled exclusively by GitHub Actions via the Netlify API
+  ignore = "exit 0"
+
+[build.processing]
+  skip_processing = false

@@ -29,3 +29,6 @@ Thumbs.db
 # Secrets (never commit)
 .env
 *.secret
+
+# Local Netlify folder
+.netlify
