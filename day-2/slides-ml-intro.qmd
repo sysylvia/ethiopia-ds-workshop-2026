@@ -1,12 +1,61 @@
 ---
 title: "Introduction to Machine Learning"
-subtitle: "Day 2 | WISE Workshop"
-author: "Sean Sylvia"
+subtitle: "Day 2 | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D."
+date: 2026-02-03
 format:
   revealjs:
-    theme: simple
+    theme: [default, ../style/workshop.scss]
     slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
+
+# Welcome to Day 2!
+
+## Today's Journey
+
+:::: {.columns}
+::: {.column width="33%"}
+### Session 1
+**Foundations**
+
+- Prediction vs. causation
+- Bias-variance tradeoff
+- Cross-validation
+:::
+
+::: {.column width="33%"}
+### Session 2
+**Algorithms**
+
+- Linear methods (LASSO)
+- Tree-based methods
+- Ensembles
+:::
+
+::: {.column width="33%"}
+### Session 3
+**Hands-On**
+
+- Demand forecasting
+- Model selection
+- Feature importance
+:::
+::::
+
+---
+
+# Session 1: Foundations of Supervised Learning
 
 ## What is Machine Learning?
 
@@ -14,109 +63,302 @@ format:
 >
 > — Arthur Samuel, 1959
 
+. . .
+
+In health economics and supply chain contexts, ML helps us:
+
+- **Predict** medication demand and stockouts
+- **Classify** facilities by risk level
+- **Identify** patterns in complex data
+
+---
+
+## The Fundamental Question
+
+**Can we accurately predict supply chain outcomes?**
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### Traditional Statistics
+- Focus on **inference** ($\hat{\beta}$)
+- Understanding relationships
+- Hypothesis testing
+- Causal interpretation
+:::
+
+::: {.column width="50%"}
+### Machine Learning
+- Focus on **prediction** ($\hat{y}$)
+- Minimizing forecast error
+- Out-of-sample performance
+- Pattern recognition
+:::
+::::
+
 ---
 
 ## ML vs Statistics vs Econometrics
 
-| Approach | Goal | Focus |
-|----------|------|-------|
-| Statistics | Inference | Uncertainty quantification |
-| Econometrics | Causation | Identification strategies |
-| Machine Learning | Prediction | Out-of-sample performance |
+| Approach | Primary Goal | Focus | Key Question |
+|----------|--------------|-------|--------------|
+| **Statistics** | Inference | Uncertainty | What is the relationship? |
+| **Econometrics** | Causation | Identification | Does X *cause* Y? |
+| **Machine Learning** | Prediction | Performance | What will Y be? |
+
+. . .
+
+> **For supply chain modeling:** We often need *prediction* (ML) to feed into *simulation* (ABM)
 
 ---
 
-## Prediction vs Causation
+## Prediction Tasks in Supply Chain
 
-**Prediction**: What will Y be given X?
-
-- Weather forecasting
-- Disease risk prediction
-- Demand forecasting
-
-**Causation**: Does X cause Y?
-
-- Treatment effects
-- Policy evaluation
-- Impact assessment
+| Task | Traditional | ML Approach | Benefit |
+|------|-------------|-------------|---------|
+| **Demand Forecasting** | ARIMA, exponential smoothing | Random forests, gradient boosting | Captures complex patterns |
+| **Stockout Risk** | Threshold rules | Ensemble classification | Earlier warning |
+| **Lead Time** | Average + buffer | ML with facility features | Facility-specific estimates |
+| **Optimal Reorder** | EOQ formulas | Reinforcement learning | Adapts to context |
 
 ---
 
-## The Fundamental Tradeoff
+## The Supervised Learning Framework
 
 ```
-                    ↑ Model Complexity
-                    |
-    Underfitting    |    Overfitting
-    (High Bias)     |    (High Variance)
-                    |
-    ←───────────────┼───────────────→
-       Training     │    Test
-       Performance  │    Performance
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │   (X, Y)    │ ──▶ │  Learn f()  │ ──▶ │  f̂(X) → Ŷ  │
+    │  Features & │     │  from data  │     │   Fitted    │
+    │  Outcomes   │     │             │     │   model     │
+    └─────────────┘     └─────────────┘     └─────────────┘
+                                                   │
+                                                   ▼
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │   Compare   │ ◀── │  New X → Ŷ  │ ◀── │   Deploy    │
+    │   Ŷ vs Y    │     │   Forecast  │     │   & Use     │
+    └─────────────┘     └─────────────┘     └─────────────┘
 ```
+
+**The Machine Learning Pipeline**: From data to predictions
 
 ---
 
-## Train / Validate / Test
+## A Supply Chain Example
 
-1. **Training set** (60-70%): Learn patterns
-2. **Validation set** (15-20%): Tune hyperparameters
-3. **Test set** (15-20%): Final evaluation
+Imagine we have historical data on medication orders:
 
-**Golden Rule**: Never touch test set until the end!
+| Feature (X) | Example Value |
+|-------------|---------------|
+| Facility type | District hospital |
+| Population served | 150,000 |
+| Season | Rainy (malaria high) |
+| Previous month demand | 500 units |
+| Distance to warehouse | 45 km |
+| **Outcome (Y)** | **Next month demand: 620 units** |
+
+. . .
+
+**Goal:** Learn $f()$ such that $\hat{y} = f(X)$ predicts demand well
+
+---
+
+## The Central Challenge: Overfitting
+
+```
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│   UNDERFITTING   │  │    JUST RIGHT    │  │   OVERFITTING    │
+│                  │  │                  │  │                  │
+│    ─────────     │  │      ~~~~        │  │    ~~/\~/\~~     │
+│   •  •  •  •     │  │    •  • •  •     │  │   •  •  •  •     │
+│                  │  │                  │  │                  │
+│ Too simple       │  │ Balanced         │  │ Too complex      │
+│ High bias        │  │ complexity       │  │ High variance    │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
+```
+
+- **Underfitting**: Model too simple, misses patterns
+- **Overfitting**: Model too complex, memorizes noise
+- **Goal**: Find the sweet spot!
+
+---
+
+## The Bias-Variance Tradeoff
+
+```
+Error
+  │
+  │   ╲                    ╱ Test Error
+  │    ╲                  ╱
+  │     ╲     ────────   ╱
+  │      ╲  ╱            ╲
+  │       ╳               ╲
+  │      ╱╲                ╲ Training Error
+  │     ╱  ╲                ╲
+  └─────────────────────────────▶
+     Low         ★        High
+          Model Complexity
+```
+
+- As complexity ↑: Training error ↓, but test error eventually ↑
+- **★** = Optimal complexity (best generalization)
+
+---
+
+## Train / Validate / Test Split
+
+```
+┌────────────────────────────────────────────────────────┐
+│                    All Data (100%)                      │
+├────────────────────────┬──────────────┬────────────────┤
+│     Training (60%)     │  Val (20%)   │   Test (20%)   │
+│                        │              │                │
+│   Learn patterns       │ Tune model   │ Final eval     │
+│                        │              │                │
+└────────────────────────┴──────────────┴────────────────┘
+```
+
+1. **Training set** (60-70%): Learn patterns from data
+2. **Validation set** (15-20%): Tune hyperparameters, compare models
+3. **Test set** (15-20%): Final, unbiased evaluation
+
+. . .
+
+> **Golden Rule**: Never touch the test set until the very end!
 
 ---
 
 ## Cross-Validation
 
+More robust than a single train/val split:
+
 ```
-Fold 1: [TRAIN] [TRAIN] [TRAIN] [TRAIN] [VAL]
-Fold 2: [TRAIN] [TRAIN] [TRAIN] [VAL] [TRAIN]
-Fold 3: [TRAIN] [TRAIN] [VAL] [TRAIN] [TRAIN]
-Fold 4: [TRAIN] [VAL] [TRAIN] [TRAIN] [TRAIN]
-Fold 5: [VAL] [TRAIN] [TRAIN] [TRAIN] [TRAIN]
+Fold 1: [  TRAIN  ] [  TRAIN  ] [  TRAIN  ] [  TRAIN  ] [  VAL  ]
+Fold 2: [  TRAIN  ] [  TRAIN  ] [  TRAIN  ] [  VAL   ] [  TRAIN  ]
+Fold 3: [  TRAIN  ] [  TRAIN  ] [  VAL   ] [  TRAIN  ] [  TRAIN  ]
+Fold 4: [  TRAIN  ] [  VAL   ] [  TRAIN  ] [  TRAIN  ] [  TRAIN  ]
+Fold 5: [  VAL   ] [  TRAIN  ] [  TRAIN  ] [  TRAIN  ] [  TRAIN  ]
 ```
 
-More robust than a single split.
+**5-Fold CV**: Train on 4 folds, validate on 1, rotate. Average results.
 
 ---
 
 ## Evaluation Metrics: Regression
 
-- **MSE**: Mean Squared Error
-- **RMSE**: Root Mean Squared Error
-- **MAE**: Mean Absolute Error
-- **R²**: Coefficient of determination
+For predicting **continuous outcomes** (e.g., demand quantities):
+
+| Metric | Formula | Interpretation |
+|--------|---------|----------------|
+| **MSE** | $\frac{1}{n}\sum(y_i - \hat{y}_i)^2$ | Average squared error |
+| **RMSE** | $\sqrt{MSE}$ | Same units as Y |
+| **MAE** | $\frac{1}{n}\sum\|y_i - \hat{y}_i\|$ | Average absolute error |
+| **R²** | $1 - \frac{SS_{res}}{SS_{tot}}$ | Variance explained |
+
+. . .
+
+> **For supply chain**: RMSE and MAE are intuitive ("off by X units on average")
 
 ---
 
 ## Evaluation Metrics: Classification
 
-- **Accuracy**: Overall correct predictions
-- **Precision**: True positives / Predicted positives
-- **Recall**: True positives / Actual positives
-- **F1 Score**: Harmonic mean of precision and recall
-- **AUC-ROC**: Area under ROC curve
+For predicting **categories** (e.g., stockout: yes/no):
+
+| Metric | What it measures |
+|--------|------------------|
+| **Accuracy** | Overall % correct |
+| **Precision** | Of predicted positives, % actually positive |
+| **Recall** | Of actual positives, % correctly predicted |
+| **F1 Score** | Harmonic mean of precision and recall |
+| **AUC-ROC** | Discrimination ability across thresholds |
+
+. . .
+
+> **For stockout prediction**: Recall matters (don't miss actual stockouts!)
 
 ---
 
-## The ML Workflow
+## The Complete ML Workflow
 
 ```
-1. Define the problem
-2. Collect and prepare data
-3. Feature engineering
-4. Train candidate models
-5. Evaluate and compare
-6. Tune best model
-7. Final evaluation on test set
-8. Deploy and monitor
+1. Define the problem        ──▶ What are we predicting? Why?
+2. Collect and prepare data  ──▶ Features, outcomes, cleaning
+3. Feature engineering       ──▶ Create informative inputs
+4. Train candidate models    ──▶ Linear, trees, ensembles...
+5. Evaluate and compare      ──▶ Cross-validation metrics
+6. Tune best model           ──▶ Hyperparameter optimization
+7. Final evaluation          ──▶ Test set performance
+8. Deploy and monitor        ──▶ Real-world use + updates
 ```
+
+---
+
+## Key Takeaways: Session 1
+
+1. **ML is about prediction**, not causation—but prediction can inform decisions
+2. **Bias-variance tradeoff** is fundamental: too simple vs. too complex
+3. **Always** use train/validation/test splits or cross-validation
+4. **Choose metrics** appropriate for your problem (regression vs. classification)
+5. **Cross-validation** gives robust performance estimates
+
+---
+
+## Real-World Example: Drug Shortage Prediction
+
+:::: {.columns}
+::: {.column width="50%"}
+### The Problem
+Roe et al. (2025) applied ML to predict **drug shortages** in South Korea:
+
+- 1,054 shortage cases (2018-2024)
+- Random Forest with Bayesian optimization
+- Two prediction tasks
+:::
+
+::: {.column width="50%"}
+### The Results
+
+| Model | Task | Performance |
+|-------|------|-------------|
+| **Model 1** | Duration prediction | 62% accuracy |
+| **Model 2** | Cause classification | >70% F1-score |
+:::
+::::
+
+. . .
+
+### Top Predictors
+**Shortage frequency**, import status, alternative drug availability
+
+> **Relevance:** Similar approach to our WISE project supply chain forecasting
+
+::: {.aside}
+Roe et al. (2025). *Frontiers in Pharmacology*. [DOI: 10.3389/fphar.2025.1608843](https://doi.org/10.3389/fphar.2025.1608843)
+:::
+
+---
+
+## Connecting Research to Practice
+
+This real-world study demonstrates key concepts we'll use today:
+
+| Concept | Their Study | Our Workshop |
+|---------|-------------|--------------|
+| **Algorithm** | Random Forest | Random Forest, Gradient Boosting |
+| **Task 1** | Shortage duration (classification) | Demand forecasting (regression) |
+| **Task 2** | Cause identification | Stockout risk prediction |
+| **Features** | Drug characteristics, supply history | Facility characteristics, demand history |
+| **Application** | Policy planning | Supply chain simulation |
+
+. . .
+
+> **Hands-on:** In [Notebook 05](notebook-shortage.qmd), you'll replicate their approach with our supply chain data
 
 ---
 
 ## Next: Algorithm Families
 
-Let's explore the different types of algorithms we can use.
+Now that we understand the foundations, let's explore the different types of algorithms we can use.
 
-[Continue to Algorithms](slides-ml-algorithms.qmd){.btn}
+[Continue to ML Algorithms](slides-ml-algorithms.qmd){.btn .btn-primary}

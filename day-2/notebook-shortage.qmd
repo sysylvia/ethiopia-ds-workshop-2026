@@ -1,0 +1,127 @@
+---
+title: "Hands-on: Drug Shortage Prediction"
+subtitle: "Day 2 | Replicating Roe et al. (2025)"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this exercise in Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/05-shortage-prediction.ipynb)
+
+## Alternative: Download
+
+- [Download .ipynb file](../notebooks/05-shortage-prediction.ipynb)
+- [View on GitHub](https://github.com/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/05-shortage-prediction.ipynb)
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Replicate the approach from a real-world ML study
+2. Build classification models for shortage duration and cause
+3. Compare your results to published findings
+4. Analyze feature importance in shortage prediction
+
+## The Paper
+
+**Roe, Y., Lee, S., Kim, C., & Lee, J. (2025).** "Drug shortage in South Korea: machine learning-based prediction models and analysis of duration and causal factors." *Frontiers in Pharmacology*, 16, 1608843. [DOI: 10.3389/fphar.2025.1608843](https://doi.org/10.3389/fphar.2025.1608843)
+
+### Key Findings
+
+| Model | Task | Performance |
+|-------|------|-------------|
+| **Model 1** | Duration prediction | 62% accuracy |
+| **Model 2** | Cause classification | >70% F1-score |
+
+### Top Predictors
+
+1. Shortage frequency (most important)
+2. Import status
+3. Alternative drug availability
+
+## Exercise Overview
+
+### Part 1: Background (10 min)
+
+- Understand the drug shortage problem
+- Review the Korean study approach
+- Connect to WISE project goals
+
+### Part 2: Data Preparation (15 min)
+
+- Load supply chain data with shortage columns
+- Explore shortage patterns in the data
+- Prepare features for classification
+
+### Part 3: Duration Prediction (25 min)
+
+- Build a Random Forest classifier
+- Predict Short/Medium/Long durations
+- Compare accuracy to 62% benchmark
+
+### Part 4: Cause Classification (25 min)
+
+- Build cause prediction model
+- Handle multi-class classification
+- Compare F1-score to >70% benchmark
+
+### Part 5: Feature Importance (15 min)
+
+- Analyze what drives predictions
+- Compare to Korean study findings
+- Discuss implications for policy
+
+## Key Code Snippets
+
+### Classification with Random Forest
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score
+
+rf_model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    random_state=42
+)
+rf_model.fit(X_train, y_train)
+y_pred = rf_model.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred, average='weighted')
+```
+
+### Feature Importance
+
+```python
+import pandas as pd
+
+importance = pd.DataFrame({
+    'feature': feature_cols,
+    'importance': rf_model.feature_importances_
+}).sort_values('importance', ascending=False)
+
+print(importance)
+```
+
+## Connection to Workshop Goals
+
+This exercise demonstrates how ML can be applied to:
+
+- **Predict** when shortages might occur
+- **Estimate** how long they might last
+- **Identify** root causes for intervention
+- **Inform** proactive supply chain management
+
+The same approaches can be applied to other supply chain challenges in the WISE project.
+
+## After This Session
+
+You will have:
+
+- Replicated a published ML methodology
+- Built two classification models
+- Compared your results to benchmark performance
+- Identified key predictors of drug shortages
+- Connected ML methods to real-world policy applications

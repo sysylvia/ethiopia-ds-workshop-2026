@@ -25,6 +25,11 @@ The primary dataset for hands-on exercises simulates pharmaceutical supply chain
 | `avg_delivery_days` | numeric | Average delivery time (days) |
 | `storage_capacity` | numeric | Maximum storage capacity (units) |
 | `actual_demand` | numeric | Actual demand for the month (target variable) |
+| `shortage_frequency` | numeric | Historical shortage count for this facility (0-5) |
+| `shortage_occurred` | binary | 1 if shortage occurred this month |
+| `shortage_duration_days` | numeric | Duration of shortage in days (0 if none) |
+| `shortage_duration_category` | categorical | None, Short (1-7 days), Medium (8-21 days), Long (22+ days) |
+| `shortage_cause` | categorical | None, Manufacturing, Logistics, Demand_Surge, Regulatory, Raw_Materials |
 
 ### Regional Coverage
 
@@ -63,6 +68,18 @@ print(f"Loaded {len(df)} records from {df['facility_id'].nunique()} facilities")
 2. **Facility type effects**: Hospitals have higher demand than clinics
 3. **Regional variation**: Distance to warehouse affects delivery times
 4. **Temporal autocorrelation**: Previous demand predicts current demand
+5. **Shortage patterns**: ~20% of facility-months experience shortages, with most being short duration
+
+### Shortage Variables (for Notebook 05)
+
+These columns support the Roe et al. (2025) replication exercise:
+
+| Variable | Distribution | Notes |
+|----------|--------------|-------|
+| `shortage_frequency` | Mean ~1.7 | Higher for clinics and distant facilities |
+| `shortage_occurred` | ~20% positive | Correlated with rainy season, stockout history |
+| `shortage_duration_category` | 53% Short, 32% Medium, 15% Long | Among shortage events |
+| `shortage_cause` | Logistics most common | Varies by distance and season |
 
 ### Sample Data Preview
 

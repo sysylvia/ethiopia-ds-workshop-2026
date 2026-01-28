@@ -40,6 +40,12 @@ Please review these materials before the workshop begins.
 - [scikit-learn documentation](https://scikit-learn.org/stable/user_guide.html)
 - [Cross-validation tutorial](https://scikit-learn.org/stable/modules/cross_validation.html)
 
+**Case Study Paper:**
+
+- Roe, Y., Lee, S., Kim, C., & Lee, J. (2025). "Drug shortage in South Korea: machine learning-based prediction models and analysis of duration and causal factors." *Frontiers in Pharmacology*, 16, 1608843.
+  - [Link to paper](https://doi.org/10.3389/fphar.2025.1608843)
+  - *Demonstrates Random Forest with Bayesian optimization for predicting drug shortage duration (62% accuracy) and causes (>70% F1). Top predictors: shortage frequency, import status, alternative drug availability. We replicate this approach in Notebook 05.*
+
 ### Day 3: Integration
 
 - [Mesa: Agent-based modeling in Python](https://mesa.readthedocs.io/)

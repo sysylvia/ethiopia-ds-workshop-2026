@@ -5,61 +5,90 @@ subtitle: "Tuesday, February 3, 2026"
 
 ## Overview
 
-Day 2 is dedicated to machine learning fundamentals. We'll cover the complete ML pipeline from data preparation through model evaluation, with hands-on exercises using supply chain data.
+Day 2 is dedicated to **machine learning fundamentals for supply chain forecasting**. We'll cover the complete ML pipeline from data preparation through model evaluation, with hands-on exercises using pharmaceutical supply chain data.
+
+Building on the reproducible research practices from Day 1, you'll learn how ML models can generate the **demand forecasts** that feed into the agent-based simulation models covered on Days 3-4.
 
 ## Learning Objectives
 
 By the end of Day 2, you will be able to:
 
-- Explain the difference between prediction and causal inference
-- Implement a complete ML pipeline (train/validate/test)
-- Choose appropriate algorithms for different problem types
-- Evaluate model performance using proper metrics
-- Tune hyperparameters and prevent overfitting
+1. **Distinguish** between prediction and causal inference tasks in health policy
+2. **Apply** the bias-variance tradeoff to select appropriate model complexity
+3. **Implement** cross-validation for robust model evaluation
+4. **Build** regularized regression models (LASSO, Ridge) for high-dimensional data
+5. **Construct** and interpret tree-based models (Random Forest, Gradient Boosting)
+6. **Evaluate** when to use ML versus traditional statistical methods
+7. **Connect** ML methods to real-world supply chain applications
 
 ## Schedule
 
-| Time | Session | Materials |
-|------|---------|-----------|
-| 8:30-10:30 | Introduction to Machine Learning | [Slides](slides-ml-intro.qmd) |
-| 10:30-10:50 | *Break* | |
-| 10:50-12:30 | Families of ML Algorithms | [Slides](slides-ml-algorithms.qmd) |
-| 12:30-1:30 | *Lunch* | |
-| 1:30-3:00 | Hands-on: Demand Forecasting | [Notebook](notebook-forecasting.qmd) |
-| 3:00-3:20 | *Break* | |
-| 3:20-5:00 | Hands-on: Model Selection & Tuning | [Notebook](notebook-tuning.qmd) |
+| Time | Session | Materials | Lead |
+|------|---------|-----------|------|
+| 8:30-10:30 | **Session 1**: Foundations of Supervised Learning | [Slides](slides-ml-intro.qmd) | Sylvia |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | **Session 2**: Algorithm Families (LASSO, Trees, Ensembles) | [Slides](slides-ml-algorithms.qmd) | Sylvia |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-3:00 | **Session 3**: Hands-on: Demand Forecasting with ML | [Notebook](notebook-forecasting.qmd) | Sylvia |
+| 3:00-3:20 | *Break* | | |
+| 3:20-5:00 | **Session 4**: Hands-on: Model Selection & Tuning | [Notebook](notebook-tuning.qmd) | Sylvia |
 
 ## Materials
 
-### Slides
+### Lecture Slides
 
-- [ML Foundations](slides-ml-intro.qmd) - Prediction vs causation, train/test split, cross-validation
-- [ML Algorithms](slides-ml-algorithms.qmd) - Linear models, trees, ensembles
+- [ML Foundations](slides-ml-intro.qmd) — Prediction vs causation, bias-variance tradeoff, train/test split, cross-validation, evaluation metrics
+- [ML Algorithms](slides-ml-algorithms.qmd) — LASSO/Ridge regularization, decision trees, Random Forests, Gradient Boosting
 
-### Hands-on Exercises
+### Hands-on Notebooks (Google Colab)
 
-- [Demand Forecasting Notebook](notebook-forecasting.qmd) - Build your first ML model
-- [Model Tuning Notebook](notebook-tuning.qmd) - Hyperparameters and evaluation
+- [Demand Forecasting Notebook](notebook-forecasting.qmd) — Build your first ML model for supply chain demand
+- [Model Tuning Notebook](notebook-tuning.qmd) — Hyperparameter optimization, cross-validation, feature importance
+- [Shortage Prediction Notebook](notebook-shortage.qmd) — Replicate Roe et al. (2025) drug shortage prediction approach
 
 ## Key Concepts
 
-### The ML Pipeline
+### The ML Workflow
 
 ```
-Raw Data → Preprocessing → Feature Engineering → Train/Val/Test Split
-    → Model Training → Evaluation → Iteration → Final Model
+1. Define the problem        ──▶ What are we predicting? Why?
+2. Collect and prepare data  ──▶ Features, outcomes, cleaning
+3. Feature engineering       ──▶ Create informative inputs
+4. Train candidate models    ──▶ Linear, trees, ensembles...
+5. Evaluate and compare      ──▶ Cross-validation metrics
+6. Tune best model           ──▶ Hyperparameter optimization
+7. Final evaluation          ──▶ Test set performance
+8. Deploy and monitor        ──▶ Use predictions → ABM inputs
 ```
 
-### Algorithm Families
+### Algorithm Selection Guide
 
-1. **Linear Models**: Ridge, Lasso, Elastic Net
-2. **Tree-Based**: Decision Trees, Random Forest, Gradient Boosting
-3. **Other**: k-NN, Support Vector Machines
+| Data Characteristics | Recommended Approach |
+|---------------------|---------------------|
+| Linear relationships | Linear models (LASSO, Ridge) |
+| Non-linear patterns | Tree-based methods |
+| High dimensionality (many features) | LASSO, Elastic Net |
+| Need interpretability | Linear models, single decision trees |
+| Maximum accuracy | Ensemble methods (RF, Gradient Boosting) |
 
-## Preparation
+### Connection to Days 3-4
+
+ML predictions → **Day 3**: Feed into agent-based models as demand inputs
+
+```
+Day 2: ML Demand Forecasts  →  Day 3-4: ABM Supply Chain Simulation
+    (What will demand be?)        (How will the system respond?)
+```
+
+## Pre-Session Preparation
 
 Before this session, ensure you:
 
-1. Completed Day 1 hands-on exercise
-2. Can access Google Colab
-3. Review the [glossary](../resources/glossary.qmd) of ML terms
+1. ✅ Completed Day 1 hands-on exercises
+2. ✅ Can access Google Colab ([test here](../computing.qmd))
+3. ✅ Review the [glossary](../resources/glossary.qmd) of ML terms
+
+### Optional Reading
+
+- Mullainathan & Spiess (2017). "[Machine Learning: An Applied Econometric Approach](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87)." *Journal of Economic Perspectives*.
+- James et al. (2021). *An Introduction to Statistical Learning*, Chapters 2-3, 5-6, 8. [Free online](https://www.statlearning.com/)
