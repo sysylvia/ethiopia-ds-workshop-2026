@@ -8,7 +8,7 @@ subtitle: "February 2-5, 2026 | Addis Ababa University"
 
 | Time | Session | Lead | Materials |
 |------|---------|------|-----------|
-| 8:30-9:30 | Registration, Welcome, Introductions | Ozawa | |
+| 8:30-9:30 | Registration, Welcome, Introductions | Ozawa | [Slides](day-1/slides-welcome.qmd) |
 | 9:30-10:30 | Fundamentals of Data Science | Sylvia | |
 | 10:30-10:50 | *Break* | | |
 | 10:50-12:30 | **Reproducible Research Practices** | Sylvia | [Slides](day-1/slides-repro.qmd) |

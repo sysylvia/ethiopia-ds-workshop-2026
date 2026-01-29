@@ -33,6 +33,7 @@ By the end of Day 1, you will be able to:
 
 ### Slides
 
+- [Welcome & Workshop Overview](slides-welcome.qmd)
 - [Reproducible Research Practices](slides-repro.qmd)
 
 ### Hands-on Exercise
