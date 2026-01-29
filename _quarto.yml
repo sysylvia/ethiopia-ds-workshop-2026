@@ -13,11 +13,10 @@ website:
   site-url: https://wise-workshop.ssylvia.io
   page-navigation: true
   title: "Data Science for HTA Workshop"
-  description: "Data Sciences for Modeling and Health Technology Assessment | Addis Ababa, Feb 2-7, 2026"
+  description: "Data Sciences for Modeling and Health Technology Assessment | Addis Ababa, Feb 2-5, 2026"
 
   sidebar:
     background: "#F5F5F5"
-    logo: images/logo.png
     pinned: true
     align: center
     tools:
@@ -28,7 +27,7 @@ website:
         href: https://colab.research.google.com
         text: "Google Colab"
       - icon: folder
-        href: https://drive.google.com/drive/folders/FOLDER_ID
+        href: https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link
         text: "Shared Drive"
 
     style: "docked"

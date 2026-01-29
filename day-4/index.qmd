@@ -35,7 +35,7 @@ By the end of Day 4, you will be able to:
 
 *Materials will be provided by Dr. Ozawa via the shared Google Drive folder.*
 
-[Access Shared Drive](https://drive.google.com/drive/folders/FOLDER_ID){.btn .btn-primary}
+[Access Shared Drive](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link){.btn .btn-primary}
 
 ## Preview
 

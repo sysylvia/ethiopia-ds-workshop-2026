@@ -5,14 +5,13 @@ subtitle: "Day 3 | Connecting Predictions to Simulation"
 
 ## Open in Google Colab
 
-Click the badge below to open this exercise in Google Colab:
+Access this notebook from our shared Google Drive:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/04-ml-to-abm.ipynb)
+[Open Notebook in Colab](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link){.btn .btn-primary}
 
-## Alternative: Download
-
-- [Download .ipynb file](../notebooks/04-ml-to-abm.ipynb)
-- [View on GitHub](https://github.com/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/04-ml-to-abm.ipynb)
+::: {.callout-tip}
+Navigate to **Day-3/** in the shared folder and open `04-ml-to-abm.ipynb` with Google Colab.
+:::
 
 ## Learning Objectives
 

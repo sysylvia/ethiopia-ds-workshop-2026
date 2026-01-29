@@ -1,148 +1,387 @@
 ---
 title: "Families of ML Algorithms"
-subtitle: "Day 2 | WISE Workshop"
-author: "Sean Sylvia"
+subtitle: "Day 2 | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D."
+date: 2026-02-03
 format:
   revealjs:
-    theme: simple
+    theme: [default, ../style/workshop.scss]
     slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
-## Algorithm Families Overview
+# Session 2: Algorithm Families
 
-1. **Linear Models**
-2. **Tree-Based Methods**
-3. **Ensemble Methods**
-4. **Other Approaches**
+## Overview
+
+:::: {.columns}
+::: {.column width="50%"}
+### Linear Methods
+- Linear Regression
+- Ridge (L2)
+- **LASSO (L1)**
+- Elastic Net
+:::
+
+::: {.column width="50%"}
+### Tree-Based Methods
+- Decision Trees
+- **Random Forests**
+- **Gradient Boosting**
+- XGBoost/LightGBM
+:::
+::::
+
+. . .
+
+> **For supply chain forecasting:** We'll focus on LASSO, Random Forests, and Gradient Boosting
 
 ---
 
-## Linear Models
+## The Regularization Spectrum
+
+Every model class has its own form of regularization:
+
+| Function Class | Regularization Parameters |
+|----------------|---------------------------|
+| **Linear** | LASSO (L1), Ridge (L2), Elastic Net |
+| **Decision Trees** | Depth, leaves, leaf size, info gain |
+| **Random Forest** | # trees, features per split, sample sizes |
+| **Gradient Boosting** | # trees, learning rate, depth, regularization |
+
+. . .
+
+> **Cross-cutting insight**: Regularization always restricts model capacity to prevent memorizing training data and encourage generalization.
+
+---
+
+# Linear Models with Regularization
+
+## Linear Regression: The Foundation
 
 $$\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p$$
 
-**Types:**
+**Problem with OLS in high dimensions:**
 
-- Linear Regression
-- Ridge Regression (L2 penalty)
-- Lasso (L1 penalty)
-- Elastic Net (L1 + L2)
+- Many features (p large) relative to observations (n)
+- Overfitting: model fits noise, not signal
+- Coefficients become unstable
+
+. . .
+
+**Solution**: Add a **penalty** to constrain coefficients
 
 ---
 
-## When to Use Linear Models
+## Ridge vs LASSO: The Key Difference
+
+:::: {.columns}
+::: {.column width="50%"}
+### Ridge Regression (L2)
+
+$$\min_\beta \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p \beta_j^2$$
+
+- **Penalty**: Sum of squared coefficients
+- **Effect**: Shrinks all coefficients toward zero
+- **Never** sets coefficients exactly to zero
+:::
+
+::: {.column width="50%"}
+### LASSO (L1)
+
+$$\min_\beta \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p |\beta_j|$$
+
+- **Penalty**: Sum of absolute coefficients
+- **Effect**: Shrinks AND selects features
+- **Can** set coefficients exactly to zero
+:::
+::::
+
+---
+
+## LASSO: Automatic Variable Selection
+
+```
+λ increasing →
+
+Feature 1:  ═══════════════════════════■──────────▶ 0
+Feature 2:  ═════════════════■──────────────────────▶ 0
+Feature 3:  ═══════■────────────────────────────────▶ 0
+Feature 4:  ═══════════════════════════════════■────▶ 0
+
+■ = coefficient becomes exactly zero
+```
+
+- As $\lambda$ increases, more coefficients shrink to zero
+- Automatic feature selection!
+- Useful when you have many potential predictors
+
+---
+
+## When to Use Linear Methods
 
 **Advantages:**
 
 - Interpretable coefficients
-- Fast training
+- Fast training and prediction
 - Works well with many features
-- Good baseline
+- Good baseline to compare against
+- Handles high-dimensional data (with regularization)
 
 **Limitations:**
 
 - Assumes linear relationships
 - Sensitive to outliers
-- May underfit complex patterns
+- May underfit complex patterns (non-linearities, interactions)
 
 ---
 
-## Decision Trees
+# Tree-Based Methods
 
-Split data recursively based on feature thresholds.
+## Decision Trees: The Intuition
+
+**How a tree makes predictions:**
 
 ```
-        [Feature X < 5?]
-           /        \
-        Yes          No
-         |            |
-    [Feature Y < 3?]  Predict: A
-       /      \
-     Yes       No
-      |         |
-  Predict: B  Predict: C
+                    [Month Demand < 500?]
+                          /         \
+                        Yes          No
+                         |            |
+              [Rainy Season?]    [Facility Size?]
+                 /      \           /      \
+               Yes      No       Small    Large
+                |        |         |        |
+            Predict:  Predict:  Predict:  Predict:
+              650       420       550       720
 ```
+
+- Split data recursively based on feature thresholds
+- Each leaf contains a prediction
+- Easy to interpret and visualize!
 
 ---
 
-## Tree Advantages & Limitations
+## How Trees Split: Information Gain
 
-**Advantages:**
+**At each node, find the split that best separates the data:**
 
-- Easy to interpret
+For regression (predicting demand):
+- Minimize within-node variance (MSE)
+
+For classification (predicting stockout: yes/no):
+- Maximize information gain (reduce entropy)
+- Or: minimize Gini impurity
+
+. . .
+
+> Trees automatically capture **non-linearities** and **interactions**!
+
+---
+
+## Tree Regularization: Controlling Complexity
+
+| Parameter | What it controls |
+|-----------|------------------|
+| **Max depth** | How deep the tree can grow |
+| **Min samples per leaf** | Minimum observations in each leaf |
+| **Min samples to split** | Minimum observations to create a split |
+| **Max features** | How many features to consider at each split |
+
+. . .
+
+**Shallow trees**: High bias, low variance (underfit)
+
+**Deep trees**: Low bias, high variance (overfit)
+
+---
+
+## Decision Trees: Pros and Cons
+
+:::: {.columns}
+::: {.column width="50%"}
+### Advantages ✅
+
+- Easy to interpret and explain
 - Handles non-linear relationships
-- No feature scaling needed
 - Captures interactions automatically
+- No feature scaling needed
+- Handles missing values
+:::
 
-**Limitations:**
+::: {.column width="50%"}
+### Limitations ❌
 
 - Prone to overfitting
-- Unstable (small data changes → different tree)
-- May not generalize well
+- High variance (unstable)
+- Small data changes → different tree
+- Often outperformed by ensembles
+:::
+::::
+
+. . .
+
+> **Solution**: Combine many trees! (Ensembles)
 
 ---
 
-## Random Forest
+# Ensemble Methods
 
-**Idea**: Combine many trees to reduce variance.
+## Random Forest: Wisdom of the Crowd
 
-1. Create many bootstrap samples
+**Key idea**: Combine many diverse trees to reduce variance
+
+**Algorithm:**
+
+1. Create **B** bootstrap samples from training data
 2. Train a tree on each sample
-3. Use random subset of features at each split
+3. At each split, consider only **m** random features (not all p)
 4. Average predictions (regression) or vote (classification)
 
----
+. . .
 
-## Gradient Boosting
-
-**Idea**: Build trees sequentially, each correcting previous errors.
-
-1. Train initial model
-2. Compute residuals (errors)
-3. Train new tree to predict residuals
-4. Add to ensemble (with learning rate)
-5. Repeat
-
-**Popular implementations**: XGBoost, LightGBM, CatBoost
+```
+Tree 1: 650    Tree 2: 620    Tree 3: 680    ...    Tree B: 640
+              ↘        ↓        ↙
+              Final Prediction: 648
+```
 
 ---
 
-## Ensemble Comparison
+## Why Random Forest Works
 
-| Method | Trees | Training | Overfitting Risk |
-|--------|-------|----------|------------------|
-| Random Forest | Parallel | Fast | Lower |
-| Gradient Boosting | Sequential | Slower | Higher |
+**Two sources of randomness:**
 
-Both typically outperform single trees.
+1. **Bootstrap sampling**: Each tree sees slightly different data
+2. **Feature subsampling**: Each split considers different features
 
----
+**Result:**
 
-## Choosing an Algorithm
-
-| Data Characteristics | Recommended |
-|---------------------|-------------|
-| Linear relationships | Linear models |
-| Non-linear, interactions | Tree-based |
-| High dimensionality | Lasso, Ridge |
-| Large dataset | Gradient Boosting |
-| Need interpretability | Linear, Single Tree |
-| Best accuracy | Ensemble methods |
+- Trees are **decorrelated** (different errors)
+- Averaging reduces variance without increasing bias
+- Much more stable than a single tree
 
 ---
 
-## Today's Approach
+## Gradient Boosting: Learning from Mistakes
 
-1. Start with a **baseline** (linear model)
-2. Try **Random Forest**
-3. Try **Gradient Boosting**
-4. Compare using cross-validation
-5. Tune the best performer
+**Key idea**: Build trees sequentially, each correcting previous errors
+
+**Algorithm:**
+
+1. Train initial model (e.g., predict mean)
+2. Compute **residuals** (errors) from current model
+3. Train new tree to predict the residuals
+4. Add new tree to ensemble (scaled by learning rate)
+5. Repeat steps 2-4
+
+. . .
+
+```
+Iteration 1: Predict mean                    Error: Large
+Iteration 2: Predict mean + tree₁            Error: Medium
+Iteration 3: Predict mean + tree₁ + tree₂    Error: Smaller
+...
+Iteration B: Σ trees                         Error: Small
+```
+
+---
+
+## Gradient Boosting: Key Parameters
+
+| Parameter | What it controls | Typical values |
+|-----------|------------------|----------------|
+| **n_estimators** | Number of trees | 100-1000 |
+| **learning_rate** | Step size for updates | 0.01-0.3 |
+| **max_depth** | Depth of each tree | 3-10 |
+| **min_samples_leaf** | Min observations per leaf | 1-20 |
+| **subsample** | Fraction of data per tree | 0.5-1.0 |
+
+. . .
+
+**Trade-off**: More trees + lower learning rate = better but slower
+
+---
+
+## Random Forest vs Gradient Boosting
+
+| Aspect | Random Forest | Gradient Boosting |
+|--------|---------------|-------------------|
+| **Training** | Parallel (fast) | Sequential (slower) |
+| **Trees** | Independent | Build on each other |
+| **Overfitting risk** | Lower | Higher (needs tuning) |
+| **Out-of-the-box** | Often good | Needs more tuning |
+| **State-of-art** | Good | Often best |
+
+. . .
+
+**Popular implementations:**
+
+- Gradient Boosting: **XGBoost**, **LightGBM**, CatBoost
+- Random Forest: scikit-learn, ranger
+
+---
+
+## Algorithm Selection Guide
+
+```
+                    ┌─────────────────────────────┐
+                    │  What's your data like?     │
+                    └─────────────────────────────┘
+                              │
+           ┌──────────────────┼──────────────────┐
+           │                  │                  │
+       Linear?            Non-linear?       High-dimensional?
+           │                  │                  │
+           ▼                  ▼                  ▼
+      Linear/LASSO      Tree methods         LASSO/Elastic Net
+                              │
+                    ┌─────────┴─────────┐
+                    │                   │
+              Need speed?         Need accuracy?
+                    │                   │
+                    ▼                   ▼
+             Random Forest      Gradient Boosting
+```
+
+---
+
+## Our Approach Today
+
+1. **Baseline**: Linear regression or LASSO
+2. **Random Forest**: Good out-of-box performance
+3. **Gradient Boosting**: Often best, more tuning
+4. **Compare**: Using cross-validation metrics
+5. **Tune**: Hyperparameters of best model
+
+. . .
+
+> **Start simple, add complexity only if needed!**
+
+---
+
+## Key Takeaways: Session 2
+
+1. **LASSO** combines prediction with automatic feature selection
+2. **Decision trees** capture non-linearities and interactions
+3. **Ensembles** (Random Forest, Gradient Boosting) beat single models
+4. **Random Forest**: Parallel trees, good out-of-box
+5. **Gradient Boosting**: Sequential, often best but needs tuning
+6. **Always compare** multiple approaches with cross-validation
 
 ---
 
 ## Let's Practice!
 
-Time for hands-on exercises.
+Time for hands-on: Forecasting demand with these algorithms.
 
-[Demand Forecasting Notebook](notebook-forecasting.qmd){.btn .btn-primary}
+[Open Demand Forecasting Notebook](notebook-forecasting.qmd){.btn .btn-primary}

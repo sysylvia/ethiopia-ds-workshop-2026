@@ -30,9 +30,13 @@ You need a Google account to use Colab. If you don't have one:
 
 ### Step 3: Test Your Setup
 
-Click the button below to open a test notebook:
+Click the button below to open the test notebook from our shared Google Drive:
 
-[![Open Test Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ssylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/00-test-setup.ipynb)
+[![Open Test Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5)
+
+::: {.callout-tip}
+All workshop notebooks are available in our [Shared Google Drive folder](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link). Open any `.ipynb` file with Google Colab by right-clicking and selecting "Open with > Google Colaboratory".
+:::
 
 Run all cells to verify your environment is working.
 

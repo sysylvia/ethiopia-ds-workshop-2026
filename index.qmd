@@ -9,7 +9,7 @@ This workshop brings together researchers and practitioners from across Africa t
 
 ::: {.callout-note}
 ## Workshop Dates
-**February 2-7, 2026** | Addis Ababa University, Ethiopia
+**February 2-5, 2026** | Addis Ababa University, Ethiopia
 :::
 
 ## Quick Links
@@ -18,16 +18,15 @@ This workshop brings together researchers and practitioners from across Africa t
 |----------|------|
 | **Schedule** | [Full Schedule](schedule.qmd) |
 | **Computing Setup** | [Google Colab Guide](computing.qmd) |
-| **Shared Materials** | [Google Drive](https://drive.google.com/drive/folders/FOLDER_ID) |
+| **Shared Materials** | [Google Drive](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link) |
 | **Instructors** | [Meet the Team](instructors.qmd) |
 
 ## Workshop Overview
 
-This intensive 6-day workshop covers:
+This intensive 4-day workshop covers:
 
 - **Days 1-3**: Data Science Foundations, Machine Learning, and Integration
 - **Day 4**: Agent-Based Modeling for Supply Chains
-- **Days 5-6**: Health Technology Assessment & Economic Evaluation
 
 ## Schedule at a Glance
 
@@ -37,7 +36,6 @@ This intensive 6-day workshop covers:
 | 2 | Feb 3 (Tue) | Machine Learning Pipeline | Sylvia |
 | 3 | Feb 4 (Wed) | Modeling Concepts & Integration | Ozawa & Sylvia |
 | 4 | Feb 5 (Thu) | ABM Deep Dive | Ozawa |
-| 5-6 | Feb 6-7 | HTA & Economic Evaluation | Gebretekle |
 
 ## Computing Environment
 
@@ -48,7 +46,3 @@ All hands-on exercises use **Google Colab** - a free, cloud-based Python environ
 ## Funding
 
 This workshop is supported by the **Gates Grand Challenges Award** through the WISE (Workforce Information Supply chain strengthening in Ethiopia) Project.
-
-::: {.d-flex .justify-content-center}
-![](images/gates-logo.png){width="200px"}
-:::
