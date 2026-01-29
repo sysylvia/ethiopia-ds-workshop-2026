@@ -4,67 +4,67 @@ subtitle: "February 2-5, 2026 | Addis Ababa University"
 ---
 
 ## Day 1: Foundations & Reproducible Research {#day1}
-**Monday, February 2, 2026** | Lead: Joint (Ozawa & Sylvia)
+**Monday, February 2, 2026**
 
-| Time | Session | Materials |
-|------|---------|-----------|
-| 8:30-9:30 | Registration, Welcome, Introductions | |
-| 9:30-10:30 | Fundamentals of Data Science | |
-| 10:30-10:50 | *Break* | |
-| 10:50-12:30 | **Reproducible Research Practices** | [Slides](day-1/slides-repro.qmd) |
-| 12:30-1:30 | *Lunch* | |
-| 1:30-3:00 | Data Science in Public Health Policy | |
-| 3:00-3:20 | *Break* | |
-| 3:20-5:00 | **Hands-on: Setting Up Your Project** | [Notebook](day-1/notebook-setup.qmd) |
+| Time | Session | Lead | Materials |
+|------|---------|------|-----------|
+| 8:30-9:30 | Registration, Welcome, Introductions | Ozawa | |
+| 9:30-10:30 | Fundamentals of Data Science | Sylvia | |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | **Reproducible Research Practices** | Sylvia | [Slides](day-1/slides-repro.qmd) |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-3:00 | Data Science in Public Health Policy | Ozawa | |
+| 3:00-3:20 | *Break* | | |
+| 3:20-5:00 | **Hands-on: Setting Up Your Project** | Sylvia | [Notebook](day-1/notebook-setup.qmd) |
 
 : {.striped .hover}
 
 ---
 
 ## Day 2: Machine Learning Pipeline {#day2}
-**Tuesday, February 3, 2026** | Lead: **Sylvia**
+**Tuesday, February 3, 2026**
 
-| Time | Session | Materials |
-|------|---------|-----------|
-| 8:30-10:30 | **Introduction to Machine Learning** | [Slides](day-2/slides-ml-intro.qmd) |
-| 10:30-10:50 | *Break* | |
-| 10:50-12:30 | **Families of ML Algorithms** | [Slides](day-2/slides-ml-algorithms.qmd) |
-| 12:30-1:30 | *Lunch* | |
-| 1:30-3:00 | **Hands-on: Demand Forecasting with ML** | [Notebook](day-2/notebook-forecasting.qmd) |
-| 3:00-3:20 | *Break* | |
-| 3:20-5:00 | **Hands-on: Model Selection & Tuning** | [Notebook](day-2/notebook-tuning.qmd) |
+| Time | Session | Lead | Materials |
+|------|---------|------|-----------|
+| 8:30-10:30 | **Introduction to Machine Learning** | Sylvia | [Slides](day-2/slides-ml-intro.qmd) |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | **Families of ML Algorithms** | Sylvia | [Slides](day-2/slides-ml-algorithms.qmd) |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-3:00 | **Hands-on: Demand Forecasting with ML** | Sylvia | [Notebook](day-2/notebook-forecasting.qmd) |
+| 3:00-3:20 | *Break* | | |
+| 3:20-5:00 | **Hands-on: Model Selection & Tuning** | Sylvia | [Notebook](day-2/notebook-tuning.qmd) |
 
 : {.striped .hover}
 
 ---
 
 ## Day 3: Modeling Concepts & Integration {#day3}
-**Wednesday, February 4, 2026** | Lead: Joint (Ozawa & Sylvia)
+**Wednesday, February 4, 2026**
 
-| Time | Session | Materials |
-|------|---------|-----------|
-| 8:30-10:30 | **Modeling Concepts** (SD vs ABM) | [Slides](day-3/slides-modeling.qmd) |
-| 10:30-10:50 | *Break* | |
-| 10:50-12:30 | **Integration: ML Predictions to Simulation** | |
-| 12:30-1:30 | *Lunch* | |
-| 1:30-3:00 | Supply Chain Simulation Foundations | |
-| 3:00-3:20 | *Break* | |
-| 3:20-5:00 | **Hands-on: Introduction to ABM** | [Notebook](day-3/notebook-integration.qmd) |
+| Time | Session | Lead | Materials |
+|------|---------|------|-----------|
+| 8:30-10:30 | **Modeling Concepts** (SD vs ABM) | Ozawa | [Slides](day-3/slides-modeling.qmd) |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | **Integration: ML Predictions to Simulation** | Sylvia | |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-3:00 | Supply Chain Simulation Foundations | Ozawa | |
+| 3:00-3:20 | *Break* | | |
+| 3:20-5:00 | **Hands-on: Introduction to ABM** | Sylvia | [Notebook](day-3/notebook-integration.qmd) |
 
 : {.striped .hover}
 
 ---
 
 ## Day 4: ABM Deep Dive {#day4}
-**Thursday, February 5, 2026** | Lead: **Ozawa**
+**Thursday, February 5, 2026**
 
-| Time | Session | Materials |
-|------|---------|-----------|
-| 8:30-10:30 | Agent-Based Modeling for Supply Chains | |
-| 10:30-10:50 | *Break* | |
-| 10:50-12:30 | ABM Implementation | |
-| 12:30-1:30 | *Lunch* | |
-| 1:30-5:00 | Cultural Exchange / Sightseeing | |
+| Time | Session | Lead | Materials |
+|------|---------|------|-----------|
+| 8:30-10:30 | Agent-Based Modeling for Supply Chains | Ozawa | |
+| 10:30-10:50 | *Break* | | |
+| 10:50-12:30 | ABM Implementation | Ozawa | |
+| 12:30-1:30 | *Lunch* | | |
+| 1:30-5:00 | Cultural Exchange / Sightseeing | | |
 
 : {.striped .hover}
 
