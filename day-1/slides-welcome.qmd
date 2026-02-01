@@ -33,14 +33,14 @@ Addis Ababa University | February 2-5, 2026
 :::: {.columns}
 ::: {.column width="50%"}
 ### WiFi Access
-- **Network:** [TBD]
-- **Password:** [TBD]
+- **Network:** *(Will be announced)*
+- **Password:** *(Will be announced)*
 :::
 
 ::: {.column width="50%"}
 ### Venue
-- **Restrooms:** [Location]
-- **Emergency exits:** [Location]
+- **Restrooms:** *(See venue map)*
+- **Emergency exits:** *(See venue map)*
 - **Coffee/tea:** Available during breaks
 :::
 ::::

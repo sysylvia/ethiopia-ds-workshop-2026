@@ -1,0 +1,445 @@
+---
+title: "Fundamentals of Data Science"
+subtitle: "Day 1 | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D."
+date: 2026-02-02
+date-format: long
+format:
+  revealjs:
+    theme: [default, ../style/workshop.scss]
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    smaller: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+---
+
+# Learning Objectives {.center}
+
+## By the End of This Session, You Will...
+
+1. **Distinguish** between statistics, econometrics, and machine learning approaches
+2. **Identify** when prediction vs. causal inference is the right goal
+3. **Understand** how ML fits into the workshop's overall pipeline
+4. **Articulate** prediction challenges in your own supply chain context
+
+::: notes
+This session is about framing — "why" and "when" rather than "how."
+The technical "how" comes in Days 2-3.
+Connect this to their actual work throughout.
+:::
+
+# The Data Revolution in Health {.center}
+
+## A Transformative Moment
+
+Health systems across Africa are experiencing an unprecedented data explosion.
+
+::: fragment
+:::: {.columns}
+::: {.column width="50%"}
+### What's Changing
+- Electronic inventory systems
+- Digital health records
+- Mobile health platforms
+- Real-time reporting
+:::
+
+::: {.column width="50%"}
+### The Opportunity
+- Earlier detection of problems
+- More efficient resource allocation
+- Evidence-based policy decisions
+- Improved health outcomes
+:::
+::::
+:::
+
+::: fragment
+> **Discussion:** What data sources does your organization currently use? What challenges do you face?
+:::
+
+::: notes
+This is an opening discussion moment — give 2-3 minutes for informal sharing.
+Note down examples they mention for later reference.
+:::
+
+# What Is Data Science? {.center}
+
+## The Intersection of Three Fields
+
+![Data science sits at the intersection of domain knowledge, statistics, and computing](../images/data-science-venn.png){fig-alt="Venn diagram showing data science as the intersection of domain knowledge (health systems, supply chains, policy), statistics and math (probability, inference, modeling), and computing (programming, data management, visualization)" width="85%"}
+
+::: fragment
+**Your domain expertise is essential** — algorithms alone cannot solve health system challenges.
+:::
+
+::: notes
+Emphasize that participants bring the domain expertise.
+We're providing methods, but their knowledge makes it meaningful.
+:::
+
+# The Fundamental Question {.center}
+
+## Can We Predict Health Outcomes Accurately?
+
+This is the core question that motivates modern data science in health.
+
+::: fragment
+:::: {.columns}
+::: {.column width="50%"}
+### Traditional Statistics
+- Focus on **inference** ($\hat{\beta}$)
+- Understanding relationships
+- Hypothesis testing
+- Causal interpretation
+:::
+
+::: {.column width="50%"}
+### Machine Learning
+- Focus on **prediction** ($\hat{y}$)
+- Minimizing forecast error
+- Out-of-sample performance
+- Pattern recognition
+:::
+::::
+:::
+
+::: fragment
+> Both approaches are valuable — the key is knowing **when to use each**.
+:::
+
+::: notes
+This is THE key distinction for the workshop.
+Beta-hat = we care about the coefficient (causation).
+Y-hat = we care about the prediction (forecasting).
+:::
+
+## Supply Chain Prediction Tasks
+
+How can prediction improve pharmaceutical supply chains?
+
+| Task | Traditional Approach | ML Approach | Benefit |
+|------|---------------------|-------------|---------|
+| **Demand Forecasting** | ARIMA, exponential smoothing | Random forests, gradient boosting | Captures complex patterns |
+| **Stockout Risk** | Threshold rules | Ensemble classification | Earlier warning |
+| **Lead Time Estimation** | Average + buffer | ML with facility features | Facility-specific estimates |
+| **Expiry Prediction** | Simple ratios | Pattern learning | Waste reduction |
+
+: {.striped .hover}
+
+::: notes
+These are concrete examples they'll work with in Days 2-3.
+Ask which of these resonate with their work.
+:::
+
+# Ethiopia's Pharmaceutical Supply Chain {.center}
+
+## The Context for Our Work
+
+:::: {.columns}
+::: {.column width="50%"}
+### Scale & Complexity
+- **EPSA** manages distribution nationwide
+- **3,500+** health facilities served
+- **1,000+** essential medicines tracked
+- Multiple distribution tiers
+:::
+
+::: {.column width="50%"}
+### Key Challenges
+- Medication stockouts
+- Demand variability
+- Transportation constraints
+- Information gaps
+:::
+::::
+
+::: fragment
+**The WISE Project Goal:** Build local capacity to apply data-driven methods to these challenges.
+:::
+
+::: notes
+This is their context — make sure examples throughout connect back here.
+The WISE project is specifically about building Ethiopian capacity.
+:::
+
+# Three Paradigms of Quantitative Analysis {.center}
+
+## Statistics, Econometrics, and Machine Learning
+
+| Approach | Primary Goal | Key Question |
+|----------|--------------|--------------|
+| **Statistics** | Estimation & inference | "What is the relationship?" |
+| **Econometrics** | Causal identification | "What is the effect?" |
+| **Machine Learning** | Prediction | "What will happen next?" |
+
+: {.striped}
+
+::: fragment
+### The "Beta-Hard" vs "Y-Hard" Distinction
+
+- **Beta-hard tasks**: We care about *why* — causal or structural inference
+- **Y-hard tasks**: We care about *what* — accurate prediction is the goal
+:::
+
+::: notes
+This terminology comes from the economics/ML literature.
+Beta-hard = hard to estimate the causal parameter.
+Y-hard = hard to predict the outcome accurately.
+:::
+
+## When to Use Each Approach
+
+| Scenario | Best Approach | Example |
+|----------|---------------|---------|
+| Testing if an intervention works | **Econometrics** | Does the new distribution policy reduce stockouts? |
+| Understanding which factors matter | **Statistics** | Which facility characteristics correlate with stockouts? |
+| Forecasting next month's demand | **ML** | How much of Drug X should we deliver to Region Y? |
+| Optimizing resource allocation | **ML** | Which facilities are highest risk for stockouts? |
+
+: {.striped .hover}
+
+::: fragment
+> In practice, we often combine approaches — this workshop shows you how.
+:::
+
+# The Prediction-Simulation Connection {.center}
+
+## How This Workshop Fits Together
+
+![The workshop pipeline: from data through ML models and simulation to policy insights](../images/workshop-pipeline.png){fig-alt="Flowchart showing workshop pipeline: Historical Data (facility reports, inventory levels, demand patterns) flows to ML Models (demand forecasting, risk prediction, Days 2-3) flows to Agent-Based Model (supply chain simulation, policy scenarios, Days 3-4) flows to Policy Insights (optimal allocation, intervention design, evidence for decisions)" width="95%"}
+
+::: fragment
+**ML predictions feed simulation models** — enabling "what if" policy analysis.
+:::
+
+::: notes
+This is the workshop's organizing framework.
+Data → ML → ABM → Policy.
+Each day builds toward this pipeline.
+:::
+
+# ML Is About Prediction {.center}
+
+## An Important Clarification
+
+::: {.callout-note}
+### Important!
+
+Machine Learning is about prediction. **Period.**
+
+It does not magically solve the causal inference problem.
+
+**What ML CAN do:**
+
+1. Provide accurate forecasts for planning and allocation
+2. Identify high-risk facilities or products for intervention
+3. Help strengthen causal analyses in specific ways (we'll see this later)
+
+**What ML CANNOT do:**
+
+- Tell you *why* something happens
+- Prove that changing X will cause Y to change
+- Replace careful study design for causal questions
+:::
+
+::: notes
+This is a key takeaway to prevent misuse of ML.
+Many people think ML = magic causal machine. It's not.
+:::
+
+## A Concrete Example: Poverty Targeting
+
+:::: {.columns}
+::: {.column width="50%"}
+### The Task
+Governments need to identify poor households for social assistance programs.
+
+**Traditional approach:** Survey everyone (expensive, slow)
+
+**ML approach:** Predict consumption from observable characteristics
+:::
+
+::: {.column width="50%"}
+### How It Works
+1. Survey a sample of households
+2. Train ML model: characteristics → consumption
+3. Apply model to rank all households
+4. Target resources to highest-need predictions
+
+**Result:** Same budget reaches more people in need
+:::
+::::
+
+::: fragment
+> **Key insight:** This is purely *predictive* — the model doesn't explain *why* households are poor, but it identifies *who* is poor.
+:::
+
+::: notes
+This is a real-world example from development economics.
+Similar logic applies to supply chain: predict which facilities will stock out.
+We don't need to know why to allocate resources effectively.
+:::
+
+# What This Workshop Will Build {.center}
+
+## Day-by-Day Preview
+
+| Day | Focus | What You'll Learn |
+|-----|-------|-------------------|
+| **Day 1** | Foundations | Reproducible research, project setup |
+| **Day 2** | ML Pipeline | Forecasting models, evaluation methods |
+| **Day 3** | Integration | Connecting ML outputs to simulation |
+| **Day 4** | ABM Deep Dive | Agent-based modeling for policy |
+
+: {.striped}
+
+::: fragment
+By the end: You'll have built a complete pipeline from data to policy-relevant predictions.
+:::
+
+# The Data Science Mindset {.center}
+
+## Five Principles for This Week
+
+::: {.nonincremental}
+1. **Prediction is not causation** — Always ask "what question am I answering?"
+
+2. **Out-of-sample performance matters** — Models that memorize data are useless
+
+3. **Domain expertise is essential** — Algorithms can't replace your knowledge
+
+4. **Reproducibility is non-negotiable** — Code and documentation matter
+
+5. **Perfect is the enemy of good** — A useful model today beats a perfect model never
+:::
+
+::: notes
+These five principles should guide their thinking throughout.
+Return to these when they face decisions about methods.
+:::
+
+# Your Role This Week {.center}
+
+## Bringing Your Expertise
+
+:::: {.columns}
+::: {.column width="50%"}
+### What You Bring
+- Understanding of Ethiopia's health system
+- Knowledge of supply chain realities
+- Awareness of data quality issues
+- Ideas for relevant applications
+:::
+
+::: {.column width="50%"}
+### What We'll Provide
+- Technical methods and tools
+- Hands-on practice opportunities
+- Templates and code examples
+- Frameworks for thinking about problems
+:::
+::::
+
+::: fragment
+**The best outcomes come from combining both** — methods without context are just math.
+:::
+
+# Discussion: Your Supply Chain Challenges {.center}
+
+## Let's Hear From You
+
+In small groups (3-4 people), discuss:
+
+::: fragment
+1. **What prediction problems** do you face in your work?
+   - What would you want to forecast more accurately?
+:::
+
+::: fragment
+2. **What data exists** that could help?
+   - What's available? What's missing?
+:::
+
+::: fragment
+3. **What decisions** would better predictions improve?
+   - How would you use the predictions?
+:::
+
+::: fragment
+**Time:** 5-7 minutes in groups, then brief sharing
+:::
+
+::: notes
+Circulate during small group discussion.
+Take notes on challenges mentioned — these can inform examples later.
+Have 2-3 groups share briefly with full room.
+:::
+
+# Key Takeaways {.center}
+
+## Remember This
+
+::: {.callout-warning}
+### Prediction vs. Causation
+
+**What ML gives you:**
+
+- Accurate predictions ($\hat{y}$)
+- Pattern recognition
+- Risk stratification
+
+**What ML does NOT give you:**
+
+- Causal effects ($\hat{\beta}$)
+- Mechanism understanding
+- Policy counterfactuals
+:::
+
+> For "Why?" questions, we need careful study design. For "What's next?" questions, ML is powerful.
+
+# What's Next {.center}
+
+## Rest of Today's Schedule
+
+| Time | Session | Description |
+|------|---------|-------------|
+| **10:30-10:50** | *Break* | Coffee/tea available |
+| **10:50-12:30** | Reproducible Research | Project structure, version control basics |
+| **1:30-3:00** | Data Science in Policy | Real-world applications (Dr. Ozawa) |
+| **3:20-5:00** | Hands-on Setup | Get your environment ready |
+
+: {.striped}
+
+::: fragment
+**Afternoon hands-on:** We'll set up everything you need for the rest of the week.
+:::
+
+# Questions? {.center}
+
+## Before We Continue
+
+:::: {.columns}
+::: {.column width="50%"}
+### About Concepts
+- ML vs. statistics
+- When prediction matters
+- Workshop structure
+:::
+
+::: {.column width="50%"}
+### About Practice
+- Technical requirements
+- What we'll build
+- How to prepare
+:::
+::::
+
+::: fragment
+> No question is too basic — we're all learning together.
+:::

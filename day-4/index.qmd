@@ -3,6 +3,11 @@ title: "Day 4: ABM Deep Dive"
 subtitle: "Thursday, February 5, 2026"
 ---
 
+::: {.callout-note}
+## Materials Coming Soon
+Day 4 materials will be available on February 5, 2026.
+:::
+
 ## Overview
 
 Day 4 provides an in-depth exploration of Agent-Based Modeling for supply chain applications. Dr. Ozawa will lead this session, building on the foundations from Days 1-3.

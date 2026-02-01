@@ -3,6 +3,11 @@ title: "Day 3: Modeling Concepts & Integration"
 subtitle: "Wednesday, February 4, 2026"
 ---
 
+::: {.callout-note}
+## Materials Coming Soon
+Day 3 materials will be available on February 4, 2026.
+:::
+
 ## Overview
 
 Day 3 bridges machine learning and simulation modeling. We'll explore different modeling paradigms and learn how to use ML predictions as inputs to agent-based models.
@@ -20,23 +25,23 @@ By the end of Day 3, you will be able to:
 
 | Time | Session | Lead | Materials |
 |------|---------|------|-----------|
-| 8:30-10:30 | Modeling Concepts (SD vs ABM) | Ozawa | [Slides](slides-modeling.qmd) |
+| 8:30-10:30 | Modeling Concepts (SD vs ABM) | Ozawa | *Coming soon* |
 | 10:30-10:50 | *Break* | | |
 | 10:50-12:30 | Integration: ML to Simulation | Joint | |
 | 12:30-1:30 | *Lunch* | | |
 | 1:30-3:00 | Supply Chain Simulation Foundations | Ozawa | |
 | 3:00-3:20 | *Break* | | |
-| 3:20-5:00 | Hands-on: Introduction to ABM | Joint | [Notebook](notebook-integration.qmd) |
+| 3:20-5:00 | Hands-on: Introduction to ABM | Joint | *Coming soon* |
 
 ## Materials
 
 ### Slides
 
-- [Modeling Concepts](slides-modeling.qmd) - System Dynamics vs Agent-Based approaches
+- Modeling Concepts - System Dynamics vs Agent-Based approaches
 
 ### Hands-on Exercise
 
-- [ML to ABM Integration Notebook](notebook-integration.qmd)
+- ML to ABM Integration Notebook
 
 ## Key Concepts
 

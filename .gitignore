@@ -34,3 +34,4 @@ Thumbs.db
 .netlify
 
 **/*.quarto_ipynb
+node_modules
