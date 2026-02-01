@@ -48,6 +48,10 @@ website:
         contents:
           - href: day-1/index.qmd
             text: "Overview"
+          - href: day-1/slides-welcome.qmd
+            text: "Slides: Welcome & Overview"
+          - href: day-1/slides-fundamentals.qmd
+            text: "Slides: Data Science Fundamentals"
           - href: day-1/slides-repro.qmd
             text: "Slides: Reproducible Research"
           - href: day-1/notebook-setup.qmd
@@ -56,22 +60,10 @@ website:
         contents:
           - href: day-2/index.qmd
             text: "Overview"
-          - href: day-2/slides-ml-intro.qmd
-            text: "Slides: ML Foundations"
-          - href: day-2/slides-ml-algorithms.qmd
-            text: "Slides: ML Algorithms"
-          - href: day-2/notebook-forecasting.qmd
-            text: "Hands-on: Demand Forecasting"
-          - href: day-2/notebook-tuning.qmd
-            text: "Hands-on: Model Tuning"
       - section: "Day 3: Integration"
         contents:
           - href: day-3/index.qmd
             text: "Overview"
-          - href: day-3/slides-modeling.qmd
-            text: "Slides: Modeling Concepts"
-          - href: day-3/notebook-integration.qmd
-            text: "Hands-on: ML to ABM"
       - section: "Day 4: ABM Deep Dive"
         contents:
           - href: day-4/index.qmd
