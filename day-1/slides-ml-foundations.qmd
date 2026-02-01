@@ -251,7 +251,7 @@ Many important problems only require good predictions:
 
 ## The Bias-Variance Tradeoff
 
-![](../images/bias_variance_tradeoff.png){fig-align="center" width=80%}
+![](../images/bias_variance_tradeoff.png){fig-align="center" width="500"}
 
 . . .
 

@@ -208,7 +208,7 @@ Y-hard = hard to predict the outcome accurately.
 
 ## How This Workshop Fits Together
 
-![The workshop pipeline: from data through ML models and simulation to policy insights](../images/workshop-pipeline.png){fig-alt="Flowchart showing workshop pipeline: Historical Data (facility reports, inventory levels, demand patterns) flows to ML Models (demand forecasting, risk prediction, Days 2-3) flows to Agent-Based Model (supply chain simulation, policy scenarios, Days 3-4) flows to Policy Insights (optimal allocation, intervention design, evidence for decisions)" width="95%"}
+![The workshop pipeline: from data through ML models and simulation to policy insights](../images/workshop-pipeline.png){fig-alt="Flowchart showing workshop pipeline: Historical Data (facility reports, inventory levels, demand patterns) flows to ML Models (demand forecasting, risk prediction, Days 2-3) flows to Agent-Based Model (supply chain simulation, policy scenarios, Days 3-4) flows to Policy Insights (optimal allocation, intervention design, evidence for decisions)" width="850"}
 
 ::: fragment
 **ML predictions feed simulation models** — enabling "what if" policy analysis.
