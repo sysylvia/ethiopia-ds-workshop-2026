@@ -21,7 +21,7 @@ website:
     align: center
     tools:
       - icon: github
-        href: https://github.com/ssylvia/ethiopia-ds-workshop-2026
+        href: https://github.com/sysylvia/ethiopia-ds-workshop-2026
         text: "GitHub"
       - icon: cloud
         href: https://colab.research.google.com

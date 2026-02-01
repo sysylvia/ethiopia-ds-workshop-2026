@@ -5,12 +5,13 @@ subtitle: "Day 2 | Build Your First ML Model"
 
 ## Open in Google Colab
 
-Access this notebook from our shared Google Drive:
+Click the badge below to open this notebook directly in Colab:
 
-[Open Notebook in Colab](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link){.btn .btn-primary}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-demand-forecasting.ipynb)
 
 ::: {.callout-tip}
-Navigate to **Day-2/** in the shared folder and open `02-demand-forecasting.ipynb` with Google Colab.
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
 :::
 
 ## Learning Objectives

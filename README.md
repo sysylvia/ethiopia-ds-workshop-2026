@@ -24,7 +24,7 @@ This repository contains the course materials for the WISE Project training work
 
 ```bash
 # Clone the repository
-git clone https://github.com/ssylvia/ethiopia-ds-workshop-2026.git
+git clone https://github.com/sysylvia/ethiopia-ds-workshop-2026.git
 cd ethiopia-ds-workshop-2026
 
 # Preview the website

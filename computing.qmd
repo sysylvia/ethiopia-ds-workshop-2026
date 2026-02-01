@@ -114,7 +114,7 @@ If Google Colab is unavailable, you can run notebooks locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ssylvia/ethiopia-ds-workshop-2026.git
+git clone https://github.com/sysylvia/ethiopia-ds-workshop-2026.git
 cd ethiopia-ds-workshop-2026
 
 # Create virtual environment
