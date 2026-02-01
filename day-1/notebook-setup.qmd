@@ -1,5 +1,5 @@
 ---
-title: "Hands-on: Project Setup"
+title: "Hands-on: Setup + ML Demo"
 subtitle: "Day 1 | Setting Up Your Analysis Environment"
 ---
 
@@ -19,41 +19,21 @@ After opening, go to **File > Save a copy in Drive** to save your progress.
 In this hands-on session, you will:
 
 1. Set up a Google Colab notebook
-2. Create a reproducible project structure
-3. Load and explore the workshop dataset
-4. Practice basic Python and pandas operations
+2. Load and explore the workshop dataset
+3. Create initial visualizations
+4. See overfitting in action
+5. Understand why train/test splits and cross-validation matter
 
 ## Prerequisites
 
 - Google account with Colab access
 - Completed [Computing Setup](../computing.qmd) guide
 
-## Exercise Overview
-
-### Part 1: Environment Setup (15 min)
-
-- Install required packages
-- Verify your setup
-- Connect to Google Drive (optional)
-
-### Part 2: Project Structure (20 min)
-
-- Create folder structure
-- Understand data organization
-- Set up paths and configurations
-
-### Part 3: Data Exploration (25 min)
-
-- Load the supply chain dataset
-- Basic data inspection
-- Summary statistics
-- Initial visualizations
-
 ## After This Session
 
 You will have:
 
 - A working Colab environment
-- Understanding of reproducible project structure
 - Familiarity with the workshop dataset
-- Confidence in basic Python operations
+- Visual intuition for overfitting
+- Understanding of why we need validation strategies

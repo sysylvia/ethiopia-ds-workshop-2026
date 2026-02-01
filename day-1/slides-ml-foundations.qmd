@@ -1,0 +1,509 @@
+---
+title: "Machine Learning Foundations"
+subtitle: "Day 1 | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D."
+date: 2026-02-02
+format:
+  revealjs:
+    theme: [default, ../style/workshop.scss]
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+# ML Foundations: Core Concepts
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+1. **Explain** what machine learning is and how it differs from traditional statistics
+2. **Distinguish** between prediction tasks and causal inference
+3. **Apply** the bias-variance tradeoff to understand model complexity
+4. **Describe** how cross-validation prevents overfitting
+5. **Connect** ML concepts to supply chain forecasting
+
+---
+
+# Why Machine Learning?
+
+## ML is Already Everywhere
+
+:::: {.columns}
+::: {.column width="50%"}
+### Translation
+
+![](../images/Translation.png){width=90%}
+:::
+
+::: {.column width="50%"}
+### Self-Driving Cars
+
+![](../images/self-driving.png){width=90%}
+:::
+::::
+
+. . .
+
+> **These advances share a common foundation**: learning patterns from data to make predictions
+
+---
+
+## The Key Insight
+
+**Traditional programming:**
+
+```
+Rules + Data → Answers
+```
+
+. . .
+
+**Machine learning:**
+
+```
+Data + Answers → Rules (learned patterns)
+```
+
+. . .
+
+> ML discovers patterns from examples, rather than being explicitly told the rules
+
+---
+
+## ML in Health & Supply Chains
+
+| Application | What ML Predicts | Why It Matters |
+|-------------|------------------|----------------|
+| **Demand Forecasting** | Future medication needs | Better inventory planning |
+| **Stockout Risk** | Which facilities will run out | Proactive intervention |
+| **Lead Time** | Delivery delays | Buffer stock decisions |
+| **Disease Outbreak** | Surge in demand | Emergency preparedness |
+
+. . .
+
+> Tomorrow's Day 2-4 workshops use ML predictions to inform simulation models
+
+---
+
+# What is Supervised Learning?
+
+## Learning from Labeled Examples
+
+**Supervised learning** = Learning a function $f$ from labeled data $(X, Y)$
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### The Setup
+- **Features (X)**: What we know
+- **Outcome (Y)**: What we want to predict
+- **Goal**: Learn $\hat{f}$ such that $\hat{y} = \hat{f}(X)$ is accurate
+:::
+
+::: {.column width="50%"}
+### Supply Chain Example
+- **X**: Facility size, season, history
+- **Y**: Next month's demand
+- **Goal**: Accurate demand forecast
+:::
+::::
+
+---
+
+## The Cucumber Farm Story
+
+A family farm in Japan wanted to automate cucumber sorting:
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### Old Approach
+- Hand-coded rules
+- "If color is X and shape is Y, then grade A"
+- Brittle, hard to maintain
+:::
+
+::: {.column width="50%"}
+### ML Approach
+- Collect labeled photos
+- Train model on examples
+- Model learns the patterns
+:::
+::::
+
+. . .
+
+> **Key insight**: We don't program the rules—we let the algorithm discover them from data
+
+---
+
+# Prediction vs. Causation
+
+## Two Different Goals
+
+:::: {.columns}
+::: {.column width="50%"}
+### Traditional Statistics/Econometrics
+**Goal**: Understand $\hat{\beta}$ (coefficients)
+
+- "Does X cause Y?"
+- Hypothesis testing
+- Causal interpretation
+- **β-hard** problems
+:::
+
+::: {.column width="50%"}
+### Machine Learning
+**Goal**: Accurate $\hat{y}$ (predictions)
+
+- "What will Y be?"
+- Minimize forecast error
+- Out-of-sample performance
+- **Y-hard** problems
+:::
+::::
+
+. . .
+
+> **Supply chain forecasting is Y-hard**: We need accurate predictions, not causal effects
+
+---
+
+## When Prediction is Enough
+
+Many important problems only require good predictions:
+
+| Domain | Prediction Task | No Causation Needed |
+|--------|-----------------|---------------------|
+| **Email** | Spam or not? | Just filter accurately |
+| **Credit** | Will they default? | Just rank risk |
+| **Poverty** | Who is poor? | Just target resources |
+| **Supply Chain** | How much demand? | Just stock appropriately |
+
+. . .
+
+> For resource allocation and planning, prediction accuracy matters more than understanding *why*
+
+---
+
+## The Poverty Targeting Example
+
+**Policy Problem**: How do we identify poor households for cash transfers?
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### What We Have
+- Observable characteristics
+- Household size, assets, location
+- Housing quality
+- Partial income data
+:::
+
+::: {.column width="50%"}
+### What We Need
+- Accurate poverty prediction
+- Rank families by need
+- Direct resources efficiently
+:::
+::::
+
+. . .
+
+> ML can predict consumption/income better than simple rules—enabling better targeting
+
+---
+
+# The Bias-Variance Tradeoff
+
+## The Central Challenge: Overfitting
+
+```
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│   UNDERFITTING   │  │    JUST RIGHT    │  │   OVERFITTING    │
+│                  │  │                  │  │                  │
+│    ─────────     │  │      ~~~~        │  │    ~~/\~/\~~     │
+│   •  •  •  •     │  │    •  • •  •     │  │   •  •  •  •     │
+│                  │  │                  │  │                  │
+│ Too simple       │  │ Balanced         │  │ Too complex      │
+│ High bias        │  │ complexity       │  │ High variance    │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
+```
+
+- **Underfitting**: Model too simple, misses real patterns
+- **Overfitting**: Model too complex, memorizes noise
+- **Sweet spot**: Captures signal, ignores noise
+
+---
+
+## The Bias-Variance Tradeoff
+
+![](../images/bias_variance_tradeoff.png){fig-align="center" width=80%}
+
+. . .
+
+- **Training error** always decreases with complexity
+- **Test error** eventually increases (overfitting!)
+- **Goal**: Find the complexity that minimizes test error
+
+---
+
+## The Polynomial Example
+
+Consider predicting $y$ from a single feature $x$:
+
+. . .
+
+| Degree | Model | Risk |
+|--------|-------|------|
+| 1 | $y = \beta_0 + \beta_1 x$ | Underfitting |
+| 3 | $y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3$ | May be right |
+| 10 | $y = \sum_{j=0}^{10} \beta_j x^j$ | Overfitting |
+
+. . .
+
+> **Hands-on preview**: In today's notebook, you'll see this exact problem with a sine wave!
+
+---
+
+## Why Overfitting is Dangerous
+
+**The model that fits training data best is NOT always the best predictor**
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### What we optimize
+Training error: How well we fit observed data
+:::
+
+::: {.column width="50%"}
+### What we care about
+Test error: How well we predict NEW data
+:::
+::::
+
+. . .
+
+> An overfit model memorizes training data (including noise) and fails on new data
+
+---
+
+# Cross-Validation
+
+## The Train/Test Split
+
+```
+┌────────────────────────────────────────────────────────┐
+│                    All Data (100%)                      │
+├────────────────────────────┬──────────────┬────────────┤
+│     Training (60%)         │  Val (20%)   │ Test (20%) │
+│                            │              │            │
+│   Learn patterns           │ Tune model   │ Final eval │
+└────────────────────────────┴──────────────┴────────────┘
+```
+
+1. **Training**: Learn patterns from data
+2. **Validation**: Compare models, tune complexity
+3. **Test**: Final, unbiased evaluation
+
+. . .
+
+> **Golden Rule**: Never touch test data until the very end!
+
+---
+
+## K-Fold Cross-Validation
+
+More robust than a single train/validation split:
+
+![](../images/k-fold.png){fig-align="center" width=70%}
+
+. . .
+
+**Process**:
+
+1. Split training data into K folds
+2. Train on K-1 folds, validate on remaining fold
+3. Repeat K times, rotating the validation fold
+4. Average the results
+
+---
+
+## Why Cross-Validation Works
+
+:::: {.columns}
+::: {.column width="50%"}
+### Single Split
+- Depends on random split
+- Validation set may be "lucky"
+- Unstable estimates
+:::
+
+::: {.column width="50%"}
+### K-Fold CV
+- Uses all data for validation
+- Averages across multiple splits
+- More reliable estimates
+:::
+::::
+
+. . .
+
+> **Rule of thumb**: 5-fold or 10-fold CV is standard practice
+
+---
+
+# Preview: Tomorrow's Algorithms
+
+## Day 2: Regularization
+
+**Problem**: What if we have many features (high dimensions)?
+
+. . .
+
+**Solution**: Add a penalty that shrinks coefficients
+
+:::: {.columns}
+::: {.column width="50%"}
+### LASSO (L1)
+- Shrinks coefficients
+- Can set some to exactly zero
+- **Automatic feature selection**
+:::
+
+::: {.column width="50%"}
+### Ridge (L2)
+- Shrinks coefficients
+- Never exactly zero
+- **Keeps all features**
+:::
+::::
+
+. . .
+
+> Tomorrow morning: Deep dive into regularization with supply chain data
+
+---
+
+## Day 2: Trees & Ensembles
+
+**Decision trees** split data recursively:
+
+```
+                    [Month Demand < 500?]
+                          /         \
+                        Yes          No
+                         |            |
+              [Rainy Season?]    [Facility Size?]
+                 /      \           /      \
+               Yes      No       Small    Large
+```
+
+. . .
+
+**Ensembles** combine many trees:
+
+- **Random Forest**: Many independent trees, averaged
+- **Gradient Boosting**: Trees that learn from each other's mistakes
+
+> Tomorrow afternoon: Build and compare tree models
+
+---
+
+# When is ML Appropriate?
+
+## ML Shines When...
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good for ML
+- Prediction is the goal
+- Large, complex datasets
+- Non-linear patterns
+- Many potential features
+- Pattern discovery
+:::
+
+::: {.column width="50%"}
+### Better for Traditional Methods
+- Causal inference needed
+- Small sample sizes
+- Need interpretable coefficients
+- Well-understood relationships
+- Hypothesis testing
+:::
+::::
+
+---
+
+## Connecting ML to This Workshop
+
+```
+Day 1: ML Foundations     →  Day 2: ML Algorithms & Practice
+        (Today)                        (Tomorrow)
+                                          │
+                                          ▼
+Day 3-4: ABM Simulation   ←   ML Predictions feed into
+        (Wed-Thu)               agent-based models
+```
+
+. . .
+
+> **Your ML forecasts become inputs** to the supply chain simulations on Days 3-4
+
+---
+
+# Key Takeaways
+
+## Summary
+
+1. **ML learns patterns from data** rather than following programmed rules
+
+2. **Prediction ≠ causation**: ML excels at "What will Y be?" not "Why?"
+
+3. **Bias-variance tradeoff**: Too simple = underfit, too complex = overfit
+
+4. **Cross-validation** prevents overfitting and gives honest error estimates
+
+5. **Tomorrow**: LASSO (feature selection) and Trees (non-linear patterns)
+
+6. **This week**: ML predictions → ABM simulations for supply chain decisions
+
+---
+
+## Discussion Questions
+
+Before we move to hands-on:
+
+1. Can you think of a **prediction problem** in your work that doesn't need causal interpretation?
+
+2. What features might help predict **medication demand** at Ethiopian health facilities?
+
+3. How would you know if your model is **overfitting**?
+
+---
+
+## Next: Hands-on Setup
+
+Let's apply these concepts with a practical demonstration:
+
+- Set up your computing environment
+- Load the workshop data
+- **See overfitting in action** with a sine wave example
+
+[Open Hands-on Notebook](notebook-setup.qmd){.btn .btn-primary}

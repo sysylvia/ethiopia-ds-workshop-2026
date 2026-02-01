@@ -139,7 +139,7 @@ Ask which of these resonate with their work.
 
 # Ethiopia's Pharmaceutical Supply Chain {.center}
 
-## The Context for Our Work
+## The Context
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -158,10 +158,6 @@ Ask which of these resonate with their work.
 - Information gaps
 :::
 ::::
-
-::: fragment
-**The WISE Project Goal:** Build local capacity to apply data-driven methods to these challenges.
-:::
 
 ::: notes
 This is their context — make sure examples throughout connect back here.
@@ -331,7 +327,7 @@ Return to these when they face decisions about methods.
 :::: {.columns}
 ::: {.column width="50%"}
 ### What You Bring
-- Understanding of Ethiopia's health system
+- Understanding of your health system
 - Knowledge of supply chain realities
 - Awareness of data quality issues
 - Ideas for relevant applications
@@ -409,10 +405,12 @@ Have 2-3 groups share briefly with full room.
 
 | Time | Session | Description |
 |------|---------|-------------|
-| **10:30-10:50** | *Break* | Coffee/tea available |
-| **10:50-12:30** | Reproducible Research | Project structure, version control basics |
-| **1:30-3:00** | Data Science in Policy | Real-world applications (Dr. Ozawa) |
-| **3:20-5:00** | Hands-on Setup | Get your environment ready |
+| 10:30-10:50 | *Break* | |
+| 10:50-12:30 | Data Science in Public Health Policy | Ozawa |
+| 12:30-1:30 | *Lunch* | |
+| 1:30-3:00 | ML Foundations: Core Concepts | Sylvia |
+| 3:00-3:20 | *Break* | |
+| 3:20-5:00 | Hands-on: Setup + ML Demo | Sylvia |
 
 : {.striped}
 

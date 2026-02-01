@@ -1,0 +1,84 @@
+---
+title: "Hands-on: Regularized Regression"
+subtitle: "Day 2 Morning | LASSO, Ridge, and Elastic Net"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-lasso-ridge.ipynb)
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Apply LASSO and Ridge regression to supply chain data
+2. Visualize coefficient paths as λ changes
+3. Use cross-validation to select optimal λ
+4. Compare model performance across regularization methods
+5. Identify which features LASSO selects
+
+## Prerequisites
+
+- Completed Day 1 hands-on (including sine wave demo)
+- Understanding of bias-variance tradeoff
+- Familiarity with the workshop dataset
+
+## Exercise Overview
+
+### Part 1: Data Preparation (15 min)
+
+- Load supply chain data
+- Create features (lags, dummies, interactions)
+- Train/test split
+
+### Part 2: Ridge Regression (20 min)
+
+- Fit Ridge with different λ values
+- Visualize coefficient shrinkage
+- Cross-validation for optimal λ
+- Evaluate on test set
+
+### Part 3: LASSO Regression (25 min)
+
+- Fit LASSO with different λ values
+- Visualize coefficient paths (some go to zero!)
+- Observe automatic feature selection
+- Cross-validation for optimal λ
+- Compare selected features
+
+### Part 4: Elastic Net (15 min)
+
+- Combine L1 and L2 penalties
+- When to use Elastic Net
+- Quick comparison
+
+### Part 5: Model Comparison (25 min)
+
+- Compare LASSO, Ridge, Elastic Net, OLS
+- Cross-validated RMSE for each
+- Which performs best on test data?
+- Feature importance from LASSO
+
+## Key Concepts Reinforced
+
+| Concept from Lecture | Practiced Here |
+|---------------------|----------------|
+| Ridge shrinks all coefficients | See all coefficients move toward zero |
+| LASSO sets some to exactly zero | Watch coefficients disappear |
+| CV selects optimal λ | Use LassoCV, RidgeCV |
+| Feature selection | Identify which features survive |
+
+## Connection to Afternoon
+
+After this session, you'll:
+
+- Understand how regularization controls complexity
+- Be ready for tree-based methods (which use different regularization)
+- Have a LASSO baseline to compare against Random Forest and Gradient Boosting

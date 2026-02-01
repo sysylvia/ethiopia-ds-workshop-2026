@@ -52,14 +52,22 @@ website:
             text: "Slides: Welcome & Overview"
           - href: day-1/slides-fundamentals.qmd
             text: "Slides: Data Science Fundamentals"
-          - href: day-1/slides-repro.qmd
-            text: "Slides: Reproducible Research"
+          - href: day-1/slides-ml-foundations.qmd
+            text: "Slides: ML Foundations"
           - href: day-1/notebook-setup.qmd
-            text: "Hands-on: Project Setup"
+            text: "Hands-on: Setup + ML Demo"
       - section: "Day 2: Machine Learning"
         contents:
           - href: day-2/index.qmd
             text: "Overview"
+          - href: day-2/slides-lasso.qmd
+            text: "Slides: LASSO & Ridge"
+          - href: day-2/slides-trees.qmd
+            text: "Slides: Trees & Ensembles"
+          - href: day-2/notebook-lasso.qmd
+            text: "Hands-on: Regularized Regression"
+          - href: day-2/notebook-forecasting.qmd
+            text: "Hands-on: Demand Forecasting"
       - section: "Day 3: Integration"
         contents:
           - href: day-3/index.qmd

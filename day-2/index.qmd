@@ -1,70 +1,89 @@
 ---
-title: "Day 2: Machine Learning Pipeline"
+title: "Day 2: ML Algorithms & Practice"
 subtitle: "Tuesday, February 3, 2026"
 ---
 
-::: {.callout-note}
-## Materials Coming Soon
-Day 2 materials will be available on February 3, 2026.
-:::
-
 ## Overview
 
-Day 2 is dedicated to **machine learning fundamentals for supply chain forecasting**. We'll cover the complete ML pipeline from data preparation through model evaluation, with hands-on exercises using pharmaceutical supply chain data.
+Day 2 is dedicated to **machine learning algorithms for supply chain forecasting**. We use an alternating lecture → hands-on pattern so you can immediately apply each concept.
 
-Building on the reproducible research practices from Day 1, you'll learn how ML models can generate the **demand forecasts** that feed into the agent-based simulation models covered on Days 3-4.
+Building on the ML foundations from Day 1, you'll learn regularization techniques (LASSO, Ridge) and tree-based methods (Random Forest, Gradient Boosting). These ML models generate the **demand forecasts** that feed into the agent-based simulation models covered on Days 3-4.
 
 ## Learning Objectives
 
 By the end of Day 2, you will be able to:
 
-1. **Distinguish** between prediction and causal inference tasks in health policy
-2. **Apply** the bias-variance tradeoff to select appropriate model complexity
-3. **Implement** cross-validation for robust model evaluation
-4. **Build** regularized regression models (LASSO, Ridge) for high-dimensional data
-5. **Construct** and interpret tree-based models (Random Forest, Gradient Boosting)
-6. **Evaluate** when to use ML versus traditional statistical methods
-7. **Connect** ML methods to real-world supply chain applications
+1. **Implement** regularized regression models (LASSO, Ridge, Elastic Net)
+2. **Explain** how LASSO performs automatic feature selection
+3. **Build** decision trees and understand their splitting logic
+4. **Compare** Random Forest vs Gradient Boosting approaches
+5. **Apply** cross-validation to select optimal model complexity
+6. **Evaluate** model performance using appropriate metrics
+7. **Connect** ML predictions to supply chain simulation inputs
 
 ## Schedule
 
-| Time | Session | Materials | Lead |
-|------|---------|-----------|------|
-| 8:30-10:30 | **Session 1**: Foundations of Supervised Learning | *Coming soon* | Sylvia |
+| Time | Session | Type | Lead |
+|------|---------|------|------|
+| 8:30-10:30 | **Regularization: LASSO & Ridge** | Lecture | Sylvia |
 | 10:30-10:50 | *Break* | | |
-| 10:50-12:30 | **Session 2**: Algorithm Families (LASSO, Trees, Ensembles) | *Coming soon* | Sylvia |
+| 10:50-12:30 | **Hands-on: Regularized Regression** | Practice | Sylvia |
 | 12:30-1:30 | *Lunch* | | |
-| 1:30-3:00 | **Session 3**: Hands-on: Demand Forecasting with ML | *Coming soon* | Sylvia |
+| 1:30-3:00 | **Trees & Ensembles** | Lecture | Sylvia |
 | 3:00-3:20 | *Break* | | |
-| 3:20-5:00 | **Session 4**: Hands-on: Model Selection & Tuning | *Coming soon* | Sylvia |
+| 3:20-5:00 | **Hands-on: Demand Forecasting** | Practice | Sylvia |
 
 ## Materials
 
 ### Lecture Slides
 
-- ML Foundations — Prediction vs causation, bias-variance tradeoff, train/test split, cross-validation, evaluation metrics
-- ML Algorithms — LASSO/Ridge regularization, decision trees, Random Forests, Gradient Boosting
+- [Regularization: LASSO & Ridge](slides-lasso.qmd) — Ridge regression, LASSO, Elastic Net, cross-validation for lambda
+- [Trees & Ensembles](slides-trees.qmd) — Decision trees, Random Forests, Gradient Boosting
 
 ### Hands-on Notebooks (Google Colab)
 
-- Demand Forecasting Notebook — Build your first ML model for supply chain demand
-- Model Tuning Notebook — Hyperparameter optimization, cross-validation, feature importance
-- Shortage Prediction Notebook — Replicate Roe et al. (2025) drug shortage prediction approach
+- [Regularized Regression Notebook](notebook-lasso.qmd) — Apply LASSO/Ridge to supply chain data
+- [Demand Forecasting Notebook](notebook-forecasting.qmd) — Build your first ML pipeline with trees and ensembles
+
+## Day Structure: Alternating Pattern
+
+```
+Morning:   Lecture (LASSO)  →  Hands-on (LASSO)
+                 │                    │
+                 └──── Apply immediately ────┘
+
+Afternoon: Lecture (Trees)  →  Hands-on (Forecasting)
+                 │                    │
+                 └──── Full ML pipeline ────┘
+```
+
+This alternating approach ensures you:
+- Apply each concept immediately after learning it
+- Build intuition through hands-on practice
+- Complete a full ML pipeline by end of day
 
 ## Key Concepts
 
-### The ML Workflow
+### Morning: Regularization
 
-```
-1. Define the problem        ──▶ What are we predicting? Why?
-2. Collect and prepare data  ──▶ Features, outcomes, cleaning
-3. Feature engineering       ──▶ Create informative inputs
-4. Train candidate models    ──▶ Linear, trees, ensembles...
-5. Evaluate and compare      ──▶ Cross-validation metrics
-6. Tune best model           ──▶ Hyperparameter optimization
-7. Final evaluation          ──▶ Test set performance
-8. Deploy and monitor        ──▶ Use predictions → ABM inputs
-```
+Why add penalties to linear models?
+
+| Problem | Solution |
+|---------|----------|
+| Many features (high-dimensional) | LASSO shrinks & selects |
+| Correlated features | Ridge shrinks all |
+| Unknown which is best | Elastic Net combines both |
+| Choosing penalty strength | Cross-validation |
+
+### Afternoon: Tree-Based Methods
+
+Non-linear methods that capture complex patterns:
+
+| Method | How it works |
+|--------|--------------|
+| **Decision Tree** | Recursive splitting, easy to interpret |
+| **Random Forest** | Many trees averaged, reduces variance |
+| **Gradient Boosting** | Trees that learn from mistakes |
 
 ### Algorithm Selection Guide
 
@@ -76,24 +95,27 @@ By the end of Day 2, you will be able to:
 | Need interpretability | Linear models, single decision trees |
 | Maximum accuracy | Ensemble methods (RF, Gradient Boosting) |
 
-### Connection to Days 3-4
-
-ML predictions → **Day 3**: Feed into agent-based models as demand inputs
+## Connection to Days 3-4
 
 ```
 Day 2: ML Demand Forecasts  →  Day 3-4: ABM Supply Chain Simulation
     (What will demand be?)        (How will the system respond?)
 ```
 
+Your ML predictions become **inputs** to the agent-based models, answering:
+- How much medication will each facility need?
+- Which facilities are at risk of stockout?
+- What should reorder quantities be?
+
 ## Pre-Session Preparation
 
 Before this session, ensure you:
 
-1. ✅ Completed Day 1 hands-on exercises
+1. ✅ Completed Day 1 hands-on exercises (including sine wave demo)
 2. ✅ Can access Google Colab ([test here](../computing.qmd))
 3. ✅ Review the [glossary](../resources/glossary.qmd) of ML terms
 
 ### Optional Reading
 
 - Mullainathan & Spiess (2017). "[Machine Learning: An Applied Econometric Approach](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87)." *Journal of Economic Perspectives*.
-- James et al. (2021). *An Introduction to Statistical Learning*, Chapters 2-3, 5-6, 8. [Free online](https://www.statlearning.com/)
+- James et al. (2021). *An Introduction to Statistical Learning*, Chapters 5-6, 8. [Free online](https://www.statlearning.com/)

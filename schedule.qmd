@@ -3,7 +3,7 @@ title: "Workshop Schedule"
 subtitle: "February 2-7, 2026 | Addis Ababa University"
 ---
 
-## Day 1: Foundations & Reproducible Research {#day1}
+## Day 1: Foundations & ML Concepts {#day1}
 **Monday, February 2, 2026**
 
 | Time | Session | Lead | Materials |
@@ -11,28 +11,28 @@ subtitle: "February 2-7, 2026 | Addis Ababa University"
 | 8:30-9:30 | Registration, Welcome, Introductions | Ozawa | [Slides](day-1/slides-welcome.qmd) |
 | 9:30-10:30 | Fundamentals of Data Science | Sylvia | [Slides](day-1/slides-fundamentals.qmd) |
 | 10:30-10:50 | *Break* | | |
-| 10:50-12:30 | **Reproducible Research Practices** | Sylvia | [Slides](day-1/slides-repro.qmd) |
+| 10:50-12:30 | **Data Science in Public Health Policy** | Ozawa | |
 | 12:30-1:30 | *Lunch* | | |
-| 1:30-3:00 | Data Science in Public Health Policy | Ozawa | |
+| 1:30-3:00 | **ML Foundations: Core Concepts** | Sylvia | [Slides](day-1/slides-ml-foundations.qmd) |
 | 3:00-3:20 | *Break* | | |
-| 3:20-5:00 | **Hands-on: Setting Up Your Project** | Sylvia | [Notebook](day-1/notebook-setup.qmd) |
+| 3:20-5:00 | **Hands-on: Setup + ML Demo** | Sylvia | [Notebook](day-1/notebook-setup.qmd) |
 
 : {.striped .hover}
 
 ---
 
-## Day 2: Machine Learning Pipeline {#day2}
+## Day 2: ML Algorithms & Practice {#day2}
 **Tuesday, February 3, 2026**
 
 | Time | Session | Lead | Materials |
 |------|---------|------|-----------|
-| 8:30-10:30 | **Introduction to Machine Learning** | Sylvia | *Coming soon* |
+| 8:30-10:30 | **Regularization: LASSO & Ridge** | Sylvia | [Slides](day-2/slides-lasso.qmd) |
 | 10:30-10:50 | *Break* | | |
-| 10:50-12:30 | **Families of ML Algorithms** | Sylvia | *Coming soon* |
+| 10:50-12:30 | **Hands-on: Regularized Regression** | Sylvia | [Notebook](day-2/notebook-lasso.qmd) |
 | 12:30-1:30 | *Lunch* | | |
-| 1:30-3:00 | **Hands-on: Demand Forecasting with ML** | Sylvia | *Coming soon* |
+| 1:30-3:00 | **Trees & Ensembles** | Sylvia | [Slides](day-2/slides-trees.qmd) |
 | 3:00-3:20 | *Break* | | |
-| 3:20-5:00 | **Hands-on: Model Selection & Tuning** | Sylvia | *Coming soon* |
+| 3:20-5:00 | **Hands-on: Demand Forecasting** | Sylvia | [Notebook](day-2/notebook-forecasting.qmd) |
 
 : {.striped .hover}
 

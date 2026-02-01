@@ -1,13 +1,13 @@
 ---
-title: "Hands-on: Demand Forecasting with ML"
-subtitle: "Day 2 | Build Your First ML Model"
+title: "Hands-on: Demand Forecasting"
+subtitle: "Day 2 Afternoon | Full ML Pipeline with Trees & Ensembles"
 ---
 
 ## Open in Google Colab
 
 Click the badge below to open this notebook directly in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-demand-forecasting.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-demand-forecasting.ipynb)
 
 ::: {.callout-tip}
 ## Save Your Work
@@ -18,10 +18,11 @@ After opening, go to **File > Save a copy in Drive** to save your progress.
 
 In this hands-on session, you will:
 
-1. Load and preprocess supply chain data
-2. Engineer features for demand prediction
-3. Train multiple ML models
-4. Evaluate and compare model performance
+1. Build a complete ML pipeline for demand forecasting
+2. Train and compare Decision Trees, Random Forest, and Gradient Boosting
+3. Use cross-validation for honest model comparison
+4. Analyze feature importance across models
+5. Generate forecasts for use in Days 3-4 simulation
 
 ## The Problem
 
@@ -32,70 +33,115 @@ You are a data scientist working with the Ethiopian pharmaceutical supply chain.
 - Seasonal patterns
 - Regional factors
 
+These predictions will feed into the **agent-based models** on Days 3-4.
+
 ## Exercise Overview
 
-### Part 1: Data Preparation (20 min)
+### Part 1: Data Preparation (15 min)
 
 - Load the supply chain dataset
-- Handle missing values
-- Create train/test split
+- Create features (lags, dummies)
+- Train/test split
 
-### Part 2: Feature Engineering (20 min)
+### Part 2: Decision Tree (15 min)
 
-- Create time-based features (month, quarter, year)
-- Encode categorical variables
-- Scale numerical features
+- Fit a single decision tree
+- Visualize the tree structure
+- See how it captures nonlinearities
+- Observe overfitting with deep trees
 
-### Part 3: Model Training (30 min)
+### Part 3: Random Forest (25 min)
 
-- Train a linear regression baseline
-- Train a Random Forest model
-- Train a Gradient Boosting model
-- Compare performance
-
-### Part 4: Interpretation (20 min)
-
+- Fit Random Forest with different parameters
+- Compare to single tree performance
+- Use OOB error for quick validation
 - Examine feature importance
-- Analyze prediction errors
-- Discuss implications for supply chain
 
-## Key Code Snippets
+### Part 4: Gradient Boosting (25 min)
 
-### Train/Test Split
+- Fit Gradient Boosting (XGBoost or sklearn)
+- Tune key parameters: learning_rate, n_estimators, max_depth
+- Cross-validate to prevent overfitting
+- Compare to Random Forest
 
-```python
-from sklearn.model_selection import train_test_split
+### Part 5: Model Comparison (20 min)
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-```
+- Compare all models: LASSO (from morning), RF, GB
+- Cross-validated RMSE for each
+- Feature importance comparison
+- Select best model for simulation
 
-### Train a Model
+## Key Concepts from Lecture
+
+| Concept | What You'll See |
+|---------|-----------------|
+| Trees capture interactions | Tree splits show feature combinations |
+| RF reduces variance | Smoother predictions than single tree |
+| GB learns from mistakes | Sequential improvement in residuals |
+| Feature importance | Which features drive predictions |
+
+## Code Snippets
+
+### Random Forest
 
 ```python
 from sklearn.ensemble import RandomForestRegressor
 
-model = RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-predictions = model.predict(X_test)
+rf = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=10,
+    random_state=42,
+    oob_score=True
+)
+rf.fit(X_train, y_train)
+print(f"OOB Score: {rf.oob_score_:.3f}")
 ```
 
-### Evaluate
+### Gradient Boosting
 
 ```python
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.ensemble import GradientBoostingRegressor
 
-rmse = mean_squared_error(y_test, predictions, squared=False)
-r2 = r2_score(y_test, predictions)
-print(f"RMSE: {rmse:.2f}, R²: {r2:.3f}")
+gb = GradientBoostingRegressor(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5,
+    random_state=42
+)
+gb.fit(X_train, y_train)
+```
+
+### Feature Importance
+
+```python
+import pandas as pd
+
+importance = pd.DataFrame({
+    'feature': feature_names,
+    'importance': rf.feature_importances_
+}).sort_values('importance', ascending=False)
+
+importance.head(10).plot(kind='barh', x='feature', y='importance')
+```
+
+## Connection to Days 3-4
+
+The forecasts you generate here become **inputs to the ABM simulation**:
+
+```
+Day 2 Output → Days 3-4 Input
+─────────────────────────────
+Demand forecasts → Agent ordering behavior
+Feature importance → What-if scenarios
+Model predictions → Inventory planning
 ```
 
 ## After This Session
 
 You will have:
 
-- Built and evaluated multiple ML models
+- Built and compared multiple ML models
 - Understanding of the full ML pipeline
-- A baseline model for demand forecasting
-- Readiness for model tuning in the next session
+- A trained model for demand forecasting
+- Feature importance insights for supply chain decisions
+- Predictions ready for simulation on Days 3-4

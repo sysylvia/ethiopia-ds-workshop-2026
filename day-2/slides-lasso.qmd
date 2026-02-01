@@ -1,0 +1,539 @@
+---
+title: "Regularization: LASSO & Ridge"
+subtitle: "Day 2 Morning | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D."
+date: 2026-02-03
+format:
+  revealjs:
+    theme: [default, ../style/workshop.scss]
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+# Welcome to Day 2!
+
+## Day 2 Structure: Learn → Apply
+
+:::: {.columns}
+::: {.column width="50%"}
+### Morning
+**Regularization (Now)**
+
+- Ridge regression
+- LASSO
+- Elastic Net
+
+**Hands-on (10:50)**
+
+- Apply LASSO/Ridge to data
+:::
+
+::: {.column width="50%"}
+### Afternoon
+**Trees & Ensembles (1:30)**
+
+- Decision trees
+- Random Forests
+- Gradient Boosting
+
+**Hands-on (3:20)**
+
+- Full ML pipeline
+:::
+::::
+
+---
+
+# Recap: Day 1 Foundations
+
+## The Central Challenge
+
+**Bias-Variance Tradeoff**:
+
+- Simple models → High bias, low variance (underfit)
+- Complex models → Low bias, high variance (overfit)
+
+. . .
+
+**Yesterday's sine wave demo** showed this visually:
+
+- Low-degree polynomial: Too simple, missed the curve
+- High-degree polynomial: Fit training data perfectly, terrible on test data
+- Sweet spot: Captured the pattern without memorizing noise
+
+---
+
+## Today's Question
+
+**What if we have MANY features?**
+
+. . .
+
+Imagine predicting demand with:
+
+- 50 facility characteristics
+- 12 monthly lags
+- 100+ potential interactions
+
+. . .
+
+> With many features, overfitting becomes almost guaranteed without constraints
+
+---
+
+# The Problem with OLS in High Dimensions
+
+## Why OLS Fails
+
+Standard OLS minimizes:
+
+$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2$$
+
+. . .
+
+**Problems when p (features) is large:**
+
+| Issue | Consequence |
+|-------|-------------|
+| More features than observations (p > n) | OLS has no unique solution |
+| Many correlated features | Coefficients explode in magnitude |
+| Fitting to noise | Perfect training fit, terrible test performance |
+
+---
+
+## A Supply Chain Example
+
+Predicting monthly medication demand:
+
+| Feature Category | Example Features | Count |
+|------------------|------------------|-------|
+| Facility info | Type, size, region, distance to warehouse | 8 |
+| Historical demand | Lag-1, Lag-2, ..., Lag-12 | 12 |
+| Seasonal factors | Month dummies, holiday indicators | 15 |
+| Disease patterns | Malaria incidence, TB rates, ... | 10 |
+| **Total** | | **45+** |
+
+. . .
+
+> With limited data points, we need to constrain model complexity
+
+---
+
+# Regularization: The Solution
+
+## Key Idea
+
+**Add a penalty** that constrains coefficient magnitudes:
+
+$$\text{minimize } \underbrace{\sum_{i=1}^n (y_i - X_i\beta)^2}_{\text{Fit the data}} + \underbrace{\lambda \cdot \text{Penalty}(\beta)}_{\text{Keep it simple}}$$
+
+. . .
+
+- **λ = 0**: No penalty → Standard OLS
+- **λ → ∞**: Full penalty → All coefficients shrink to zero
+- **λ optimal**: Balance fit and simplicity
+
+---
+
+# Ridge Regression (L2)
+
+## The L2 Penalty
+
+Ridge regression adds the **sum of squared coefficients**:
+
+$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p \beta_j^2$$
+
+. . .
+
+**Effect:**
+
+- All coefficients shrink toward zero
+- Coefficients never reach exactly zero
+- Correlated features share influence
+
+---
+
+## Ridge: Geometric Intuition
+
+:::: {.columns}
+::: {.column width="50%"}
+### The Constraint Region
+- Ridge constrains $\sum \beta_j^2 \leq c$
+- This is a **circle** (or sphere) in parameter space
+- OLS solution must stay inside
+:::
+
+::: {.column width="50%"}
+### The Result
+- Coefficients shrink proportionally
+- Correlated variables: effect spread across both
+- No variable is completely eliminated
+:::
+::::
+
+. . .
+
+> **Analogy**: Ridge is "socialist" — everyone contributes, no one is eliminated
+
+---
+
+## When to Use Ridge
+
+**Best for:**
+
+- Many correlated features (multicollinearity)
+- You want to keep all predictors
+- Prior belief that all features matter
+
+**Limitations:**
+
+- Doesn't perform feature selection
+- All coefficients remain in model
+- Less interpretable with many features
+
+---
+
+# LASSO (L1)
+
+## The L1 Penalty
+
+LASSO uses the **sum of absolute coefficients**:
+
+$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p |\beta_j|$$
+
+. . .
+
+**Key difference from Ridge:**
+
+- Can set coefficients **exactly to zero**
+- Performs **automatic feature selection**
+- Identifies the "important" variables
+
+---
+
+## LASSO: Geometric Intuition
+
+:::: {.columns}
+::: {.column width="50%"}
+### The Constraint Region
+- LASSO constrains $\sum |\beta_j| \leq c$
+- This is a **diamond** in parameter space
+- Diamond has **corners** at axes
+:::
+
+::: {.column width="50%"}
+### The Result
+- OLS contours often hit corners first
+- Corner = one coefficient is zero
+- Sparse solutions emerge naturally
+:::
+::::
+
+![](../images/lasso-contours.png){fig-align="center" width=50%}
+
+---
+
+## LASSO: The Coefficient Path
+
+As λ increases, coefficients shrink:
+
+![](../images/lambda.png){fig-align="center" width=70%}
+
+. . .
+
+- **Small λ**: Many non-zero coefficients
+- **Large λ**: Few non-zero coefficients
+- **Path shows**: Which features are "strongest"
+
+---
+
+## LASSO = Automatic Feature Selection
+
+```
+λ increasing →
+
+Feature 1:  ═══════════════════════════■──────────▶ 0
+Feature 2:  ═════════════════■──────────────────────▶ 0
+Feature 3:  ═══════■────────────────────────────────▶ 0
+Feature 4:  ═══════════════════════════════════■────▶ 0
+
+■ = coefficient becomes exactly zero
+```
+
+. . .
+
+**Interpretation:**
+
+- Features that stay non-zero longest are "most important"
+- LASSO selects a sparse subset of predictors
+- Useful when you want a simple, interpretable model
+
+---
+
+## When to Use LASSO
+
+**Best for:**
+
+- Suspected sparsity (only some features matter)
+- Feature selection is desired
+- High-dimensional data (p >> n possible with additional considerations)
+- Want interpretable model with fewer variables
+
+**Limitations:**
+
+- With correlated features, selects one arbitrarily
+- Selected features may change with data perturbations
+- Not stable under resampling
+
+---
+
+# Ridge vs LASSO
+
+## Side-by-Side Comparison
+
+| Aspect | Ridge (L2) | LASSO (L1) |
+|--------|------------|------------|
+| **Penalty** | $\sum \beta_j^2$ | $\sum |\beta_j|$ |
+| **Geometry** | Circle | Diamond |
+| **Zero coefficients** | Never | Yes, performs selection |
+| **Correlated features** | Shares across all | Picks one arbitrarily |
+| **Interpretation** | Less sparse | Sparse, easier to explain |
+
+![](../images/lasso_vs_ridge_vs_en.png){fig-align="center" width=60%}
+
+---
+
+## A Warning: LASSO Instability
+
+**From the transcripts (HPM 883):**
+
+If `BEDRMS` and `BATHS` are both correlated with price:
+
+- LASSO might select one or the other
+- Re-running on slightly different data can flip the choice
+- **Prediction may be stable, but selected features are not**
+
+. . .
+
+> **Implication**: Don't over-interpret which features LASSO selects
+
+---
+
+# Elastic Net
+
+## Best of Both Worlds
+
+Elastic Net combines L1 and L2 penalties:
+
+$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \left[ \alpha \sum_{j=1}^p |\beta_j| + (1-\alpha) \sum_{j=1}^p \beta_j^2 \right]$$
+
+. . .
+
+| α Value | Behavior |
+|---------|----------|
+| α = 1 | Pure LASSO |
+| α = 0 | Pure Ridge |
+| 0 < α < 1 | Mix of both |
+
+---
+
+## When to Use Elastic Net
+
+**Best for:**
+
+- Groups of correlated features
+- Want some feature selection
+- LASSO alone is too unstable
+
+. . .
+
+**Practical default:**
+
+- Start with α = 0.5 (equal mix)
+- Use cross-validation to tune both λ and α
+
+---
+
+# Choosing λ: Cross-Validation
+
+## The Key Question
+
+How do we choose the penalty strength λ?
+
+. . .
+
+**Too small λ** → Overfitting (not enough regularization)
+
+**Too large λ** → Underfitting (too much regularization)
+
+. . .
+
+> **Solution**: Cross-validation to find the λ that minimizes test error
+
+---
+
+## Cross-Validation for λ
+
+```
+For each candidate λ:
+    1. Split training data into K folds
+    2. For each fold:
+       - Train on K-1 folds
+       - Evaluate on held-out fold
+    3. Average CV error across folds
+
+Select λ with lowest CV error
+```
+
+. . .
+
+Most software does this automatically:
+
+- `sklearn.linear_model.LassoCV` in Python
+- `glmnet` with `cv.glmnet()` in R
+
+---
+
+## The λ Path with CV
+
+![](../images/lambda.png){fig-align="center" width=70%}
+
+**Two common choices:**
+
+- **λ.min**: Minimum CV error
+- **λ.1se**: Largest λ within 1 SE of minimum (more regularization)
+
+---
+
+# Practical Implementation
+
+## Python: scikit-learn
+
+```python
+from sklearn.linear_model import Lasso, LassoCV, Ridge, RidgeCV
+
+# LASSO with cross-validation for lambda
+lasso_cv = LassoCV(cv=5)
+lasso_cv.fit(X_train, y_train)
+
+# Best lambda
+print(f"Optimal alpha: {lasso_cv.alpha_}")
+
+# Coefficients (many will be zero)
+print(lasso_cv.coef_)
+
+# Prediction
+y_pred = lasso_cv.predict(X_test)
+```
+
+---
+
+## Feature Selection with LASSO
+
+```python
+# Which features were selected?
+import pandas as pd
+
+coef_df = pd.DataFrame({
+    'feature': feature_names,
+    'coefficient': lasso_cv.coef_
+})
+
+# Non-zero coefficients
+selected = coef_df[coef_df['coefficient'] != 0]
+print(f"Selected {len(selected)} of {len(feature_names)} features")
+```
+
+. . .
+
+> LASSO often reduces dozens of features to a handful
+
+---
+
+# Application to Supply Chains
+
+## Supply Chain Feature Selection
+
+With LASSO, we can identify which factors most predict demand:
+
+| Feature Category | Likely Selected? | Why |
+|------------------|------------------|-----|
+| Recent demand (Lag-1) | ✅ Yes | Strong predictor |
+| Distant lags (Lag-10) | ❌ Maybe not | Weaker signal |
+| Facility size | ✅ Yes | Core determinant |
+| Obscure indicators | ❌ No | Noise |
+
+. . .
+
+> LASSO helps build parsimonious forecasting models
+
+---
+
+## Connecting to Simulation
+
+**Day 2 → Days 3-4:**
+
+1. Use LASSO to build demand forecast model
+2. Select key predictive features
+3. Generate facility-level demand predictions
+4. Feed predictions into ABM as inputs
+
+. . .
+
+```
+LASSO Model: f(facility_features) → Demand Forecast
+                                       ↓
+ABM Simulation: Demand → Inventory → Stockouts
+```
+
+---
+
+# Key Takeaways
+
+## Summary: Regularization
+
+1. **Regularization** adds penalties to prevent overfitting in high dimensions
+
+2. **Ridge (L2)**: Shrinks all coefficients, keeps all features
+
+3. **LASSO (L1)**: Shrinks and selects features, sets some to zero
+
+4. **Elastic Net**: Combines both, handles correlated features
+
+5. **Cross-validation**: Use CV to choose the penalty strength λ
+
+6. **Supply chains**: LASSO helps identify which features matter for forecasting
+
+---
+
+## Discussion: Before Hands-on
+
+1. In your experience, which features might predict medication demand?
+
+2. Why might feature selection be valuable for supply chain planning?
+
+3. What's the risk of trusting LASSO's selected features too literally?
+
+---
+
+## Next: Hands-on Practice
+
+Apply LASSO and Ridge to real supply chain data:
+
+- Load the dataset
+- Fit regularized models
+- Visualize coefficient paths
+- Compare predictive performance
+- Identify selected features
+
+[Open LASSO Hands-on Notebook](notebook-lasso.qmd){.btn .btn-primary}

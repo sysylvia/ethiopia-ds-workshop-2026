@@ -1,33 +1,35 @@
 ---
-title: "Day 1: Foundations & Reproducible Research"
+title: "Day 1: Foundations & ML Concepts"
 subtitle: "Monday, February 2, 2026"
 ---
 
 ## Overview
 
-Day 1 establishes the foundation for the entire workshop. We'll cover fundamental concepts in data science, introduce reproducible research practices, and get everyone set up with the computing environment.
+Day 1 establishes the foundation for the entire workshop. We'll cover fundamental concepts in data science, introduce machine learning principles, and get everyone set up with the computing environment—including a hands-on demonstration of overfitting.
 
 ## Learning Objectives
 
 By the end of Day 1, you will be able to:
 
 - Distinguish between machine learning, statistics, and econometrics approaches
-- Set up a reproducible research project with proper structure
-- Use Google Colab for Python-based analysis
+- Understand the difference between prediction and causal inference
+- Explain the bias-variance tradeoff and why overfitting is dangerous
+- Set up a Google Colab environment for Python-based analysis
+- Visualize overfitting using a sine wave demonstration
 - Understand the role of data science in health policy decisions
 
 ## Schedule
 
 | Time | Session | Lead |
 |------|---------|------|
-| 8:30-9:30 | Registration, Welcome, Introductions | Team |
-| 9:30-10:30 | Fundamentals of Data Science | Joint |
+| 8:30-9:30 | Registration, Welcome, Introductions | Ozawa |
+| 9:30-10:30 | Fundamentals of Data Science | Sylvia |
 | 10:30-10:50 | *Break* | |
-| 10:50-12:30 | Reproducible Research Practices | Sylvia |
+| 10:50-12:30 | Data Science in Public Health Policy | Ozawa |
 | 12:30-1:30 | *Lunch* | |
-| 1:30-3:00 | Data Science in Public Health Policy | Ozawa |
+| 1:30-3:00 | ML Foundations: Core Concepts | Sylvia |
 | 3:00-3:20 | *Break* | |
-| 3:20-5:00 | Hands-on: Setting Up Your Project | Joint |
+| 3:20-5:00 | Hands-on: Setup + ML Demo | Sylvia |
 
 ## Materials
 
@@ -35,11 +37,24 @@ By the end of Day 1, you will be able to:
 
 - [Welcome & Workshop Overview](slides-welcome.qmd)
 - [Fundamentals of Data Science](slides-fundamentals.qmd)
-- [Reproducible Research Practices](slides-repro.qmd)
+- [ML Foundations: Core Concepts](slides-ml-foundations.qmd)
 
 ### Hands-on Exercise
 
-- [Project Setup Notebook](notebook-setup.qmd)
+- [Project Setup + ML Demo Notebook](notebook-setup.qmd)
+
+## Key Concepts
+
+### ML Foundations (Afternoon)
+
+The afternoon lecture introduces core machine learning concepts:
+
+- **Supervised learning**: Learning patterns from labeled data
+- **Prediction vs. causation**: When prediction is enough
+- **Bias-variance tradeoff**: Understanding model complexity
+- **Cross-validation**: Preventing overfitting
+- **Preview of Day 2**: LASSO, Ridge, Trees
+
 
 ## Preparation
 
