@@ -1,7 +1,7 @@
 ---
 title: "Welcome & Workshop Overview"
 subtitle: "WISE Workshop — Data Sciences for Modeling & HTA"
-author: "Sachiko Ozawa, PhD & Sean Sylvia, PhD"
+author: "Sachiko Ozawa, PhD, Sean Sylvia, PhD & Gebremedhin Beedemariam Gebretekle, PhD"
 date: 2026-02-02
 format:
   revealjs:
@@ -14,6 +14,8 @@ format:
     center: true
     scrollable: true
     footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+    toc: true
+    toc-depth: 1
 ---
 
 # Welcome!
@@ -22,38 +24,11 @@ format:
 
 **WISE Project Training Workshop**
 
-Addis Ababa University | February 2-5, 2026
-
----
-
-# Logistics
-
-## WiFi & Venue Information
-
-:::: {.columns}
-::: {.column width="50%"}
-### WiFi Access
-- **Network:** *(Will be announced)*
-- **Password:** *(Will be announced)*
-:::
-
-::: {.column width="50%"}
-### Venue
-- **Restrooms:** *(See venue map)*
-- **Emergency exits:** *(See venue map)*
-- **Coffee/tea:** Available during breaks
-:::
-::::
-
-. . .
-
-> Please silence mobile phones during sessions
+Addis Ababa University | February 2-7, 2026
 
 ---
 
 # The WISE Project
-
-## Workforce Information Supply chain strengthening in Ethiopia
 
 :::: {.columns}
 ::: {.column width="60%"}
@@ -106,7 +81,7 @@ The WISE project aims to strengthen Ethiopia's pharmaceutical supply chain throu
 ## Your Instructors
 
 :::: {.columns}
-::: {.column width="50%"}
+::: {.column width="33%"}
 ### Dr. Sachiko Ozawa
 **UNC Gillings School of Global Public Health**
 
@@ -115,13 +90,22 @@ The WISE project aims to strengthen Ethiopia's pharmaceutical supply chain throu
 - Agent-based modeling for health systems
 :::
 
-::: {.column width="50%"}
+::: {.column width="33%"}
 ### Dr. Sean Sylvia
 **UNC Gillings School of Global Public Health**
 
 - Health economist
 - Machine learning for health policy
 - Reproducible research methods
+:::
+
+::: {.column width="33%"}
+### Dr. Gebremedhin Gebretekle
+**Public Health Agency of Canada**
+
+- Health technology assessment
+- Health economics & outcomes research
+- Antimicrobial stewardship
 :::
 ::::
 
@@ -165,6 +149,10 @@ By the end of this workshop, you will be able to:
 
 4. **Design agent-based models** for pharmaceutical supply chains
 
+. . .
+
+5. **Apply health technology assessment methods** to evaluate interventions
+
 ---
 
 ## What You'll Build
@@ -191,14 +179,16 @@ By the end of this workshop, you will be able to:
 
 # Schedule Overview
 
-## Four Days, Four Themes
+## Six Days, Six Themes
 
 | Day | Focus | Lead |
 |-----|-------|------|
 | **Day 1** | Foundations & Reproducible Research | Joint |
 | **Day 2** | Machine Learning Pipeline | Sylvia |
 | **Day 3** | Modeling Concepts & Integration | Joint |
-| **Day 4** | ABM Deep Dive + Cultural Exchange | Ozawa |
+| **Day 4** | ABM Deep Dive | Ozawa |
+| **Day 5** | Health Technology Assessment | Gebretekle |
+| **Day 6** | Economic Evaluation Methods | Gebretekle |
 
 ---
 
@@ -244,7 +234,6 @@ By the end of this workshop, you will be able to:
 |------|---------|
 | 8:30-10:30 | Agent-Based Modeling for Supply Chains |
 | 10:50-12:30 | ABM Implementation |
-| 1:30-5:00 | Cultural Exchange / Sightseeing |
 
 ---
 
@@ -274,15 +263,15 @@ We'll use **Google Colab** for all hands-on exercises.
 
 . . .
 
-> **Shared Drive:** All materials available at our workshop folder
+> **Note:** All materials are available on the [workshop website](https://sysylvia.github.io/ethiopia-ds-workshop-2026/). The shared Google Drive folder serves as a backup if needed. If you have trouble accessing any materials, please let us know.
 
 ---
 
 ## Getting Started with Colab
 
-1. Go to [colab.research.google.com](https://colab.research.google.com)
+1. Go to the [Computing Setup page](../computing.qmd) on the workshop website
 2. Sign in with your Google account
-3. Open notebooks from our shared folder
+3. Click the Colab badge for any notebook to open it directly
 4. Run code cells with **Shift+Enter**
 
 . . .
@@ -361,6 +350,3 @@ We'll explore:
 - ML vs. statistics vs. econometrics
 - The role of prediction in health policy
 
-. . .
-
-*Short break first? Or shall we continue?*
