@@ -13,7 +13,7 @@ website:
   site-url: https://wise-workshop.ssylvia.io
   page-navigation: true
   title: "Data Science for HTA Workshop"
-  description: "Data Sciences for Modeling and Health Technology Assessment | Addis Ababa, Feb 2-5, 2026"
+  description: "Data Sciences for Modeling and Health Technology Assessment | Addis Ababa, Feb 2-7, 2026"
 
   sidebar:
     background: "#F5F5F5"
@@ -76,6 +76,12 @@ website:
         contents:
           - href: day-4/index.qmd
             text: "Overview"
+      - section: "Days 5-6: HTA & Economic Evaluation"
+        contents:
+          - href: day-5/index.qmd
+            text: "Day 5 Overview"
+          - href: day-6/index.qmd
+            text: "Day 6 Overview"
       - section: "Resources"
         contents:
           - href: resources/readings.qmd

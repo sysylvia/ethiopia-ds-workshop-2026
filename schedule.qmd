@@ -1,6 +1,6 @@
 ---
 title: "Workshop Schedule"
-subtitle: "February 2-5, 2026 | Addis Ababa University"
+subtitle: "February 2-7, 2026 | Addis Ababa University"
 ---
 
 ## Day 1: Foundations & Reproducible Research {#day1}
@@ -67,6 +67,14 @@ subtitle: "February 2-5, 2026 | Addis Ababa University"
 | 1:30-5:00 | Cultural Exchange / Sightseeing | | |
 
 : {.striped .hover}
+
+---
+
+## Days 5-6: HTA & Economic Evaluation {#day5-6}
+
+**Friday-Saturday, February 6-7, 2026** | Lead: **Dr. Gebretekle**
+
+*Schedule to be provided by Dr. Gebretekle*
 
 ---
 
