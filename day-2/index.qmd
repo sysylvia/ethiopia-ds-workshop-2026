@@ -35,15 +35,10 @@ By the end of Day 2, you will be able to:
 
 ## Materials
 
-### Lecture Slides
-
-- [Regularization: LASSO & Ridge](slides-lasso.qmd) — Ridge regression, LASSO, Elastic Net, cross-validation for lambda
-- [Trees & Ensembles](slides-trees.qmd) — Decision trees, Random Forests, Gradient Boosting
-
-### Hands-on Notebooks (Google Colab)
-
-- [Regularized Regression Notebook](notebook-lasso.qmd) — Apply LASSO/Ridge to supply chain data
-- [Demand Forecasting Notebook](notebook-forecasting.qmd) — Build your first ML pipeline with trees and ensembles
+::: {.callout-note}
+## Materials Available on Day 2
+Lecture slides and hands-on notebooks will be made available at the start of each session on Tuesday, February 3rd.
+:::
 
 ## Day Structure: Alternating Pattern
 

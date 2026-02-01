@@ -60,14 +60,15 @@ website:
         contents:
           - href: day-2/index.qmd
             text: "Overview"
-          - href: day-2/slides-lasso.qmd
-            text: "Slides: LASSO & Ridge"
-          - href: day-2/slides-trees.qmd
-            text: "Slides: Trees & Ensembles"
-          - href: day-2/notebook-lasso.qmd
-            text: "Hands-on: Regularized Regression"
-          - href: day-2/notebook-forecasting.qmd
-            text: "Hands-on: Demand Forecasting"
+          # Materials available on Day 2
+          # - href: day-2/slides-lasso.qmd
+          #   text: "Slides: LASSO & Ridge"
+          # - href: day-2/slides-trees.qmd
+          #   text: "Slides: Trees & Ensembles"
+          # - href: day-2/notebook-lasso.qmd
+          #   text: "Hands-on: Regularized Regression"
+          # - href: day-2/notebook-forecasting.qmd
+          #   text: "Hands-on: Demand Forecasting"
       - section: "Day 3: Integration"
         contents:
           - href: day-3/index.qmd
