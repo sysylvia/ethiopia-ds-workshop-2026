@@ -1,0 +1,95 @@
+---
+title: "Hands-on: Demand Forecasting (R)"
+subtitle: "Day 2 Afternoon | Random Forest and XGBoost with tidymodels"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-demand-forecasting-r.ipynb)
+
+::: {.callout-important}
+## R Runtime Required
+After opening in Colab, change the runtime to R: **Runtime > Change runtime type > R**
+:::
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Build Random Forest models using `rand_forest()` with `ranger` engine
+2. Build Gradient Boosting models using `boost_tree()` with `xgboost` engine
+3. Compare tree-based methods to linear regression
+4. Analyze feature importance using `vip` package
+
+## Prerequisites
+
+- Completed LASSO/Ridge notebook
+- Understanding of regularization concepts
+- Familiarity with tidymodels `workflow()` pattern
+
+## tidymodels Approach
+
+| Model | Specification |
+|-------|---------------|
+| Linear Regression | `linear_reg() %>% set_engine("lm")` |
+| Random Forest | `rand_forest() %>% set_engine("ranger")` |
+| Gradient Boosting | `boost_tree() %>% set_engine("xgboost")` |
+
+## Exercise Overview
+
+### Part 1: Data Preparation (15 min)
+
+- Load supply chain data
+- Feature engineering with `recipe()`
+- Train/test split
+
+### Part 2: Linear Regression Baseline (10 min)
+
+- Fit baseline model
+- Evaluate performance
+
+### Part 3: Random Forest (25 min)
+
+- Fit Random Forest with `ranger` engine
+- Understand how trees differ from linear models
+- Evaluate on test set
+
+### Part 4: Gradient Boosting (25 min)
+
+- Fit XGBoost model
+- Compare boosting vs bagging
+- Evaluate on test set
+
+### Part 5: Model Comparison (15 min)
+
+- Compare all three models
+- Visualize predictions vs actual
+- Feature importance with `vip()`
+
+## Key Packages
+
+| Package | Purpose |
+|---------|---------|
+| parsnip | Model specification |
+| ranger | Random Forest engine |
+| xgboost | Gradient Boosting engine |
+| vip | Variable importance plots |
+
+## Connection to Model Tuning
+
+After this session, you'll:
+
+- Understand how tree-based models work
+- Be ready to tune hyperparameters (trees, depth, learning rate)
+- Have baseline models to improve through tuning
+
+## Python Version
+
+Looking for Python? See the [Python version](notebook-forecasting.qmd) of this notebook.
