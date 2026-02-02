@@ -139,18 +139,15 @@ Note down examples they mention for later reference.
 - Skip legacy systems entirely
 - Higher potential productivity
 - **But significant uncertainty**
+
+### The Question
+How do we capture the leapfrog opportunity while managing the risk?
+
 :::
 
 :::
 
 ::::
-
-::: {.fragment}
-::: {.callout-note style="max-width: 800px; margin: 0.5em auto;"}
-### The Question
-How do we capture the leapfrog opportunity while managing the risk?
-:::
-:::
 
 ::: {.notes}
 [~45 sec] Open with opportunity, not problems. LMICs have a unique chance to skip the mistakes of HIC health IT. Mobile penetration is high, CHW networks exist—the infrastructure is there. But leapfrogging comes with uncertainty. The question is: how do we design systems that capture this opportunity while managing the risk?
