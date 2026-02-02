@@ -83,7 +83,8 @@ Please share:
 
 1. **Your name**
 2. **Your institution/organization**
-3. **One thing you hope to learn this week**
+3. **Your background in data sceince**
+4. **One thing you hope to learn this week**
 
 . . .
 
@@ -153,9 +154,9 @@ By the end of this workshop, you will be able to:
 |------|---------|
 | 8:30-9:30 | **Welcome & Introductions** ← *You are here* |
 | 9:30-10:30 | Fundamentals of Data Science |
-| 10:50-12:30 | Reproducible Research Practices |
 | 1:30-3:00 | Data Science in Public Health Policy |
-| 3:20-5:00 | Hands-on: Setting Up Your Project |
+| 1:30-3:00 | ML Foundations: Core Concepts | Sylvia |
+| 3:20-5:00 | Hands-on: Setting Up Your Project & ML Intro |
 
 ---
 
