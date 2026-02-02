@@ -69,7 +69,7 @@ The WISE project aims to strengthen Ethiopia's pharmaceutical supply chain throu
 
 | Instructor | Affiliation | Expertise |
 |------------|-------------|-----------|
-| **Dr. Sachiko Ozawa** | UNC Gillings School of Global Public Health | WISE PI, Supply chains, ABM |
+| **Dr. Sachiko Ozawa** | UNC Eshelman School of Pharmacy | WISE PI, Supply chains, ABM |
 | **Dr. Sean Sylvia** | UNC Gillings School of Global Public Health | Health economics, ML, Reproducibility |
 | **Dr. Gebremedhin Gebretekle** | Public Health Agency of Canada | HTA, Health economics, Antimicrobial stewardship |
 
