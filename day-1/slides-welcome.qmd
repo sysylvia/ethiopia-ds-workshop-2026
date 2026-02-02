@@ -13,6 +13,7 @@ format:
     incremental: false
     center: true
     scrollable: true
+    smaller: true
     footer: "WISE Workshop | Data Sciences for Modeling & HTA"
     toc: true
     toc-depth: 1
@@ -30,25 +31,21 @@ Addis Ababa University | February 2-7, 2026
 
 # The WISE Project
 
-:::: {.columns}
-::: {.column width="60%"}
-### Gates Grand Challenges Award
+## Gates Grand Challenges Award
 
 Building local capacity in:
 
 - **Data science** for health systems
 - **Predictive modeling** for supply chains
 - **Agent-based simulation** for policy analysis
-:::
 
-::: {.column width="40%"}
-### Ethiopia Context
+---
+
+## Ethiopia Context
 
 - Pharmaceutical supply chain challenges
 - Health workforce distribution
 - Data-driven decision making
-:::
-::::
 
 ---
 
@@ -58,21 +55,11 @@ The WISE project aims to strengthen Ethiopia's pharmaceutical supply chain throu
 
 . . .
 
-:::: {.columns}
-::: {.column width="50%"}
-### The Challenge
-- Medication stockouts
-- Inefficient distribution
-- Limited forecasting capacity
-:::
-
-::: {.column width="50%"}
-### The Opportunity
-- Rich data sources
-- Growing technical capacity
-- Commitment to improvement
-:::
-::::
+| The Challenge | The Opportunity |
+|---------------|-----------------|
+| Medication stockouts | Rich data sources |
+| Inefficient distribution | Growing technical capacity |
+| Limited forecasting capacity | Commitment to improvement |
 
 ---
 
@@ -80,34 +67,11 @@ The WISE project aims to strengthen Ethiopia's pharmaceutical supply chain throu
 
 ## Your Instructors
 
-:::: {.columns}
-::: {.column width="33%"}
-### Dr. Sachiko Ozawa
-**UNC Gillings School of Global Public Health**
-
-- WISE Project Principal Investigator
-- Expert in pharmaceutical supply chains
-- Agent-based modeling for health systems
-:::
-
-::: {.column width="33%"}
-### Dr. Sean Sylvia
-**UNC Gillings School of Global Public Health**
-
-- Health economist
-- Machine learning for health policy
-- Reproducible research methods
-:::
-
-::: {.column width="33%"}
-### Dr. Gebremedhin Gebretekle
-**Public Health Agency of Canada**
-
-- Health technology assessment
-- Health economics & outcomes research
-- Antimicrobial stewardship
-:::
-::::
+| Instructor | Affiliation | Expertise |
+|------------|-------------|-----------|
+| **Dr. Sachiko Ozawa** | UNC Gillings School of Global Public Health | WISE PI, Supply chains, ABM |
+| **Dr. Sean Sylvia** | UNC Gillings School of Global Public Health | Health economics, ML, Reproducibility |
+| **Dr. Gebremedhin Gebretekle** | Public Health Agency of Canada | HTA, Health economics, Antimicrobial stewardship |
 
 ---
 
@@ -157,23 +121,12 @@ By the end of this workshop, you will be able to:
 
 ## What You'll Build
 
-:::: {.columns}
-::: {.column width="50%"}
-### Technical Skills
-- Python for data analysis
-- Machine learning pipeline
-- Demand forecasting models
-- ABM simulation basics
-:::
-
-::: {.column width="50%"}
-### Conceptual Understanding
-- When to use ML vs. statistics
-- Bias-variance tradeoff
-- Model validation strategies
-- Connecting predictions to policy
-:::
-::::
+| Technical Skills | Conceptual Understanding |
+|------------------|--------------------------|
+| Python for data analysis | When to use ML vs. statistics |
+| Machine learning pipeline | Bias-variance tradeoff |
+| Demand forecasting models | Model validation strategies |
+| ABM simulation basics | Connecting predictions to policy |
 
 ---
 
@@ -228,12 +181,23 @@ By the end of this workshop, you will be able to:
 
 ---
 
-## Day 4: Deep Dive
+## Day 4: ABM Deep Dive
 
 | Time | Session |
 |------|---------|
 | 8:30-10:30 | Agent-Based Modeling for Supply Chains |
 | 10:50-12:30 | ABM Implementation |
+
+---
+
+## Days 5-6: HTA & Economic Evaluation {.smaller}
+
+*Led by Dr. Gebremedhin Gebretekle*
+
+| Day | Focus |
+|-----|-------|
+| **Day 5** | Health Technology Assessment — frameworks, methods, decision criteria |
+| **Day 6** | Economic Evaluation — cost-effectiveness, budget impact, policy application |
 
 ---
 
@@ -245,25 +209,15 @@ We'll use **Google Colab** for all hands-on exercises.
 
 . . .
 
-:::: {.columns}
-::: {.column width="50%"}
-### What You Need
-- Google account
-- Web browser
-- Laptop (charged!)
-:::
-
-::: {.column width="50%"}
-### What's Provided
-- Pre-configured notebooks
-- Sample datasets
-- Shared Google Drive folder
-:::
-::::
+| What You Need | What's Provided |
+|---------------|-----------------|
+| Google account | Pre-configured notebooks |
+| Web browser | Sample datasets |
+| Laptop (charged!) | Shared Google Drive folder |
 
 . . .
 
-> **Note:** All materials are available on the [workshop website](https://sysylvia.github.io/ethiopia-ds-workshop-2026/). The shared Google Drive folder serves as a backup if needed. If you have trouble accessing any materials, please let us know.
+> All materials on [workshop website](https://sysylvia.github.io/ethiopia-ds-workshop-2026/)
 
 ---
 
@@ -284,22 +238,12 @@ We'll use **Google Colab** for all hands-on exercises.
 
 ## How We'll Work Together
 
-:::: {.columns}
-::: {.column width="50%"}
-### Engagement
-- Questions welcome anytime
-- No question is too basic
-- Help your neighbors
-- Share your expertise
-:::
-
-::: {.column width="50%"}
-### Logistics
-- Breaks are important — please take them!
-- Step out if needed
-- Let us know if pace is too fast/slow
-:::
-::::
+| Engagement | Logistics |
+|------------|-----------|
+| Questions welcome anytime | Breaks are important — take them! |
+| No question is too basic | Step out if needed |
+| Help your neighbors | Let us know if pace is too fast/slow |
+| Share your expertise | |
 
 ---
 
@@ -320,21 +264,11 @@ We'll use **Google Colab** for all hands-on exercises.
 
 ## Before We Continue
 
-:::: {.columns}
-::: {.column width="50%"}
-### About the Workshop
-- Schedule
-- Materials
-- Computing setup
-:::
-
-::: {.column width="50%"}
-### About the Project
-- WISE goals
-- Expected outcomes
-- Next steps
-:::
-::::
+| About the Workshop | About the Project |
+|--------------------|-------------------|
+| Schedule | WISE goals |
+| Materials | Expected outcomes |
+| Computing setup | Next steps |
 
 ---
 
