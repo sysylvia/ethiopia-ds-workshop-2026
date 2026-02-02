@@ -331,7 +331,7 @@ Test error: How well we predict NEW data
 
 More robust than a single train/validation split:
 
-![](../images/k-fold.png){fig-align="center" width=70%}
+![](../images/k-fold.png){fig-align="center" width=80%}
 
 . . .
 

@@ -113,7 +113,7 @@ Note down examples they mention for later reference.
 
 ---
 
-## The Leapfrog Opportunity {.center}
+## The Leapfrog Opportunity {.center} {.smaller}
 
 :::: {.columns}
 
