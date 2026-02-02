@@ -154,9 +154,9 @@ By the end of this workshop, you will be able to:
 |------|---------|
 | 8:30-9:30 | **Welcome & Introductions** ← *You are here* |
 | 9:30-10:30 | Fundamentals of Data Science |
-| 1:30-3:00 | Data Science in Public Health Policy |
-| 1:30-3:00 | ML Foundations: Core Concepts | Sylvia |
-| 3:20-5:00 | Hands-on: Setting Up Your Project & ML Intro |
+| 10:50-12:30 | Data Science in Public Health Policy |
+| 1:30-3:00 | ML Foundations: Core Concepts |
+| 3:20-5:00 | Hands-on: Setup + ML Demo |
 
 ---
 
@@ -164,10 +164,10 @@ By the end of this workshop, you will be able to:
 
 | Time | Session |
 |------|---------|
-| 8:30-10:30 | Introduction to Machine Learning |
-| 10:50-12:30 | Families of ML Algorithms |
-| 1:30-3:00 | Hands-on: Demand Forecasting |
-| 3:20-5:00 | Hands-on: Model Selection & Tuning |
+| 8:30-10:30 | Regularization: LASSO & Ridge |
+| 10:50-12:30 | Hands-on: Regularized Regression |
+| 1:30-3:00 | Trees & Ensembles |
+| 3:20-5:00 | Hands-on: Demand Forecasting |
 
 ---
 
