@@ -68,6 +68,187 @@ This is an opening discussion moment — give 2-3 minutes for informal sharing.
 Note down examples they mention for later reference.
 :::
 
+---
+
+## AI as Economic Transformation 
+
+### Economics of Digitization: 
+
+**Reduction in (Marginal) Costs **
+
+| Cost Type | Healthcare Application |
+|---------------|----------------------------|
+| **Search Costs** | Instant medical literature access, symptom lookup |
+| **Replication Costs** | Digital health records, AI models deployed at scale |
+| **Transportation Costs** | Telemedicine, remote monitoring, digital consultations |
+| **Tracking Costs** | Continuous patient surveillance, automated data collection |
+| **Verification Costs** | Digital identity, online reputation systems, trust mechanisms |
+
+---
+
+## The Dream: AI-Enabled Healthcare
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### What AI Can Do
+
+- Extend specialist expertise to frontline workers
+- Standardize care quality across settings
+- Enable continuous learning from practice
+- Reduce diagnostic delays
+:::
+
+::: {.column width="50%"}
+### The Sustainability Question
+
+- Can AI systems improve **and** remain equitable over time?
+- Will they work for **hard-to-reach** populations?
+- How do we design for **long-term** rather than short-term gains?
+:::
+
+---
+
+## Leapfrogging Potential 
+
+**LMIC health systems can choose to follow path of developed countries, or adopt latest technology and processes.**
+
+::: {.columns}
+::: {.column width="50%"}
+- Well-traveled, but outdated vs. Modern, but risky
+    - New path in healthcare delivery enabled by "4th Industrial Revolution" tech:AI, sharing economy, IoT, etc
+- Many LMICs have strong incentives to follow new path (WEF 2015)
+    - Large pop + "dual disease burden" --> High cost of high-income country approach 
+    - 4IR tech low marginal cost
+:::
+
+::: {.column width="50%"}
+![](images/mobile.png){width="500"}
+
+*Mobile leapfrogging precedent: LMICs bypassed landline infrastructure*
+:::
+:::
+
+::: {.notes}
+The economic lens is crucial - AI fundamentally changes cost structures. The M-Pesa example shows how LMICs can leapfrog traditional infrastructure. Need a figure showing mobile banking adoption curves.
+:::
+
+---
+
+## Challenge: AI Often Fails In Healthcare 
+
+| System | Scope | Key Failure | Real-World Impact |
+|--------|-------|-------------|-------------------|
+| **Epic Sepsis Model** | 56% of US hospitals | Missed 67% of cases, false alerts 88% of the time | Delayed treatment, alert fatigue |
+| **IBM Watson Oncology** | Major hospitals globally | Unsafe treatment recommendations | $62M+ wasted, quietly discontinued |
+| **SkinVision App** | Consumer market | 235% worse performance with rotation | Missed melanomas, health disparities |
+| **COMPAS (Criminal Justice)** | 46 US states | 44.9% vs 23.5% false positive rates | Systematic racial bias in sentencing |
+
+::: {.fragment}
+**Pattern:** Technical validation ≠ Real-world success
+:::
+
+::: {.notes}
+Each row represents millions in investment and thousands of lives affected. The pattern is clear: systems that pass technical validation fail when deployed in complex social systems. Include source citations in appendix.
+:::
+
+---
+
+## The Problem: AI Systems Can Degrade Over Time
+
+::: {.eyebrow}
+CASE STUDY
+:::
+
+:::: {.columns}
+
+::: {.column width="60%"}
+### Epic Sepsis Model
+
+- Deployed in **56% of US hospitals**
+- Initial promise: Early detection, save lives
+- Reality: **Missed 67% of sepsis cases**
+- Alert fatigue became widespread
+
+::: {.small}
+*Wong et al., JAMA Internal Medicine 2021*
+:::
+:::
+
+::: {.column width="40%"}
+::: {.fragment}
+::: {.callout-warning}
+### Pattern
+
+Technical validation ≠ Sustainable real-world success
+:::
+:::
+:::
+
+::::
+
+::: {.notes}
+[~45 sec] Concrete example showing the gap between promise and reality. Sets up WHY we need a different approach.
+:::
+
+---
+
+## Why? Feedback Loops Change Everything
+
+::: {.eyebrow}
+CORE INSIGHT
+:::
+
+![](images/crisp-dm-slide2.svg){fig-align="center" width="80%"}
+
+::: {.fragment}
+::: {.callout-note}
+### Key Insight
+
+AI deployment changes the data-generating process it depends on
+:::
+:::
+
+::: {.notes}
+[~1.5 min] Core theoretical contribution. When you deploy an AI system, clinician behavior changes, patient selection changes, and the training data for the next iteration is different from what came before.
+:::
+
+---
+
+## Six Challenges to AI Adoption 
+
+![](images/six-challenges.png){width="100%"}
+
+---
+
+# Design Principles {.section background-color="#13294B"}
+
+## Design Principles for Sustainable AI in PHC
+
+::: {.eyebrow}
+RECOMMENDATIONS
+:::
+
+::: {.incremental}
+1. **Community Engagement as Methodology**
+   - Communities detect when systems stop working for them
+
+2. **Design for Behavioral Adaptation**
+   - Clinicians *will* change behavior—plan for it
+
+3. **Continuous Validation, Not One-Time Approval**
+   - Build monitoring from day one
+
+4. **Equity-First Design**
+   - Test on hard-to-reach first—if it works for them, it works for all
+:::
+
+::: {.notes}
+[~1 min] Actionable recommendations connecting to panelists: community engagement (Ye Zhang), PHC sustainability (Krishna Rao), hard-to-reach (Weiming Tang).
+:::
+
+---
+
 # What Is Data Science? {.center}
 
 ## The Intersection of Three Fields
