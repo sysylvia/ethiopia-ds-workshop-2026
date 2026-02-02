@@ -113,33 +113,95 @@ Note down examples they mention for later reference.
 
 ---
 
-## Leapfrogging Potential 
+## The Leapfrog Opportunity {.center}
 
-**LMIC health systems can choose to follow path of developed countries, or adopt latest technology and processes.**
+:::: {.columns}
 
-::: {.columns}
-::: {.column width="50%"}
-- Well-traveled, but outdated vs. Modern, but risky
-    - New path in healthcare delivery enabled by "4th Industrial Revolution" tech:AI, sharing economy, IoT, etc
-- Many LMICs have strong incentives to follow new path (WEF 2015)
-    - Large pop + "dual disease burden" --> High cost of high-income country approach 
-    - 4IR tech low marginal cost
+::: {.column width="60%"}
+![](images/adri-v2-leapfrog-final.jpg){fig-align="center" width="100%"}
 :::
 
-::: {.column width="50%"}
-![](/images/mobile.png){width="500"}
+::: {.column width="40%"}
 
-*Mobile leapfrogging precedent: LMICs bypassed landline infrastructure*
+::: {.fragment}
+### The Choice LMICs Face
+
+**Option 1: Follow the HIC Path**
+
+- Safe, proven trajectory
+- Limited by legacy infrastructure
+- Ceiling set by institutional debt
+:::
+
+::: {.fragment}
+**Option 2: Leapfrog to the Frontier**
+
+- Skip legacy systems entirely
+- Higher potential productivity
+- **But significant uncertainty**
+:::
+
+:::
+
+::::
+
+::: {.fragment}
+::: {.callout-note style="max-width: 800px; margin: 0.5em auto;"}
+### The Question
+How do we capture the leapfrog opportunity while managing the risk?
 :::
 :::
 
 ::: {.notes}
-The economic lens is crucial - AI fundamentally changes cost structures. The M-Pesa example shows how LMICs can leapfrog traditional infrastructure. Need a figure showing mobile banking adoption curves.
+[~45 sec] Open with opportunity, not problems. LMICs have a unique chance to skip the mistakes of HIC health IT. Mobile penetration is high, CHW networks exist—the infrastructure is there. But leapfrogging comes with uncertainty. The question is: how do we design systems that capture this opportunity while managing the risk?
 :::
 
 ---
 
-## Challenge: AI Often Fails In Healthcare 
+## AI is Different {.center}
+
+![](images/adri-v2-sociotechnical-loop.svg){fig-align="center" width="90%"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+#### The Complexity {style="font-size: 0.85em;"}
+
+- Data shapes decisions → decisions change behaviors
+- Behaviors generate new data → **feedback loops**
+- Yesterday's patterns ≠ tomorrow's reality
+- **Unknown unknowns** we can't predict upfront
+
+:::
+
+::: {.column width="50%"}
+
+#### The Core Insight {style="font-size: 0.85em;"}
+
+Health systems are **information-processing and decision-making factories**.
+
+Digital systems transform the factory floor—not just *how* care is delivered, but *what* care, *when*, and to *whom*.
+
+:::
+
+::::
+
+::: {.callout-note appearance="minimal" style="max-width: 900px; margin: 0.5em auto; text-align: center;"}
+We must **learn about the system** before deploying—and **design to learn** continuously after.
+:::
+
+::: {.notes}
+[~90 sec] Health systems are fundamentally information-processing machines. Digital health doesn't just make processes faster—it changes what decisions get made, when, and for whom.
+
+But here's the complexity: these are sociotechnical systems with feedback loops. Data shapes decisions, decisions change behaviors, and those changed behaviors generate new data. The system you're trying to improve keeps shifting under your feet.
+
+This means unknown unknowns—emergent effects we can't predict upfront. You can't retrofit sustainability onto a digital health system after deployment. The sociotechnical has to be designed in from the start. We need to learn about the system before deploying, and design systems that continue learning after.
+:::
+
+---
+
+## AI Often Fails In Healthcare 
 
 | System | Scope | Key Failure | Real-World Impact |
 |--------|-------|-------------|-------------------|
@@ -158,97 +220,76 @@ Each row represents millions in investment and thousands of lives affected. The 
 
 ---
 
-## The Problem: AI Systems Can Degrade Over Time
-
-::: {.eyebrow}
-CASE STUDY
-:::
-
-:::: {.columns}
-
-::: {.column width="60%"}
-### Epic Sepsis Model
-
-- Deployed in **56% of US hospitals**
-- Initial promise: Early detection, save lives
-- Reality: **Missed 67% of sepsis cases**
-- Alert fatigue became widespread
-
-::: {.small}
-*Wong et al., JAMA Internal Medicine 2021*
-:::
-:::
-
-::: {.column width="40%"}
-::: {.fragment}
-::: {.callout-warning}
-### Pattern
-
-Technical validation ≠ Sustainable real-world success
-:::
-:::
-:::
-
-::::
-
-::: {.notes}
-[~45 sec] Concrete example showing the gap between promise and reality. Sets up WHY we need a different approach.
-:::
-
----
-
-## Why? Feedback Loops Change Everything
-
-::: {.eyebrow}
-CORE INSIGHT
-:::
-
-![](/images//crisp-dm-slide2.svg){fig-align="center" width="80%"}
-
-::: {.fragment}
-::: {.callout-note}
-### Key Insight
-
-AI deployment changes the data-generating process it depends on
-:::
-:::
-
-::: {.notes}
-[~1.5 min] Core theoretical contribution. When you deploy an AI system, clinician behavior changes, patient selection changes, and the training data for the next iteration is different from what came before.
-:::
-
----
-
 ## Six Challenges to AI Adoption 
 
 ![](/images/six-challenges.png){width="100%"}
 
 ---
 
-# Design Principles {.section background-color="#13294B"}
+## ECAM: Four Principles for Sustainable AI {.center data-background-color="#13294B"}
 
-## Design Principles for Sustainable AI in PHC
+::: {style="color: white;"}
 
-::: {.eyebrow}
-RECOMMENDATIONS
+:::: {.columns}
+
+::: {.column width="20%"}
+![](images/adri-v2-ecam-cycle.svg){fig-align="center" width="100%"}
 :::
 
-::: {.incremental}
-1. **Community Engagement as Methodology**
-   - Communities detect when systems stop working for them
+::: {.column width="20%"}
+### **E**NGAGE
+Stakeholders First
 
-2. **Design for Behavioral Adaptation**
-   - Clinicians *will* change behavior—plan for it
+- Map stakeholders **before** building
+- CHWs, patients, officials
+- Co-design, not consultation
+:::
 
-3. **Continuous Validation, Not One-Time Approval**
-   - Build monitoring from day one
+::: {.column width="20%"}
+### **C**ALIBRATE
+Local Context
 
-4. **Equity-First Design**
-   - Test on hard-to-reach first—if it works for them, it works for all
+- Train on local populations
+- Local languages, diseases
+- Don't import HIC models
+:::
+
+::: {.column width="20%"}
+### **A**UDIT
+Bias Continuously
+
+- Equity audits by subgroup
+- Gender, geography, SES
+- Check for hallucination
+:::
+
+::: {.column width="20%"}
+### **M**ONITOR
+Adapt Continuously
+
+- Human override mechanisms
+- Retraining triggers
+- Performance dashboards
+:::
+
+::::
+
+::: {style="text-align: center; font-size: 0.6em; margin-top: 1.5em; opacity: 0.8;"}
+Templin et al. (2024) [PLOS Digital Health](https://doi.org/10.1371/journal.pdig.0000474) | Templin et al. (2025) [npj Digital Medicine](https://doi.org/10.1038/s41746-024-01350-x)
+:::
+
 :::
 
 ::: {.notes}
-[~1 min] Actionable recommendations connecting to panelists: community engagement (Ye Zhang), PHC sustainability (Krishna Rao), hard-to-reach (Weiming Tang).
+[~120 sec] Based on our work synthesizing challenges and evaluation frameworks for AI in healthcare, we propose four principles—ECAM.
+
+**Engage:** Before you write a line of code, map your stakeholders. Community health workers, patients, local officials. Co-design, not just consultation.
+
+**Calibrate:** Don't import models trained on US or European populations. Calibrate to local languages, disease patterns, care pathways.
+
+**Audit:** Build in equity audits from day one. Test across subgroups—gender, geography, socioeconomic status. Check for hallucination.
+
+**Monitor:** Design for feedback. Human override mechanisms. Continuous retraining triggers. Performance dashboards.
 :::
 
 ---
