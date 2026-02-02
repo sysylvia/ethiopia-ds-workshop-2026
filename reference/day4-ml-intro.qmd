@@ -1,0 +1,953 @@
+---
+title: "Introduction to Machine Learning | 机器学习简介"
+subtitle: "Day 4 Code-Along Session 2 | 第4天代码实践第2部分"
+author: "Your Name Here | 在此输入您的姓名"
+date: 2025-03-20
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false
+---
+
+```{r, echo=FALSE, warning=FALSE}
+# Deleting all current variables
+rm(list=ls())
+
+# Ensuring consistent random values in the bookdown version (this can be ignored).
+set.seed(2, kind = "Mersenne-Twister", normal.kind = "Inversion", sample.kind = "Rejection")
+```
+
+# Introduction to Machine Learning | 机器学习简介 {#intro-ml}
+
+In this chapter, we'll briefly review machine learning concepts that will be relevant later. We'll focus in particular on the problem of **prediction**, that is, to model some output variable as a function of observed input covariates.
+
+在本章中，我们将简要回顾后续相关的机器学习概念。我们将特别关注**预测**问题，即将某个输出变量建模为观察到的输入协变量的函数。
+
+```{r, warning=FALSE, message=FALSE}
+# loading relevant packages
+# if you need to install a new package, 
+# use e.g., install.packages("grf")
+library(grf)
+library(rpart)
+library(glmnet)
+library(splines)
+library(lmtest)
+library(MASS)
+library(sandwich)
+library(ggplot2)
+library(reshape2)
+library(stringr)
+```
+
+In this section, we will use simulated data. In the next section we'll load a real dataset.
+
+在本节中，我们将使用模拟数据。在下一节中，我们将加载真实数据集。
+
+```{r simulate_data, warning=FALSE}
+# Simulating data
+
+# Sample size
+n <- 500
+
+# Generating covariate X ~ Unif[-4, 4]
+x <- runif(n, -4, 4)
+
+# Generate outcome
+# if x < 0:
+#   y = cos(2*x) + N(0, 1)
+# else:
+#   y = 1-sin(x) + N(0, 1)
+mu <- ifelse(x < 0, cos(2*x), 1-sin(x)) 
+y <- mu + 1 * rnorm(n)
+
+# collecting observations in a data.frame object
+data <- data.frame(x=x, y=y)
+
+# outcome variable name
+outcome <- "y"
+
+# covariate names
+covariates <- c("x")
+```
+
+Figure shows how the two variables `x` and `y` relate. Note that the relationship is nonlinear.
+
+下图显示了变量`x`和`y`之间的关系。注意这种关系是非线性的。
+
+```{r simulated-data, fig.align = 'center', fig.cap= "Simulated data | 模拟数据"}
+#las=1 rotates axis labels to a horizontal position
+plot(x, y, col="black", ylim=c(-4, 4), pch=21, bg="red", ylab = "Outcome y", las=1) 
+lines(x[order(x)], mu[order(x)], col="black", lwd=3, type="l")
+legend("bottomright", legend=c("Ground truth E[Y|X=x]", "Data"), cex=.8, lty=c(1, NA), col="black",  pch=c(NA, 21), pt.bg=c(NA, "red"))
+```
+
+Note: If you'd like to run the code below on a different dataset, you can replace the dataset above with another `data.frame` of your choice, and redefine the key variable identifiers (`outcome`, `covariates`) accordingly. Although we try to make the code as general as possible, you may also need to make a few minor changes to the code below; read the comments carefully.
+
+注意：如果您想在不同的数据集上运行下面的代码，可以用您选择的另一个`data.frame`替换上述数据集，并相应地重新定义关键变量标识符（`outcome`、`covariates`）。尽管我们尽量使代码尽可能通用，但您可能还需要对下面的代码进行一些小的修改；请仔细阅读注释。
+
+## Key concepts | 关键概念
+
+The prediction problem is to accurately guess the value of some output variable $Y_i$ from input variables $X_i$. For example, we might want to predict house prices given house characteristics such as the number of rooms, age of the building, and so on. The relationship between input and output is modeled in very general terms by some function
+
+预测问题是从输入变量$X_i$准确猜测某个输出变量$Y_i$的值。例如，我们可能想根据房屋特征（如房间数量、建筑年龄等）来预测房价。输入和输出之间的关系通过某个函数以非常一般的方式建模：
+
+$$Y_i = f(X_i) + \epsilon_i$$
+
+where $\epsilon_i$ represents all that is not captured by information obtained from $X_i$ via the mapping $f$. We say that error $\epsilon_i$ is irreducible.
+
+其中$\epsilon_i$表示通过映射$f$从$X_i$获得的信息无法捕获的所有内容。我们说误差$\epsilon_i$是不可约的。
+
+We highlight that this is **not modeling a causal relationship** between inputs and outputs. For an extreme example, consider taking $Y_i$ to be "distance from the equator" and $X_i$ to be "average temperature." We can still think of the problem of guessing ("predicting") "distance from the equator" given some information about "average temperature," even though one would expect the former to cause the latter.
+
+我们强调这**不是在建模输入和输出之间的因果关系**。举一个极端的例子，考虑将$Y_i$设为"距赤道的距离"，将$X_i$设为"平均温度"。即使人们会期望前者导致后者，我们仍然可以考虑根据"平均温度"的某些信息来猜测（"预测"）"距赤道的距离"的问题。
+
+In general, we can't know the "ground truth" $f$, so we will approximate it from data. Given $n$ data points $\{(X_1, Y_1), \cdots, (X_n, Y_n)\}$, our goal is to obtain an estimated model $\hat{f}$ such that our predictions $\widehat{Y}_i := \hat{f}(X_i)$ are "close" to the true outcome values $Y_i$ given some criterion. To formalize this, we'll follow these three steps:
+
+一般来说，我们无法知道"基本事实"$f$，因此我们将从数据中对其进行近似。给定$n$个数据点$\{(X_1, Y_1), \cdots, (X_n, Y_n)\}$，我们的目标是获得一个估计模型$\hat{f}$，使得我们的预测$\widehat{Y}_i := \hat{f}(X_i)$在某个准则下"接近"真实结果值$Y_i$。为了形式化这一点，我们将遵循以下三个步骤：
+
++ **Modeling | 建模:** Decide on some suitable class of functions that our estimated model may belong to. In machine learning applications the class of functions can be very large and complex (e.g., deep decision trees, forests, high-dimensional linear models, etc). Also, we must decide on a loss function that serves as our criterion to evaluate the quality of our predictions (e.g., mean-squared error).
+
+  决定我们的估计模型可能属于的某个合适的函数类。在机器学习应用中，函数类可能非常大且复杂（例如，深度决策树、森林、高维线性模型等）。此外，我们必须决定一个损失函数，作为评估预测质量的准则（例如，均方误差）。
+
++ **Fitting | 拟合:** Find the estimate $\hat{f}$ that optimizes the loss function chosen in the previous step (e.g., the tree that minimizes the squared deviation between $\hat{f}(X_i)$ and $Y_i$ in our data).
+
+  找到优化前一步选择的损失函数的估计$\hat{f}$（例如，最小化数据中$\hat{f}(X_i)$和$Y_i$之间平方偏差的树）。
+
++ **Evaluation | 评估:** Evaluate our fitted model $\hat{f}$. That is, if we were given a new, yet unseen, input and output pair $(X',Y')$, we'd like to know if $Y' \approx \hat{f}(X_i)$ by some metric.
+
+  评估我们拟合的模型$\hat{f}$。也就是说，如果给定一个新的、尚未见过的输入和输出对$(X',Y')$，我们想通过某个度量知道是否$Y' \approx \hat{f}(X_i)$。
+
+For concreteness, let's work through an example. Let's say that, given the data simulated above, we'd like to predict $Y_i$ from the first covariate $X_{i1}$ only. Also, let's say that our model class will be polynomials of degree $q$ in $X_{i1}$. We'll evaluate fit based on **mean squared error (MSE)**, which measures the average squared difference between the estimated and actual values. That is, $\hat{f}(X_{i1}) = \hat{b}_0 + X_{i1}\hat{b}_1 + \cdots + X_{i1}^q \hat{b}_q$, where the coefficients are obtained by solving the following problem:
+
+为了具体起见，让我们通过一个例子来说明。假设给定上面模拟的数据，我们只想从第一个协变量$X_{i1}$预测$Y_i$。同时，假设我们的模型类是$X_{i1}$的$q$次多项式。我们将基于**均方误差（MSE）**来评估拟合，它衡量估计值和实际值之间的平均平方差。即$\hat{f}(X_{i1}) = \hat{b}_0 + X_{i1}\hat{b}_1 + \cdots + X_{i1}^q \hat{b}_q$，其中系数通过求解以下问题获得：
+
+$$\hat{b} = \arg\min_b \sum_{i=1}^m \left(Y_i - b_0 - X_{i1}b_1 - \cdots - X_{i1}^q b_q \right)^2$$
+
+An important question is what is $q$, the degree of the polynomial. It controls the complexity of the model. One may imagine that more complex models are better, but that is not always true, because a very flexible model may try to simply interpolate over the data at hand, but fail to generalize well for new data points. We call this **overfitting**. The main feature of overfitting is **high variance**, in the sense that, if we were given a different data set of the same size, we'd likely get a very different model.
+
+一个重要的问题是$q$是什么，即多项式的次数。它控制模型的复杂性。人们可能会认为更复杂的模型更好，但这并不总是正确的，因为一个非常灵活的模型可能会试图简单地对手头的数据进行插值，但无法很好地推广到新的数据点。我们称之为**过拟合**。过拟合的主要特征是**高方差**，意思是，如果我们得到相同大小的不同数据集，我们可能会得到一个非常不同的模型。
+
+To illustrate, in the figure below we let the degree be $q=10$ but use only the first few data points. The fitted model is shown in green, and the original data points are in red.
+
+为了说明这一点，在下图中我们让次数为$q=10$，但只使用前几个数据点。拟合的模型以绿色显示，原始数据点以红色显示。
+
+```{r example-overfitting, warning=FALSE, message=FALSE, fig.align = 'center', fig.cap= "Example of overfitting | 过拟合示例"}
+# Note: this code assumes that the first covariate is continuous.
+# Fitting a flexible model on very little data
+
+# selecting only a few data points
+subset <- 1:30
+
+# formula for a high-dimensional polynomial regression
+# y ~ 1 + x1 + x1^2 + x1^3 + .... + x1^q
+fmla <- formula(paste0(outcome, "~ poly(", covariates[1], ", 10)"))
+
+# linear regression using only a few observations
+ols <- lm(fmla, data = data, subset=subset)
+
+# compute a grid of x1 values we'll use for prediction
+x <- data[,covariates[1]]
+x.grid <- seq(min(x), max(x), length.out=1000)
+new.data <- data.frame(x.grid)
+colnames(new.data) <- covariates[1]
+
+# predict
+y.hat <- predict(ols, newdata = new.data)
+
+# plotting observations (in red) and model predictions (in green)
+plot(data[subset, covariates[1]], data[subset, outcome], pch=21, bg="red", xlab=covariates[1], ylim=c(-3, 3), ylab="Outcome y", las=1)
+lines(x.grid, y.hat, col="green", lwd=2)
+legend("bottomright", legend=c("Estimate", "Data"), col = c("green", "black"),pch = c(NA, 21), pt.bg = c(NA, "red"), lty = c(1, NA), lwd = c(2, NA), cex = .8)
+```
+
+On the other hand, when $q$ is too small relative to our data, we permit only very simple models and may suffer from misspecification bias. We call this **underfitting**. The main feature of underfitting is **high bias** -- the selected model just isn't complex enough to accurately capture the relationship between input and output variables.
+
+另一方面，当$q$相对于我们的数据太小时，我们只允许非常简单的模型，可能会遭受错误指定偏差。我们称之为**欠拟合**。欠拟合的主要特征是**高偏差** -- 所选模型的复杂度不足以准确捕获输入和输出变量之间的关系。
+
+To illustrate underfitting, in the figure below we set $q=1$ (a linear fit).
+
+为了说明欠拟合，在下图中我们设置$q=1$（线性拟合）。
+
+```{r example-underfitting, fig.align = 'center', fig.cap= "Example of underfitting | 欠拟合示例"}
+# Note: this code assumes that the first covariate is continuous
+# Fitting a very simply model on very little data
+
+# only a few data points
+subset <- 1:25
+
+# formula for a linear regression (without taking polynomials of x1)
+# y ~ 1 + x1
+fmla <- formula(paste0(outcome, "~", covariates[1]))
+
+# linear regression
+ols <- lm(fmla, data[subset,])
+
+# compute a grid of x1 values we'll use for prediction
+x <- data[,covariates[1]]
+x.grid <- seq(min(x), max(x), length.out=1000)
+new.data <- data.frame(x.grid)
+colnames(new.data) <- covariates[1]
+
+# predict
+y.hat <- predict(ols, newdata = new.data)
+
+# plotting observations (in red) and model predictions (in green)
+plot(data[subset, covariates[1]], data[subset, outcome], pch=21, bg="red", xlab=covariates[1], ylab="Outcome y", las=1)
+lines(x.grid, y.hat, col="green", lwd=2)
+legend("bottomright", legend=c("Estimate", "Data"), col = c("green", "black"),pch = c(NA, 21), pt.bg = c(NA, "red"), lty = c(1, NA), lwd = c(2, NA),cex = .8)
+```
+
+This tension is called the **bias-variance trade-off**: simpler models underfit and have more bias, more complex models overfit and have more variance.
+
+这种张力被称为**偏差-方差权衡**：更简单的模型欠拟合并具有更多偏差，更复杂的模型过拟合并具有更多方差。
+
+One data-driven way of deciding an appropriate level of complexity is to divide the available data into a training set (where the model is fit) and the validation set (where the model is evaluated). The next snippet of code uses 50% of the data to fit a polynomial of order $q$, and then evaluates that polynomial on the second half. The training MSE estimate decreases monotonically with the polynomial degree, because the model is better able to fit on the training data; the test MSE estimate starts increasing after a while reflecting that the model no longer generalizes well.
+
+决定适当复杂度水平的一种数据驱动方法是将可用数据分为训练集（拟合模型的地方）和验证集（评估模型的地方）。下一段代码使用50%的数据来拟合$q$阶多项式，然后在第二半数据上评估该多项式。训练MSE估计随多项式次数单调递减，因为模型能够更好地拟合训练数据；测试MSE估计在一段时间后开始增加，反映出模型不再能很好地泛化。
+
+```{r mse-train-test, fig.align = 'center', fig.cap= "MSE estimates (train-test split) | MSE估计（训练-测试分割）"}
+# polynomial degrees that we'll loop over
+poly.degree <- seq(3, 20)
+
+# training data observations: randomly select 50% of data
+train <- sample(1:n, 0.5*n)
+
+# looping over each polynomial degree
+mse.estimates <- lapply(poly.degree, function(q) {
+
+  # formula y ~ 1 + x1 + x1^2 + ... + x1^q
+  fmla <- formula(paste0(outcome, "~ poly(", covariates[1], ",", q,")"))
+
+  # linear regression using the formula above
+  # note we're fitting only on the training data observations
+  ols <- lm(fmla, data=data[train,])
+
+  # predicting on the training subset
+  # (no need to pass a dataframe)
+  y.hat.train <- predict(ols)
+  y.train <- data[train, outcome]
+  
+  # predicting on the validation subset
+  # (the minus sign in "-train" excludes observations in the training data)
+  y.hat.test <- predict(ols, newdata=data[-train,])
+  y.test <- data[-train, outcome]
+  
+  # compute the mse estimate on the validation subset and output it
+  data.frame(
+    mse.train=mean((y.hat.train - y.train)^2),
+    mse.test=mean((y.hat.test - y.test)^2))
+  })
+mse.estimates <- do.call(rbind, mse.estimates)
+
+matplot(poly.degree, mse.estimates, type="l",  ylab="MSE estimate", xlab="Polynomial degree", las=1)
+text(poly.degree[2], .9*max(mse.estimates), pos=4, "<-----\nHigh bias\nLow variance") 
+text(max(poly.degree), .9*max(mse.estimates), pos=2, "----->\nLow bias\nHigh variance") 
+legend("top", legend=c("Training", "Validation"), bty="n", lty=1:2, col=1:2, cex=.7)
+```
+
+To make better use of the data we will often divide the data into $K$ subsets, or _folds_. Then one fits $K$ models, each using $K-1$ folds and then evaluate the fitted model on the remaining fold. This is called **k-fold cross-validation**.
+
+为了更好地利用数据，我们通常将数据分为$K$个子集或_折_。然后拟合$K$个模型，每个模型使用$K-1$折，然后在剩余的折上评估拟合的模型。这称为**k折交叉验证**。
+
+```{r mse-k-fold, fig.align = 'center', fig.cap= "MSE estimates (K-fold cross-validation) | MSE估计（K折交叉验证）"} 
+# number of folds (K)
+n.folds <- 5
+
+# polynomial degrees that we'll loop over to select
+poly.degree <- seq(4, 20)
+
+# list of indices that will be left out at each step
+indices <- split(seq(n), sort(seq(n) %% n.folds))
+
+# looping over polynomial degrees (q)
+mse.estimates <- sapply(poly.degree, function(q) {
+
+    # formula y ~ 1 + x1 + x1^2 + ... + x1^q
+    fmla <- formula(paste0(outcome, "~ poly(", covariates[1], ",", q,")"))
+
+    # loop over folds get cross-validated predictions
+    y.hat <- lapply(indices, function(fold.idx) {
+
+        # fit on K-1 folds, leaving out observations in fold.idx
+        # (the minus sign in -fold.idx excludes those observations)
+        ols <- lm(fmla, data=data[-fold.idx,])
+
+        # predict on left-out kth fold
+        predict(ols, newdata=data[fold.idx,])
+    })
+    # concatenate all the cross-validated predictions
+    y.hat <- unname(unlist(y.hat))
+
+    # cross-validated mse estimate
+    mean((y.hat - data[, outcome])^2)
+})
+
+# plot
+plot(poly.degree, mse.estimates, ylab="MSE estimate", xlab="Polynomial degree", type="l", lty=2, col=2, las = 1)
+legend("top", legend=c("Cross-validated MSE"), bty="n", lty=2, col=2, cex=.7)
+```
+
+A final remark is that, in machine learning applications, the complexity of the model often is allowed to increase with the available data. In the example above, even though we weren't very successful when fitting a high-dimensional model on very little data, if we had much more data perhaps such a model would be appropriate. The next figure again fits a high order polynomial model, but this time on many data points. Note how, at least in data-rich regions, the model is much better behaved, and tracks the average outcome reasonably well without trying to interpolate wildly of the data points.
+
+最后要说明的是，在机器学习应用中，模型的复杂性通常允许随着可用数据的增加而增加。在上面的例子中，尽管我们在很少的数据上拟合高维模型时不太成功，但如果我们有更多的数据，也许这样的模型会是合适的。下图再次拟合了一个高阶多项式模型，但这次是在许多数据点上。注意，至少在数据丰富的区域，模型表现得更好，并且在不试图对数据点进行疯狂插值的情况下，相当好地跟踪了平均结果。
+
+```{r flexible-model, fig.align = 'center', fig.cap= "Fitting a flexible model on a lot of data | 在大量数据上拟合灵活模型"}
+# Note this code assumes that the first covariate is continuous
+# Fitting a flexible model on a lot of data
+
+# now using much more data
+subset <- 1:n
+
+# formula for high order polynomial regression
+# y ~ 1 + x1 + x1^2 + ... + x1^q
+fmla <- formula(paste0(outcome, "~ poly(", covariates[1], ", 15)"))
+
+# linear regression
+ols <- lm(fmla, data, subset=subset)
+
+# compute a grid of x1 values we'll use for prediction
+x <- data[,covariates[1]]
+x.grid <- seq(min(x), max(x), length.out=1000)
+new.data <- data.frame(x.grid)
+colnames(new.data) <- covariates[1]
+
+# predict
+y.hat <- predict(ols, newdata = new.data)
+
+# plotting observations (in red) and model predictions (in green)
+plot(data[subset, covariates[1]], data[subset, outcome], pch=21, bg="red", xlab=covariates[1], ylab="Outcome", las=1)
+lines(x[order(x)], mu[order(x)], lwd=2, col="black")
+lines(x.grid, y.hat, col="green", lwd=2)
+legend("bottomright", lwd=2, lty=c(1, 1), col=c("black", "green"), legend=c("Ground truth", "Estimate"))
+```
+
+This is one of the benefits of using machine learning-based models: more data implies more flexible modeling, and therefore potentially better predictive power -- provided that we carefully avoid overfitting.
+
+这是使用基于机器学习的模型的好处之一：更多的数据意味着更灵活的建模，因此可能具有更好的预测能力 -- 前提是我们小心避免过拟合。
+
+The example above based on polynomial regression was used mostly for illustration. In practice, there are often better-performing algorithms. We'll see some of them next.
+
+上面基于多项式回归的例子主要用于说明。在实践中，通常有性能更好的算法。我们接下来会看到其中一些。
+
+## Common machine learning algorithms | 常见机器学习算法
+
+Next, we'll introduce three machine learning algorithms: regularized linear models, trees, and forests. Although this isn't an exhaustive list, these algorithms are common enough that every machine learning practitioner should know about them. They also have convenient `R` packages that allow for easy coding.
+
+接下来，我们将介绍三种机器学习算法：正则化线性模型、树和森林。虽然这不是一个详尽的列表，但这些算法足够常见，每个机器学习从业者都应该了解它们。它们还有方便的`R`包，可以轻松编码。
+
+In this tutorial, we'll focus heavily on how to **interpret** the output of machine learning models -- or, at least, how not to _mis_-interpret it. However, in this chapter we won't be making any causal claims about the relationships between variables yet. But please hang tight, as estimating causal effects will be one of the main topics presented in the next chapters.
+
+在本教程中，我们将重点关注如何**解释**机器学习模型的输出 -- 或者至少如何不_错误_解释它。然而，在本章中，我们还不会对变量之间的关系做出任何因果声明。但请耐心等待，因为估计因果效应将是接下来几章中介绍的主要主题之一。
+
+For the remainder of the chapter we will use a real dataset. Each row in this data set represents the characteristics of an owner-occupied housing unit. Our goal is to predict the (log) price of the housing unit (`LOGVALUE`, our outcome variable) from features such as the size of the lot (`LOT`) and square feet area (`UNITSF`), number of bedrooms (`BEDRMS`) and bathrooms (`BATHS`), year in which it was built (`BUILT`) etc. This dataset comes from the American Housing Survey and was used in [Mullainathan and Spiess (2017, JEP)](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87). In addition, we will append to this data columns that are pure noise. Ideally, our fitted model should not take them into account.
+
+在本章的其余部分，我们将使用一个真实的数据集。这个数据集中的每一行代表一个自有住房单元的特征。我们的目标是从诸如地块大小（`LOT`）和平方英尺面积（`UNITSF`）、卧室数量（`BEDRMS`）和浴室数量（`BATHS`）、建造年份（`BUILT`）等特征预测住房单元的（对数）价格（`LOGVALUE`，我们的结果变量）。该数据集来自美国住房调查，并在[Mullainathan和Spiess（2017，JEP）](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87)中使用。此外，我们将向该数据添加纯噪声列。理想情况下，我们拟合的模型不应考虑它们。
+
+```{r, warning=FALSE}
+# load dataset
+data <- read.csv("https://docs.google.com/uc?id=1kNahFWMGUEB3Qz83s6rMf1l684MSqc_3&export=download")
+
+# outcome variable name
+outcome <- "LOGVALUE"
+
+# covariates
+true.covariates <- c('LOT','UNITSF','BUILT','BATHS','BEDRMS','DINING','METRO','CRACKS','REGION','METRO3','PHONE','KITCHEN','MOBILTYP','WINTEROVEN','WINTERKESP','WINTERELSP','WINTERWOOD','WINTERNONE','NEWC','DISH','WASH','DRY','NUNIT2','BURNER','COOK','OVEN','REFR','DENS','FAMRM','HALFB','KITCH','LIVING','OTHFN','RECRM','CLIMB','ELEV','DIRAC','PORCH','AIRSYS','WELL','WELDUS','STEAM','OARSYS')
+p.true <- length(true.covariates)
+
+# noise covariates added for didactic reasons
+p.noise <- 20
+noise.covariates <- paste0('noise', seq(p.noise))
+covariates <- c(true.covariates, noise.covariates)
+X.noise <- matrix(rnorm(n=nrow(data)*p.noise), nrow(data), p.noise)
+colnames(X.noise) <- noise.covariates
+data <- cbind(data, X.noise)
+
+# sample size
+n <- nrow(data)
+
+# total number of covariates
+p <- length(covariates)
+```
+
+Here's the correlation between the first few covariates. Note how, most variables are positively correlated, which is expected since houses with more bedrooms will usually also have more bathrooms, larger area, etc.
+
+这是前几个协变量之间的相关性。注意，大多数变量都是正相关的，这是预期的，因为有更多卧室的房子通常也会有更多浴室、更大的面积等。
+
+```{r}
+round(cor(data[,covariates[1:8]]), 3)
+```
+
+### Regularized linear models | 正则化线性模型
+
+This class of models extends common methods such as linear and logistic regression by adding a penalty to the magnitude of the coefficients. **Lasso** penalizes the absolute value of slope coefficients. For regression problems, it becomes
+
+这类模型通过对系数的大小添加惩罚来扩展线性和逻辑回归等常见方法。**Lasso**惩罚斜率系数的绝对值。对于回归问题，它变成：
+
+$$\hat{b}_{Lasso} = \arg\min_b \sum_{i=1}^m \left( Y_i - b_0 - X_{i1}b_1 - \cdots - X_{ip}b_p \right)^2 + \lambda \sum_{j=1}^p |b_j|$$
+
+Similarly, in a regression problem **Ridge** penalizes the sum of squares of the slope coefficients,
+
+类似地，在回归问题中，**Ridge**惩罚斜率系数的平方和：
+
+$$\hat{b}_{Ridge} = \arg\min_b \sum_{i=1}^m \left( Y_i - b_0 - X_{i1}b_1 - \cdots - X_{ip}b_p \right)^2 + \lambda \sum_{j=1}^p b_j^2$$
+
+Also, there exists the **Elastic Net** penalization which consists of a convex combination between the other two. In all cases, the scalar parameter $\lambda$ controls the complexity of the model. For $\lambda=0$, the problem reduces to the "usual" linear regression. As $\lambda$ increases, we favor simpler models. As we'll see below, the optimal parameter $\lambda$ is selected via cross-validation.
+
+此外，还存在**弹性网**惩罚，它由其他两种的凸组合组成。在所有情况下，标量参数$\lambda$控制模型的复杂性。对于$\lambda=0$，问题简化为"通常的"线性回归。随着$\lambda$增加，我们倾向于更简单的模型。正如我们下面将看到的，最优参数$\lambda$是通过交叉验证选择的。
+
+An important feature of Lasso-type penalization is that it promotes **sparsity** – that is, it forces many coefficients to be exactly zero. This is different from Ridge-type penalization, which forces coefficients to be small.
+
+Lasso类型惩罚的一个重要特征是它促进**稀疏性** -- 也就是说，它迫使许多系数恰好为零。这与Ridge类型的惩罚不同，后者迫使系数变小。
+
+Another interesting property of these models is that, even though they are called "linear" models, this should actually be understood as **linear in transformations** of the covariates. For example, we could use polynomials or splines (continuous piecewise polynomials) of the covariates and allow for much more flexible models.
+
+这些模型的另一个有趣特性是，尽管它们被称为"线性"模型，但这实际上应该理解为**协变量转换的线性**。例如，我们可以使用协变量的多项式或样条（连续分段多项式），并允许更灵活的模型。
+
+In fact, because of the penalization term, problems with Lasso and Ridge remain well-defined and have a unique solution even in **high-dimensional** problems in which the number of coefficients $p$ is larger than the sample size $n$ – that is, our data is "fat" with more columns than rows. These situations can arise either naturally (e.g. genomics problems in which we have hundreds of thousands of gene expression information for a few individuals) or because we are including many transformations of a smaller set of covariates.
+
+事实上，由于惩罚项，Lasso和Ridge的问题即使在**高维**问题中也保持良好定义并具有唯一解，其中系数数量$p$大于样本大小$n$ -- 也就是说，我们的数据是"宽"的，列数多于行数。这些情况可能自然出现（例如，基因组学问题，我们为少数个体拥有数十万个基因表达信息）或因为我们包含了较小协变量集的许多转换。
+
+Finally, although here we are focusing on regression problems, other generalized linear models such as logistic regression can also be similarly modified by adding a Lasso, Ridge, or Elastic Net-type penalty to similar consequences.
+
+最后，尽管我们在这里专注于回归问题，但其他广义线性模型（如逻辑回归）也可以通过添加Lasso、Ridge或弹性网类型的惩罚以类似的方式进行修改，产生类似的结果。
+
+In our example we will use the `glmnet` package; see this [vignette](https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html) for more information about the package, including how to use glmnet for other types of outcomes (binomial, categorical, multi-valued). The function `cv.glmnet` automatically performs k-fold cross-validation.
+
+在我们的例子中，我们将使用`glmnet`包；有关该包的更多信息，包括如何将glmnet用于其他类型的结果（二项式、分类、多值），请参见此[小册子](https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html)。函数`cv.glmnet`自动执行k折交叉验证。
+
+Also, to emphasize the point about linearity in transformations of the covariates, we will use splines of our independent variables (i.e., we will use piecewise continuous polynomials of the original covariates). This is done using the function `bs`; see this [primer](https://cran.r-project.org/web/packages/crs/vignettes/spline_primer.pdf) for more information.
+
+此外，为了强调协变量转换中的线性点，我们将使用自变量的样条（即，我们将使用原始协变量的分段连续多项式）。这是使用函数`bs`完成的；有关更多信息，请参见此[入门](https://cran.r-project.org/web/packages/crs/vignettes/spline_primer.pdf)。
+
+```{r}
+# A formula of type "~ x1 + x2 + ..." (right-hand side only) to
+# indicate how covariates should enter the model. If you'd like to add, e.g.,
+# third-order polynomials in x1, you could do so here by modifying the formula
+# to be something like  "~ poly(x1, 3) + x2 + ..."
+fmla <- formula(paste(" ~ 0 + ", paste0(covariates, collapse=" + ")))
+
+# Use this formula instead if you'd like to fit on piecewise polynomials
+# fmla <- formula(paste(" ~ 0 + ", paste0("bs(", covariates, ", df=5)", collapse=" + ")))
+
+# Function model.matrix selects the covariates according to the formula
+# above and expands the covariates accordingly. In addition, if any column
+# is a factor, then this creates dummies (one-hot encoding) as well.
+XX <- model.matrix(fmla, data)
+Y <- data[, outcome]
+
+# Fit a lasso model.
+# Note this automatically performs cross-validation.
+lasso <- cv.glmnet(
+  x=XX, y=Y,
+  family="gaussian", # use 'binomial' for logistic regression
+  alpha=1. # use alpha=0 for ridge, or alpha in (0, 1) for elastic net
+)
+```
+
+The figure below plots the average estimated MSE for each lambda. The red dots are the averages across all folds, and the error bars are based on the variability of mse estimates across folds. The vertical dashed lines show the (log) lambda with smallest estimated MSE (left) and the one whose mse is at most one standard error from the first (right). The top x-axis indicates the number of nonzero coefficient estimates.
+
+下图绘制了每个lambda的平均估计MSE。红点是所有折的平均值，误差条基于折之间MSE估计的变异性。垂直虚线显示具有最小估计MSE的（对数）lambda（左）和其MSE最多比第一个大一个标准误差的lambda（右）。顶部x轴表示非零系数估计的数量。
+
+```{r lasso-mse, fig.align = 'center', fig.cap= "Estimated MSE as a function of lambda | 估计的MSE作为lambda的函数" }
+par(oma=c(0,0,3,0))
+plot(lasso, las=1)
+mtext('Number of Non-Zero Coefficients', side=3, line = 3)
+```
+
+Here are the first few estimated coefficients at the $\lambda$ value that minimizes cross-validated MSE. Note that many estimated coefficients them are exactly zero.
+
+这是在最小化交叉验证MSE的$\lambda$值处的前几个估计系数。注意许多估计系数恰好为零。
+
+```{r}
+# Estimated coefficients at the lambda value that minimized cross-validated MSE
+coef(lasso, s = "lambda.min")[1:5,]  # showing only first coefficients
+print(paste("Number of nonzero coefficients at optimal lambda:", lasso$nzero[which.min(lasso$cvm)], "out of", length(coef(lasso))))
+```
+
+Predictions and estimated MSE for the selected model are retrieved as follows.
+
+所选模型的预测和估计的MSE如下获取。
+
+```{r}
+# Retrieve predictions at best lambda regularization parameter
+y.hat <- predict(lasso, newx=XX, s="lambda.min", type="response")
+
+# Get k-fold cross validation
+mse.glmnet <- lasso$cvm[lasso$lambda == lasso$lambda.min]
+print(paste("glmnet MSE estimate (k-fold cross-validation):", mse.glmnet))
+```
+
+The figure below plots the estimated coefficients as a function of the regularization parameter $\lambda$.
+
+下图将估计的系数绘制为正则化参数$\lambda$的函数。
+
+```{r lasso-coef, fig.align = 'center', fig.cap= "Estimated coefficients as a function of lambda | 估计系数作为lambda的函数"  }
+par(oma=c(0,0,3,0))
+plot(lasso$glmnet.fit, xvar="lambda")
+mtext('Number of Non-Zero Coefficients', side=3, line = 3)
+```
+
+It's tempting to try to interpret the coefficients obtained via Lasso. Unfortunately, that can be very difficult, because by dropping covariates Lasso introduces a form of **omitted variable bias** ([wikipedia](https://en.wikipedia.org/wiki/Omitted-variable_bias)). To understand this form of bias, consider the following toy example. We have two positively correlated independent variables, `x.1` and `x.2`, that are linearly related to the outcome `y`. Linear regression of `y` on `x1` and `x2` gives us the correct coefficients. However, if we _omit_ `x2` from the estimation model, the coefficient on `x1` increases. This is because `x1` is now "picking up" the effect of the variable that was left out. In other words, the effect of `x1` seems stronger because we aren't controlling for some other confounding variable. Note that the second model still works for prediction, but we cannot interpret the coefficient as a measure of strength of the causal relationship between `x1` and `y`.
+
+人们很容易尝试解释通过Lasso获得的系数。不幸的是，这可能非常困难，因为通过删除协变量，Lasso引入了一种**遗漏变量偏差**（[维基百科](https://en.wikipedia.org/wiki/Omitted-variable_bias)）。为了理解这种形式的偏差，考虑以下玩具示例。我们有两个正相关的自变量`x.1`和`x.2`，它们与结果`y`线性相关。`y`对`x1`和`x2`的线性回归给我们正确的系数。然而，如果我们从估计模型中_遗漏_`x2`，`x1`的系数会增加。这是因为`x1`现在正在"拾取"被遗漏变量的效应。换句话说，`x1`的效应似乎更强，因为我们没有控制其他一些混杂变量。注意，第二个模型仍然适用于预测，但我们不能将系数解释为`x1`和`y`之间因果关系强度的度量。
+
+```{r}
+# Generating some data 
+# y = 1 + 2*x1 + 3*x2 + noise, where corr(x1, x2) = .5
+# note the sample size is very large -- this isn't solved by big data!
+x <- mvrnorm(100000, mu=c(0,0), Sigma=diag(c(.5,.5)) + 1)
+y <- 1 + 2*x[,1] + 3*x[,2] + rnorm(100000)
+data.sim <- data.frame(x=x, y=y)
+
+print("Correct model | 正确模型")
+lm(y ~ x.1 + x.2, data.sim)
+
+print("Model with omitted variable bias | 具有遗漏变量偏差的模型")
+lm(y ~ x.1, data.sim)
+```
+
+The phenomenon above occurs in Lasso and in any other sparsity-promoting method when correlated covariates are present since, by forcing coefficients to be zero, Lasso is effectively dropping them from the model. And as we have seen, as a variable gets dropped, a different variable that is correlated with it can "pick up" its effect, which in turn can cause bias. Once $\lambda$ grows sufficiently large, the penalization term overwhelms any benefit of having that variable in the model, so that variable finally decreases to zero too.
+
+当存在相关协变量时，上述现象会在Lasso和任何其他促进稀疏性的方法中发生，因为通过迫使系数为零，Lasso有效地将它们从模型中删除。正如我们所看到的，当一个变量被删除时，与其相关的另一个变量可以"拾取"其效应，这反过来可能导致偏差。一旦$\lambda$增长到足够大，惩罚项就会压倒在模型中拥有该变量的任何好处，因此该变量最终也会减少到零。
+
+One may instead consider using Lasso to select a subset of variables, and then regressing the outcome on the subset of selected variables via OLS (without any penalization). This method is often called **post-lasso**. Although it has desirable properties in terms of model fit (see e.g., [Belloni and Chernozhukov, 2013](https://arxiv.org/pdf/1001.0188.pdf)), this procedure does not solve the omitted variable issue we mentioned above.
+
+人们可能会考虑使用Lasso来选择变量子集，然后通过OLS（没有任何惩罚）将结果回归到所选变量的子集上。这种方法通常称为**后Lasso**。虽然它在模型拟合方面具有理想的特性（例如，参见[Belloni和Chernozhukov，2013](https://arxiv.org/pdf/1001.0188.pdf)），但此过程不能解决我们上面提到的遗漏变量问题。
+
+We illustrate this next. In the figure below, we observe the path of the estimated coefficient on the number of bathrooms (`BATHS`) as we increase $\lambda$.
+
+我们接下来说明这一点。在下图中，我们观察到随着$\lambda$增加，浴室数量（`BATHS`）的估计系数的路径。
+
+```{r}
+# prepare data
+fmla <- formula(paste0(outcome, "~", paste0(covariates, collapse="+")))
+XX <- model.matrix(fmla, data)[,-1]  # [,-1] drops the intercept
+Y <- data[,outcome]
+
+# fit ols, lasso and ridge models
+ols <- lm(fmla, data)
+lasso <- cv.glmnet(x=XX, y=Y, alpha=1.)  # alpha = 1 for lasso
+ridge <- cv.glmnet(x=XX, y=Y, alpha=0.)  # alpha = 0 for ridge
+
+# retrieve ols, lasso and ridge coefficients
+lambda.grid <- c(0, sort(lasso$lambda))
+ols.coefs <- coef(ols)
+lasso.coefs <- as.matrix(coef(lasso, s=lambda.grid))
+ridge.coefs <- as.matrix(coef(ridge, s=lambda.grid))
+
+# loop over lasso coefficients and re-fit OLS to get post-lasso coefficients
+plasso.coefs <- apply(lasso.coefs, 2, function(beta) {
+
+    # which slopes are non-zero
+    non.zero <- which(beta[-1] != 0)  # [-1] excludes intercept
+
+    # if there are any non zero coefficients, estimate OLS
+    fmla <- formula(paste0(outcome, "~", paste0(c("1", covariates[non.zero]), collapse="+")))
+    beta <- rep(0, ncol(XX) + 1)
+
+    # populate post-lasso coefficients
+    beta[c(1, non.zero + 1)] <- coef(lm(fmla, data))
+
+    beta
+  })
+```
+
+```{r coef-baths, fig.align = 'center', fig.cap= "Coefficient estimates for BATHS from different penalization methods | 不同惩罚方法的BATHS系数估计"}
+selected <- 'BATHS'
+k <- which(rownames(lasso.coefs) == selected) # index of coefficient to plot
+coefs <- cbind(postlasso=plasso.coefs[k,],  lasso=lasso.coefs[k,], ridge=ridge.coefs[k,], ols=ols.coefs[k])
+matplot(lambda.grid, coefs, col=1:4, type="b", pch=20, lwd=2, las=1, xlab="Lambda", ylab="Coefficient estimate")
+abline(h = 0, lty="dashed", col="gray")
+
+legend("bottomleft",
+  legend = colnames(coefs),
+  bty="n", col=1:4,   inset=c(.05, .05), lwd=2)
+```
+
+In the figure above, the OLS coefficients are not penalized, so they remain constant. Ridge estimates decrease monotonically as $\lambda$ grows. Also, for this dataset, Lasso estimates first increase and then decrease. Meanwhile, the post-lasso coefficient estimates seem to behave somewhat erratically with $\lambda$. To understand this behavior, let's see what happens to the magnitude of other selected variables that are correlated with `BATHS`.
+
+在上图中，OLS系数没有受到惩罚，因此它们保持不变。Ridge估计随着$\lambda$增长而单调递减。此外，对于这个数据集，Lasso估计首先增加然后减少。同时，后Lasso系数估计似乎随$\lambda$表现得有些不稳定。为了理解这种行为，让我们看看与`BATHS`相关的其他选定变量的大小会发生什么。
+
+```{r coef-baths-correlated, fig.align = 'center', fig.cap= "Coefficient estimates for other selected variables correlated with BATHS from LASSO | 来自LASSO的与BATHS相关的其他选定变量的系数估计"}
+covs <- which(covariates %in% c('UNITSF', 'BEDRMS',  'DINING'))
+matplot(lambda.grid, t(lasso.coefs[covs+1,]), type="l", lwd=2, las=1, xlab="Lambda", ylab="Coefficient estimate")
+legend("topright", legend = covariates[covs], bty="n", col=1:p,  lty=1:p, inset=c(.05, .05), lwd=2, cex=.6)
+```
+
+Comparing the two figures above, note how the discrete jumps in magnitude for the `BATHS` coefficient in the first coincide with, for example, variables `DINING` and `BEDRMS` being exactly zero. As these variables got dropped from the model, the coefficient on `BATHS` increased to pick up their effect.
+
+比较上面两个图，注意第一个图中`BATHS`系数的离散跳跃如何与例如变量`DINING`和`BEDRMS`恰好为零相吻合。当这些变量从模型中删除时，`BATHS`的系数增加以拾取它们的效应。
+
+Another problem with Lasso coefficients is their instability. When multiple variables are highly correlated we may spuriously drop several of them. To get a sense of the amount of variability, in the next snippet we fix $\lambda$ and then look at the lasso coefficients estimated during cross-validation. We see that by simply removing one fold we can get a very different set of coefficients (nonzero coefficients are in black in the heatmap below). This is because there may be many choices of coefficients with similar predictive power, so the set of nonzero coefficients we end up with can be quite unstable.
+
+Lasso系数的另一个问题是它们的不稳定性。当多个变量高度相关时，我们可能会虚假地删除其中几个。为了了解变异性的大小，在下一个片段中，我们固定$\lambda$，然后查看交叉验证期间估计的lasso系数。我们看到，仅仅删除一折，我们就可以得到一组非常不同的系数（非零系数在下面的热图中为黑色）。这是因为可能有许多具有相似预测能力的系数选择，因此我们最终得到的非零系数集可能相当不稳定。
+
+```{r lasso-fold-heatmap, fig.align = 'center', fig.cap="Lasso coefficients estimated removing each fold | 删除每折估计的Lasso系数"}
+# Fixing lambda. This choice is not very important; the same occurs any intermediate lambda value.
+selected.lambda <- lasso$lambda.min
+n.folds <- 10
+foldid <- (seq(n) %% n.folds) + 1
+coefs <- sapply(seq(n.folds), function(k) {
+  lasso.fold <- glmnet(XX[foldid == k,], Y[foldid == k])
+  as.matrix(coef(lasso.fold, s=selected.lambda))
+})
+heatmap(1*(coefs != 0), Rowv = NA, Colv = NA, cexCol = 1, scale="none", col=gray(c(1,0)), margins = c(3, 1), xlab="Fold", labRow=c("Intercept", covariates), main="Non-zero coefficient estimates | 非零系数估计")
+```
+
+As we have seen above, any interpretation needs to take into account the joint distribution of covariates. One possible heuristic is to consider **data-driven subgroups**. For example, we can analyze what differentiates observations whose predictions are high from those whose predictions are low. The following code estimates a flexible Lasso model with splines, ranks the observations into a few subgroups according to their predicted outcomes, and then estimates the average covariate value for each subgroup.
+
+正如我们在上面看到的，任何解释都需要考虑协变量的联合分布。一种可能的启发式方法是考虑**数据驱动的子组**。例如，我们可以分析预测高的观察值与预测低的观察值之间的差异。以下代码使用样条估计灵活的Lasso模型，根据预测结果将观察值排序为几个子组，然后估计每个子组的平均协变量值。
+
+```{r}
+# Number of data-driven subgroups.
+num.groups <- 4
+
+# Fold indices
+n.folds <- 5
+foldid <- (seq(n) %% n.folds) + 1
+
+fmla <- formula(paste(" ~ 0 + ", paste0("bs(", covariates, ", df=3)", collapse=" + ")))
+
+# Function model.matrix selects the covariates according to the formula
+# above and expands the covariates accordingly. In addition, if any column
+# is a factor, then this creates dummies (one-hot encoding) as well.
+XX <- model.matrix(fmla, data)
+Y <- data[, outcome]
+
+# Fit a lasso model.
+# Passing foldid argument so we know which observations are in each fold.
+lasso <- cv.glmnet(x=XX, y=Y, foldid = foldid, keep=TRUE)
+
+y.hat <- predict(lasso, newx = XX, s = "lambda.min")
+
+# Ranking observations.
+ranking <- lapply(seq(n.folds), function(i) {
+
+    # Extract cross-validated predictions for remaining fold.
+    y.hat.cross.val <- y.hat[foldid == i]
+
+    # Find the relevant subgroup break points
+    qs <- quantile(y.hat.cross.val, probs = seq(0, 1, length.out=num.groups + 1))
+
+    # Rank observations into subgroups depending on their predictions
+    cut(y.hat.cross.val, breaks = qs, labels = seq(num.groups))
+  })
+ranking <- factor(do.call(c, ranking))
+
+# Estimate expected covariate per subgroup
+avg.covariate.per.ranking <- mapply(function(x.col) {
+  fmla <- formula(paste0(x.col, "~ 0 + ranking"))
+  ols <- lm(fmla, data=transform(data, ranking=ranking))
+  t(lmtest::coeftest(ols, vcov=vcovHC(ols, "HC2"))[, 1:2])
+}, covariates, SIMPLIFY = FALSE)
+
+avg.covariate.per.ranking[1:2]
+```
+
+The figure below visualizes the results. Note how observations ranked higher (i.e., were predicted to have higher prices) have more bedrooms and baths, were built more recently, have fewer cracks, and so on. The next snippet of code displays the average covariate per group along with each standard errors. The rows are ordered according to $Var(E[X_{ij} | G_i) / Var(X_i)$, where $G_i$ denotes the ranking. This is a rough normalized measure of how much variation is "explained" by group membership $G_i$. Brighter colors indicate larger values.
+
+下图可视化了结果。注意排名较高的观察值（即，被预测有更高的价格）有更多的卧室和浴室，建造时间更近，裂缝更少等。下一段代码显示每组的平均协变量以及每个标准误差。行按照$Var(E[X_{ij} | G_i) / Var(X_i)$排序，其中$G_i$表示排名。这是组成员$G_i$"解释"多少变异的粗略归一化度量。更亮的颜色表示更大的值。
+
+```{r lasso-subgroup, fig.align = 'center', fig.cap="Average covariate values within group (based on prediction ranking) | 组内平均协变量值（基于预测排名）"}
+df <- mapply(function(covariate) {
+      # Looping over covariate names
+      # Compute average covariate value per ranking (with correct standard errors)
+      fmla <- formula(paste0(covariate, "~ 0 + ranking"))
+      ols <- lm(fmla, data=transform(data, ranking=ranking))
+      ols.res <- coeftest(ols, vcov=vcovHC(ols, "HC2"))
+    
+      # Retrieve results
+      avg <- ols.res[,1]
+      stderr <- ols.res[,2]
+      
+      # Tally up results
+      data.frame(covariate, avg, stderr, ranking=paste0("G", seq(num.groups)), 
+                 # Used for coloring
+                 scaling=pnorm((avg - mean(avg))/sd(avg)), 
+                 # We will order based on how much variation is 'explain' by the averages
+                 # relative to the total variation of the covariate in the data
+                 variation=sd(avg) / sd(data[,covariate]),
+                 # String to print in each cell in heatmap below
+                 # Note: depending on the scaling of your covariates, 
+                 # you may have to tweak these formatting parameters a little.
+                 labels=paste0(formatC(avg), "\n", " (", formatC(stderr, digits = 2, width = 2), ")"))
+}, covariates, SIMPLIFY = FALSE)
+df <- do.call(rbind, df)
+
+# a small optional trick to ensure heatmap will be in decreasing order of 'variation'
+df$covariate <- reorder(df$covariate, order(df$variation))
+df <- df[order(df$variation, decreasing=TRUE),]
+
+# plot heatmap
+ggplot(df[1:(9*num.groups),]) +  # showing on the first few results (ordered by 'variation')
+    aes(ranking, covariate) +
+    geom_tile(aes(fill = scaling)) + 
+    geom_text(aes(label = labels), size=3) +  # 'size' controls the fontsize inside cell
+    scale_fill_gradient(low = "#E1BE6A", high = "#40B0A6") +
+    ggtitle(paste0("Average covariate values within group (based on prediction ranking) | 组内平均协变量值（基于预测排名）")) +
+    theme_minimal() + 
+    ylab("") + xlab("") +
+    theme(plot.title = element_text(size = 10, face = "bold"),
+          legend.position="bottom")
+```
+
+As we just saw above, houses that have, e.g., been built more recently (`BUILT`), have more baths (`BATHS`) are associated with larger price predictions.
+
+正如我们刚才在上面看到的，例如，建造时间更近（`BUILT`）、有更多浴室（`BATHS`）的房屋与更高的价格预测相关。
+
+This sort of interpretation exercise did not rely on reading any coefficients, and in fact it could also be done using any other flexible method, including decisions trees and forests.
+
+这种解释练习不依赖于读取任何系数，事实上，它也可以使用任何其他灵活的方法来完成，包括决策树和森林。
+
+### Decision trees | 决策树
+
+This next class of algorithms divides the covariate space into "regions" and estimates a constant prediction within each region.
+
+下一类算法将协变量空间划分为"区域"，并在每个区域内估计一个常数预测。
+
+To estimate a decision tree, we follow a recursive partition algorithm. At each stage, we select one variable $j$ and one split point $s$, and divide the observations into "left" and "right" subsets, depending on whether $X_{ij} \leq s$ or $X_{ij} > s$. For regression problems, the variable and split points are often selected so that the sum of the variances of the outcome variable in each "child" subset is smallest. For classification problems, we split to separate the classes. Then, for each child, we separately repeat the process of finding variables and split points. This continues until a minimum subset size is reached, or improvement falls below some threshold.
+
+为了估计决策树，我们遵循递归分区算法。在每个阶段，我们选择一个变量$j$和一个分割点$s$，并根据$X_{ij} \leq s$或$X_{ij} > s$将观察值分为"左"和"右"子集。对于回归问题，通常选择变量和分割点，使得每个"子"子集中结果变量的方差之和最小。对于分类问题，我们分割以分离类别。然后，对于每个子节点，我们分别重复寻找变量和分割点的过程。这一直持续到达到最小子集大小，或改进低于某个阈值。
+
+At prediction time, to find the predictions for some point $x$, we just follow the tree we just built, going left or right according to the selected variables and split points, until we reach a terminal node. Then, for regression problems, the predicted value at some point $x$ is the average outcome of the observations in the same partition as the point $x$. For classification problems, we output the majority class in the node.
+
+在预测时，为了找到某个点$x$的预测，我们只需遵循刚刚构建的树，根据选定的变量和分割点向左或向右走，直到我们到达终端节点。然后，对于回归问题，某个点$x$的预测值是与点$x$在同一分区中的观察值的平均结果。对于分类问题，我们输出节点中的多数类。
+
+Let's estimate a decision tree using the `R` package rpart; see [this tutorial](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) for more information about it.
+
+让我们使用`R`包rpart估计决策树；有关它的更多信息，请参见[本教程](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf)。
+
+```{r}
+# Fit tree without pruning first
+fmla <- formula(paste(outcome, "~", paste(covariates, collapse=" + ")))
+tree <- rpart(fmla, data=data, cp=0, method="anova")  # use method="class" for classification
+```
+
+At this point, we have not constrained the complexity of the tree in any way, so it's likely too deep and probably overfits. The figure below is a plot of what we have so far (without bothering to label the splits to avoid clutter).
+
+此时，我们没有以任何方式限制树的复杂性，因此它可能太深，可能过拟合。下图是我们目前所拥有的图（没有费心标记分割以避免混乱）。
+
+```{r decision-tree, fig.align = 'center', fig.cap="Decision tree before pruning | 剪枝前的决策树"}
+plot(tree, uniform=TRUE)
+```
+
+To reduce the complexity of the tree, we **prune** the tree: we collapse its leaves, permitting bias to increase but forcing variance to decrease until the desired trade-off is achieved. In `rpart`, this is done by considering a modified loss function that takes into account the number of terminal nodes (i.e., the number of regions in which the original data was partitioned). Somewhat heuristically, if we denote tree predictions by $T(x)$ and its number of terminal nodes by $|T|$, the modified regression problem can be written as:
+
+为了降低树的复杂性，我们**剪枝**树：我们折叠它的叶子，允许偏差增加但迫使方差减少，直到达到所需的权衡。在`rpart`中，这是通过考虑考虑终端节点数量（即原始数据被分区的区域数量）的修改损失函数来完成的。有些启发式地，如果我们用$T(x)$表示树预测，用$|T|$表示其终端节点数，修改后的回归问题可以写成：
+
+$$\widehat{T} = \arg\min_{T} \sum_{i=1}^m \left( T(X_i) - Y_i \right)^2 + c_p |T|$$
+
+The complexity of the tree is controlled by the scalar parameter $c_p$, denoted as `cp` in `rpart`. For each value of $c_p$, we find the subtree that solves the equation above. Large values of $c_p$ lead to aggressively pruned trees, which have more bias and less variance. Small values of $c_p$ allow for deeper trees whose predictions can vary more wildly. The plot below shows the cross-validated error (relative to a tree with only one node, which corresponds to predicting the sample mean everywhere) for trees obtained at different levels of $c_p$. The bias-variance trade-off is optimized at the point at which the cross-validated error is minimized.
+
+树的复杂性由标量参数$c_p$控制，在`rpart`中表示为`cp`。对于每个$c_p$值，我们找到解决上述方程的子树。大的$c_p$值导致积极剪枝的树，具有更多偏差和更少方差。小的$c_p$值允许更深的树，其预测可能变化更大。下图显示了在不同$c_p$水平获得的树的交叉验证误差（相对于只有一个节点的树，对应于在所有地方预测样本均值）。偏差-方差权衡在交叉验证误差最小的点上优化。
+
+```{r decision-tree-cp, fig.align = 'center', fig.cap="Cross-validated error as a function of $c_p$ | 交叉验证误差作为$c_p$的函数"}
+plotcp(tree)
+```
+
+The following code retrieves the optimal parameter and prunes the tree. Here, instead of choosing the parameter that minimizes the mean-squared-error, we're following another common heuristic: we will choose the most regularized model whose error is within one standard error of the minimum error.
+
+以下代码检索最优参数并剪枝树。在这里，我们不是选择最小化均方误差的参数，而是遵循另一个常见的启发式方法：我们将选择误差在最小误差的一个标准误差内的最正则化模型。
+
+```{r}
+# Retrieves the optimal parameter
+cp.min <- which.min(tree$cptable[,"xerror"]) # minimum error
+cp.idx <- which(tree$cptable[,"xerror"] - tree$cptable[cp.min,"xerror"] < tree$cptable[,"xstd"])[1]  # at most one std. error from minimum error
+cp.best <- tree$cptable[cp.idx,"CP"]
+
+# Prune the tree
+pruned.tree <- prune(tree, cp=cp.best)
+```
+
+The figure below plots the pruned tree. See also the package [rpart.plot](http://www.milbo.org/rpart-plot/prp.pdf) for more advanced plotting capabilities.
+
+下图绘制了剪枝后的树。另请参见包[rpart.plot](http://www.milbo.org/rpart-plot/prp.pdf)以获得更高级的绘图功能。
+
+```{r decision-tree-pruned, fig.align = 'center', fig.cap="The pruned decision tree | 剪枝后的决策树"}
+plot(pruned.tree, uniform=TRUE, margin = .05)
+text(pruned.tree, cex=.7)
+```
+
+Finally, here's how to extract predictions and mse estimates from the pruned tree.
+
+最后，这是如何从剪枝树中提取预测和MSE估计。
+
+```{r}
+# Retrieve predictions from pruned tree
+y.hat <- predict(pruned.tree)
+
+# Compute mse for pruned tree (using cross-validated predictions)
+mse.tree <- mean((xpred.rpart(tree)[,cp.idx] - data[,outcome])^2, na.rm=TRUE)
+print(paste("Tree MSE estimate (cross-validated):", mse.tree))
+```
+
+It's often said that trees are "interpretable." To some extent, that's true – we can look at the tree and clearly visualize the mapping from inputs to prediction. This can be important in settings in which conveying how one got to a prediction is important. For example, if a decision tree were to be used for credit scoring, it would be easy to explain to a client how their credit was scored.
+
+人们经常说树是"可解释的"。在某种程度上，这是真的 -- 我们可以查看树并清楚地可视化从输入到预测的映射。这在传达如何得出预测很重要的环境中可能很重要。例如，如果决策树用于信用评分，很容易向客户解释他们的信用是如何评分的。
+
+Beyond that, however, there are several reasons for not interpreting the obtained decision tree further. First, even though a tree may have used a particular variable for a split, that does not mean that it's indeed an important variable: if two covariates are highly correlated, the tree may split on one variable but not the other, and there's no guarantee which variables are relevant in the underlying data-generating process.
+
+然而，除此之外，还有几个原因不进一步解释获得的决策树。首先，即使树可能使用特定变量进行分割，这并不意味着它确实是一个重要变量：如果两个协变量高度相关，树可能在一个变量上分割而不在另一个变量上分割，并且不能保证哪些变量在底层数据生成过程中是相关的。
+
+Similar to what we did for Lasso above, we can estimate the average value of each covariate per leaf. Although results are noisier here because there are many leaves, we see somewhat similar trends in that houses with higher predictions are also correlated with more bedrooms, bathrooms and room sizes.
+
+与我们上面对Lasso所做的类似，我们可以估计每个叶子的每个协变量的平均值。虽然这里的结果更嘈杂，因为有许多叶子，但我们看到了某种相似的趋势，即预测更高的房屋也与更多的卧室、浴室和房间大小相关。
+
+```{r}
+y.hat <- predict(pruned.tree)
+
+# Number of leaves should equal the number of distinct prediction values.
+# This should be okay for most applications, but if an exact answer is needed use
+# predict.rpart.leaves from package treeCluster
+num.leaves <- length(unique(y.hat))
+
+# Leaf membership, ordered by increasing prediction value
+leaf <- factor(y.hat, ordered = TRUE, labels = seq(num.leaves))
+
+# Looping over covariates
+avg.covariate.per.leaf <- mapply(function(covariate) {
+  
+  # Coefficients on linear regression of covariate on leaf 
+  #  are the average covariate value in each leaf.
+  # covariate ~ leaf.1 + ... + leaf.L 
+  fmla <- formula(paste0(covariate, "~ 0 + leaf"))
+  ols <- lm(fmla, data=transform(data, leaf=leaf))
+  
+  # Heteroskedasticity-robust standard errors
+  t(coeftest(ols, vcov=vcovHC(ols, "HC2"))[,1:2])
+}, covariates, SIMPLIFY = FALSE)
+
+print(avg.covariate.per.leaf[1:2])  # Showing only first few
+```
+
+Finally, as we did in the linear model case, we can use the same code for an annotated version of the same information. Again, we ordered the rows in decreasing order based on an estimate of the relative variance "explained" by leaf membership: $Var(E[X_i|L_i]) / Var(X_i)$, where $L_i$ represents the leaf.
+
+最后，正如我们在线性模型案例中所做的，我们可以使用相同的代码来获得相同信息的注释版本。同样，我们根据叶子成员"解释"的相对方差的估计，按降序排列行：$Var(E[X_i|L_i]) / Var(X_i)$，其中$L_i$表示叶子。
+
+```{r decision-tree-subgroup, fig.align = 'center', fig.cap="Average covariate values within leaf | 叶子内的平均协变量值"}
+df <- mapply(function(covariate) {
+      # Looping over covariate names
+      # Compute average covariate value per ranking (with correct standard errors)
+      fmla <- formula(paste0(covariate, "~ 0 + leaf"))
+      ols <- lm(fmla, data=transform(data, leaf=leaf))
+      ols.res <- coeftest(ols, vcov=vcovHC(ols, "HC2"))
+    
+      # Retrieve results
+      avg <- ols.res[,1]
+      stderr <- ols.res[,2]
+      
+      # Tally up results
+      data.frame(covariate, avg, stderr, 
+                 ranking=factor(seq(num.leaves)), 
+                 # Used for coloring
+                 scaling=pnorm((avg - mean(avg))/sd(avg)), 
+                 # We will order based on how much variation is 'explain' by the averages
+                 # relative to the total variation of the covariate in the data
+                 variation=sd(avg) / sd(data[,covariate]),
+                 # String to print in each cell in heatmap below
+                 # Note: depending on the scaling of your covariates, 
+                 # you may have to tweak these  formatting parameters a little.
+                 labels=paste0(formatC(avg),"\n(", formatC(stderr, digits = 2, width = 2), ")"))
+}, covariates, SIMPLIFY = FALSE)
+df <- do.call(rbind, df)
+
+# a small optional trick to ensure heatmap will be in decreasing order of 'variation'
+df$covariate <- reorder(df$covariate, order(df$variation))
+df <- df[order(df$variation, decreasing=TRUE),]
+
+# plot heatmap
+ggplot(df[1:(8*num.leaves),]) +  # showing on the first few results (ordered by 'variation')
+    aes(ranking, covariate) +
+    geom_tile(aes(fill = scaling)) + 
+    geom_text(aes(label = labels), size=2.5) +  # 'size' controls the fontsize inside cell
+    scale_fill_gradient(low = "#E1BE6A", high = "#40B0A6") +
+    ggtitle(paste0("Average covariate values within leaf | 叶子内的平均协变量值")) +
+    theme_minimal() + 
+    ylab("") + xlab("Leaf (ordered by prediction, low to high) | 叶子（按预测排序，从低到高）") +
+    labs(fill="Normalized\nvariation | 归一化\n变异") +
+    theme(plot.title = element_text(size = 12, face = "bold", hjust = .5),
+          axis.title.x = element_text(size=9),
+          legend.title = element_text(hjust = .5, size=9))
+```
+
+### Forests | 森林
+
+Forests are a type of **ensemble** estimators: they aggregate information about many decision trees to compute a new estimate that typically has much smaller variance.
+
+森林是一种**集成**估计器：它们聚合关于许多决策树的信息来计算一个通常具有更小方差的新估计。
+
+At a high level, the process of fitting a (regression) forest consists of fitting many decision trees, each on a different subsample of the data. The forest prediction for a particular point $x$ is the average of all tree predictions for that point.
+
+从高层次来看，拟合（回归）森林的过程包括拟合许多决策树，每个树在数据的不同子样本上。特定点$x$的森林预测是该点所有树预测的平均值。
+
+One interesting aspect of forests and many other ensemble methods is that cross-validation can be built into the algorithm itself. Since each tree only uses a subset of the data, the remaining subset is effectively a test set for that tree. We call these observations **out-of-bag** (they were not in the "bag" of training observations). They can be used to evaluate the performance of that tree, and the average of out-of-bag evaluations is evidence of the performance of the forest itself.
+
+森林和许多其他集成方法的一个有趣方面是交叉验证可以内置到算法本身中。由于每棵树只使用数据的一个子集，剩余的子集实际上是该树的测试集。我们称这些观察为**袋外**（它们不在训练观察的"袋"中）。它们可用于评估该树的性能，袋外评估的平均值是森林本身性能的证据。
+
+For the example below, we'll use the regression_forest function of the `R` package `grf`. The particular forest implementation in `grf` has interesting properties that are absent from most other packages. For example, trees are built using a certain sample-splitting scheme that ensures that predictions are approximately unbiased and normally distributed for large samples, which in turn allows us to compute valid confidence intervals around those predictions. We'll have more to say about the importance of these features when we talk about causal estimates in future chapters. See also the [grf website](https://grf-labs.github.io/grf/) for more information.
+
+对于下面的例子，我们将使用`R`包`grf`的regression_forest函数。`grf`中的特定森林实现具有大多数其他包中没有的有趣特性。例如，树是使用某种样本分割方案构建的，该方案确保预测对于大样本大致无偏且正态分布，这反过来允许我们计算这些预测周围的有效置信区间。当我们在未来章节中讨论因果估计时，我们将更多地讨论这些特征的重要性。另请参见[grf网站](https://grf-labs.github.io/grf/)以获取更多信息。
+
+```{r}
+X <- data[,covariates]
+Y <- data[,outcome]
+
+# Fitting the forest
+# We'll use few trees for speed here. 
+# In a practical application please use a higher number of trees.
+forest <- regression_forest(X=X, Y=Y, num.trees=200)  
+
+# There usually isn't a lot of benefit in tuning forest parameters, but the next code does so automatically (expect longer training times)
+# forest <- regression_forest(X=X, Y=Y, tune.parameters="all")
+
+# Retrieving forest predictions
+y.hat <- predict(forest)$predictions
+
+# Evaluation (out-of-bag mse)
+mse.oob <- mean(predict(forest)$debiased.error)
+print(paste("Forest MSE (out-of-bag):", mse.oob))
+```
+
+The function `variable_importance` computes a simple weighted sum of how many times each feature was split on at each depth across the trees.
+
+函数`variable_importance`计算每个特征在树中每个深度上被分割的次数的简单加权和。
+
+```{r}
+var.imp <- variable_importance(forest)
+names(var.imp) <- covariates
+sort(var.imp, decreasing = TRUE)[1:10] # showing only first few
+```
+
+All the caveats about interpretation that we mentioned above apply to forest output as well.
+
+我们上面提到的所有关于解释的注意事项也适用于森林输出。
+
+## Further reading | 进一步阅读
+
+In this chapter, we briefly reviewed some key concepts that we further develop later in this tutorial. For readers who are entirely new to this field or interested in learning about it in more depth, the first few chapters of the following textbook are an accessible introduction:
+
+在本章中，我们简要回顾了一些关键概念，这些概念将在本教程后面进一步开发。对于完全不了解这个领域或有兴趣更深入了解它的读者，以下教科书的前几章是一个易于理解的介绍：
+
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). An introduction to statistical learning (Vol. 112, p. 18). New York: springer. Available for free at [the authors' website](https://www.statlearning.com/).
+
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). 统计学习导论（第112卷，第18页）。纽约：施普林格。可在[作者网站](https://www.statlearning.com/)免费获取。
+
+Some of the discussion in the Lasso section in particular was drawn from [Mullainathan and Spiess (JEP, 2017)](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87), which contains a good discussion of the interpretability issues discussed here.
+
+特别是Lasso部分的一些讨论来自[Mullainathan和Spiess（JEP，2017）](https://www.aeaweb.org/articles?id=10.1257/jep.31.2.87)，其中包含了对这里讨论的可解释性问题的良好讨论。
+
+There has been a good deal of research on inference in high-dimensional models. Although we won't be covering it in depth in this tutorial, we refer readers to [Belloni, Chernozhukov and Hansen (JEP, 2014)](http://www.mit.edu/~vchern/papers/JEP.pdf). Also check out the related `R` package [`hdm`](https://cran.r-project.org/web/packages/hdm/hdm.pdf), developed by the same authors, along with Philipp Bach and Martin Spindler.
+
+在高维模型推断方面已经有大量研究。虽然我们不会在本教程中深入介绍它，但我们建议读者参考[Belloni, Chernozhukov和Hansen（JEP，2014）](http://www.mit.edu/~vchern/papers/JEP.pdf)。还可以查看相关的`R`包[`hdm`](https://cran.r-project.org/web/packages/hdm/hdm.pdf)，由同一作者与Philipp Bach和Martin Spindler开发。
+
+---
+
+*End of code-along session | 代码实践会话结束*

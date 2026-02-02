@@ -1,0 +1,386 @@
+---
+title: "Lab Exercise: Predicting Healthcare Utilization | 实验练习：预测医疗利用"
+subtitle: "Day 4 - Applying ML Methods to Healthcare Data | 第4天 - 将机器学习方法应用于医疗数据"
+author: "Your Name Here | 在此输入您的姓名"
+date: 2025-03-20
+format:
+  html:
+    toc: true
+    code-fold: true
+    code-tools: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Lab Overview | 实验概述
+
+In this 45-minute lab, you'll work in pairs to build and evaluate machine learning models for predicting healthcare utilization among elderly patients. This connects directly to the morning's discussion on AI in long-term care.
+
+在这个45分钟的实验中，您将两人一组构建和评估用于预测老年患者医疗利用的机器学习模型。这与上午关于人工智能在长期护理中的讨论直接相关。
+
+### Learning Goals | 学习目标
+
+1. Apply multiple ML methods to a realistic healthcare problem | 将多种机器学习方法应用于现实的医疗问题
+2. Compare model performance using appropriate metrics | 使用适当的指标比较模型性能
+3. Interpret results in a healthcare context | 在医疗背景下解释结果
+4. Present findings to the class | 向全班展示发现
+
+### Deliverables | 交付成果
+
+- Completed notebook with your analysis | 包含您分析的完整笔记本
+- 5-minute presentation of key findings | 5分钟的关键发现展示
+- One visualization for presentation | 一个用于展示的可视化
+
+## Setup | 设置
+
+```{r setup}
+# Load required packages
+library(data.table)
+library(ggplot2)
+library(glmnet)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(caret)
+library(tableone)
+library(gtsummary)
+library(patchwork)
+
+# Set seed for reproducibility
+set.seed(2025)
+
+# Set theme
+theme_set(theme_minimal(base_size = 12))
+
+# Set data.table print options
+options(datatable.print.nrows = 10)
+```
+
+## Task 1: Data Loading and Exploration (10 minutes) | 任务1：数据加载和探索（10分钟）
+
+Load the healthcare utilization dataset and perform initial exploration.
+
+加载医疗利用数据集并进行初步探索。
+
+```{r load-data}
+# Load the elderly care dataset
+# This dataset contains information about elderly patients (age 65+)
+# and their healthcare utilization patterns
+
+# Note: For this workshop, we'll simulate the data
+n <- 1200
+elderly_care_data <- data.table(
+  # Patient ID
+  patient_id = 1:n,
+  
+  # Demographics
+  age = round(rnorm(n, 75, 8)),  # Elderly population
+  gender = sample(c("M", "F"), n, replace = TRUE),
+  
+  # Clinical measures
+  charlson_index = rpois(n, lambda = 2.5),  # Comorbidity index
+  n_medications = rpois(n, lambda = 6),      # Polypharmacy common
+  cognitive_score = round(runif(n, 0, 30)), # Cognitive assessment (0-30)
+  adl_score = round(runif(n, 0, 6)),        # Activities of daily living (0-6)
+  
+  # Chronic conditions
+  diabetes = rbinom(n, 1, 0.35),
+  hypertension = rbinom(n, 1, 0.55),
+  heart_failure = rbinom(n, 1, 0.20),
+  copd = rbinom(n, 1, 0.15),
+  dementia = rbinom(n, 1, 0.10),
+  
+  # Prior utilization
+  prior_hospitalizations = rpois(n, lambda = 0.8),
+  prior_er_visits = rpois(n, lambda = 1.2),
+  prior_falls = rpois(n, lambda = 0.5),
+  
+  # Social factors
+  living_situation = sample(c("Alone", "With Family", "Assisted Living"), 
+                           n, replace = TRUE, prob = c(0.3, 0.5, 0.2)),
+  has_caregiver = rbinom(n, 1, 0.6),
+  
+  # Geographic
+  distance_to_hospital = rexp(n, rate = 0.1)  # km
+)
+
+# Create outcome using data.table syntax
+elderly_care_data[, risk_score := 
+  0.05 * (age - 75) +
+  0.3 * charlson_index +
+  0.02 * n_medications +
+  -0.02 * cognitive_score +
+  -0.3 * adl_score +
+  0.5 * diabetes +
+  0.3 * hypertension +
+  0.8 * heart_failure +
+  0.6 * copd +
+  1.2 * dementia +
+  0.4 * prior_hospitalizations +
+  0.2 * prior_er_visits +
+  0.3 * prior_falls +
+  ifelse(living_situation == "Alone", 0.5, 0) +
+  -0.3 * has_caregiver +
+  0.01 * distance_to_hospital]
+
+# Annual healthcare costs (thousands)
+elderly_care_data[, healthcare_cost := exp(5 + risk_score + rnorm(n, 0, 0.6))]
+elderly_care_data[, risk_score := NULL]
+
+# Display structure
+str(elderly_care_data)
+```
+
+### 1.1 Create Summary Statistics | 创建汇总统计
+
+```{r summary-stats}
+# TODO: Create a summary table of patient characteristics
+# Hint: Use tbl_summary() from gtsummary
+
+
+
+
+```
+
+### 1.2 Visualize the Outcome | 可视化结果
+
+```{r outcome-viz}
+# TODO: Create a histogram of healthcare costs
+# Consider: Should we transform the outcome? Why?
+
+
+
+
+```
+
+### 1.3 Explore Key Relationships | 探索关键关系
+
+```{r explore-relationships}
+# TODO: Create 2-3 visualizations showing relationships between
+# predictors and healthcare costs
+# Consider: Which variables might be most predictive?
+
+
+
+
+```
+
+## Task 2: Data Preparation (5 minutes) | 任务2：数据准备（5分钟）
+
+Prepare the data for modeling.
+
+准备建模数据。
+
+```{r data-prep}
+# 2.1 Handle the outcome variable
+# TODO: Decide whether to use raw costs or log-transformed costs
+# Document your decision
+
+
+
+
+# 2.2 Create train/test split (70/30)
+# TODO: Use createDataPartition for stratified splitting
+
+
+
+
+# 2.3 Prepare predictor matrices
+# TODO: Convert categorical variables to appropriate format
+# Create matrices for glmnet
+
+
+
+
+```
+
+## Task 3: Model Building (15 minutes) | 任务3：模型构建（15分钟）
+
+Build at least 3 different models. You must include:
+
+构建至少3个不同的模型。您必须包括：
+
+1. A regularized regression model (LASSO or Ridge) | 正则化回归模型（LASSO或Ridge）
+2. A tree-based model (Random Forest or single tree) | 基于树的模型（随机森林或单树）
+3. One additional model of your choice | 您选择的一个额外模型
+
+```{r model-building}
+# 3.1 Model 1: LASSO Regression
+# TODO: Fit LASSO with cross-validation
+
+
+
+
+# 3.2 Model 2: Random Forest
+# TODO: Fit random forest
+# Consider: How many trees? What mtry?
+
+
+
+
+# 3.3 Model 3: Your choice
+# TODO: Choose and implement another model
+# Options: Ridge, Elastic Net, GRF, Gradient Boosting
+
+
+
+
+```
+
+## Task 4: Model Evaluation (10 minutes) | 任务4：模型评估（10分钟）
+
+Evaluate and compare your models.
+
+评估并比较您的模型。
+
+```{r evaluation}
+# 4.1 Generate predictions for all models
+# TODO: Get predictions on test set for each model
+
+
+
+
+# 4.2 Calculate performance metrics
+# TODO: Calculate RMSE, MAE, and R² for each model
+# Create a comparison table
+
+
+
+
+# 4.3 Create visualization comparing predictions
+# TODO: Create scatter plots or other visualizations
+# showing predicted vs actual values
+
+
+
+
+```
+
+### 4.4 Analyze Prediction Errors | 分析预测误差
+
+```{r error-analysis}
+# TODO: Where do your models perform well/poorly?
+# Consider: Are errors related to patient characteristics?
+
+
+
+
+```
+
+## Task 5: Interpretation and Clinical Relevance (5 minutes) | 任务5：解释和临床相关性（5分钟）
+
+Extract insights relevant to healthcare practice.
+
+提取与医疗实践相关的见解。
+
+```{r interpretation}
+# 5.1 Variable Importance
+# TODO: Extract and visualize variable importance from your best model
+
+
+
+
+# 5.2 High-Risk Patient Identification
+# TODO: Identify characteristics of highest-cost patients
+# How would you use this for intervention targeting?
+
+
+
+
+# 5.3 Model Selection for Practice
+# TODO: Which model would you recommend for clinical use? Why?
+# Consider: Accuracy vs interpretability vs implementation
+
+
+
+
+```
+
+## Task 6: Key Visualization for Presentation | 任务6：用于展示的关键可视化
+
+Create one key visualization that summarizes your main finding.
+
+创建一个总结您主要发现的关键可视化。
+
+```{r key-viz}
+# TODO: Create your presentation visualization
+# This should tell a clear story about your analysis
+
+
+
+
+```
+
+## Presentation Outline (5 minutes) | 展示大纲（5分钟）
+
+Prepare to present your findings in 5 minutes, covering:
+
+准备在5分钟内展示您的发现，包括：
+
+1. **Brief Data Overview | 简要数据概述** (30 seconds | 30秒)
+   - Key characteristics of elderly care population | 老年护理人群的关键特征
+   - Outcome distribution | 结果分布
+
+2. **Methods Used | 使用的方法** (1 minute | 1分钟)
+   - Which models and why | 哪些模型以及为什么
+   - Any data transformations | 任何数据转换
+
+3. **Key Results | 关键结果** (2 minutes | 2分钟)
+   - Model performance comparison | 模型性能比较
+   - Most important predictors | 最重要的预测因子
+   - Show your key visualization | 展示您的关键可视化
+
+4. **Clinical Implications | 临床意义** (1 minute | 1分钟)
+   - How could this be used in practice? | 这如何在实践中使用？
+   - Which patients should be targeted for intervention? | 应该针对哪些患者进行干预？
+
+5. **Limitations & Next Steps | 限制和下一步** (30 seconds | 30秒)
+   - What are the caveats? | 有什么注意事项？
+   - What would you do with more time/data? | 有更多时间/数据您会做什么？
+
+## Bonus Challenges (If Time Permits) | 额外挑战（如果时间允许）
+
+1. **Subgroup Analysis | 亚组分析**: Does model performance vary by patient subgroups (e.g., dementia vs non-dementia)? | 模型性能是否因患者亚组而异（例如，痴呆症与非痴呆症）？
+
+2. **Cost-Effective Targeting | 成本效益目标**: If you could only intervene on the top 10% highest-risk patients, who would you select? | 如果您只能对前10%最高风险患者进行干预，您会选择谁？
+
+3. **Ensemble Approach | 集成方法**: Can you combine predictions from multiple models for better performance? | 您能否组合多个模型的预测以获得更好的性能？
+
+```{r bonus}
+# Space for bonus work
+
+
+
+
+```
+
+## Reflection Questions | 反思问题
+
+Before presenting, discuss with your partner:
+
+在展示之前，与您的搭档讨论：
+
+1. How do these methods compare to traditional risk scores used in healthcare? | 这些方法与医疗保健中使用的传统风险评分相比如何？
+2. What ethical considerations arise when using ML for healthcare resource allocation? | 使用机器学习进行医疗资源分配时会出现哪些伦理考虑？
+3. How would you validate these models before clinical deployment? | 在临床部署之前，您将如何验证这些模型？
+4. What additional data would improve predictions? | 哪些额外数据会改善预测？
+
+## Save Your Work | 保存您的工作
+
+```{r save}
+# Save your results
+save.image("lab4_results.RData")
+
+# Save your key plot
+ggsave("lab4_key_visualization.png", width = 10, height = 6, dpi = 300)
+
+print("Lab work saved! | 实验工作已保存！")
+```
+
+---
+
+*Remember: Focus on the clinical relevance of your findings. Good luck!*
+
+*记住：专注于您发现的临床相关性。祝好运！*

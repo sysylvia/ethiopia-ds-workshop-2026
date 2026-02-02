@@ -1,0 +1,1271 @@
+---
+title: "Supervised Machine Learning for Health Policy | 用于卫生政策的监督机器学习"
+subtitle: "Day 4: PKU-UNC Workshop | 第4天：PKU-UNC研讨会"
+author: "Sean Sylvia, Ph.D."
+date: today
+format: 
+  clean-revealjs:
+    theme: [default, ../../assets/scss/unc-clean.scss]
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    width: 1280
+    height: 720
+    footer: "Causal Inference Workshop | 因果推断研讨会"
+    multiplex: false
+    touch: true
+    controls: true
+    navigation-mode: linear
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+
+# Set up font for Chinese text support
+if (Sys.info()["sysname"] == "Darwin") {
+  # macOS
+  theme_set(theme_minimal(base_size = 14, base_family = "STSong"))
+} else if (Sys.info()["sysname"] == "Windows") {
+  # Windows
+  theme_set(theme_minimal(base_size = 14, base_family = "SimSun"))
+} else {
+  # Linux/other
+  theme_set(theme_minimal(base_size = 14))
+}
+
+# Alternative: use showtext package for better cross-platform support
+library(showtext)
+showtext_auto()
+```
+
+# Welcome Back! | 欢迎回来！
+
+## Bridging from AI in Long-term Care | 从长期护理中的AI衔接
+
+:::: {.columns}
+::: {.column width="50%"}
+### Prof. Yorke's Key Challenges | Yorke教授的关键挑战
+- Predicting care needs | 预测护理需求
+- Resource allocation | 资源分配
+- Early warning systems | 预警系统
+- Personalized interventions | 个性化干预
+:::
+
+::: {.column width="50%"}
+### Today's ML Toolkit | 今天的机器学习工具包
+- Risk prediction models | 风险预测模型
+- Classification algorithms | 分类算法
+- High-dimensional methods | 高维方法
+- Ensemble approaches | 集成方法
+:::
+::::
+
+::: {.notes}
+Connect the morning's special lecture to our technical content. Emphasize that the AI applications discussed require the fundamental ML methods we'll learn today.
+:::
+
+## Today's Journey | 今天的旅程
+
+:::: {.columns}
+::: {.column width="33%"}
+### Session 1 | 第1节
+**Foundations | 基础**
+- Prediction vs. causation | 预测与因果关系
+- Bias-variance tradeoff | 偏差-方差权衡
+- Cross-validation | 交叉验证
+:::
+
+::: {.column width="33%"}
+### Session 2 | 第2节
+**Regularization | 正则化**
+- High-dimensional data | 高维数据
+- LASSO & Ridge
+- Elastic Net | 弹性网
+:::
+
+::: {.column width="33%"}
+### Session 3 | 第3节
+**Trees & Forests | 树与森林**
+- Decision trees | 决策树
+- Random forests | 随机森林
+- Modern extensions | 现代扩展
+:::
+::::
+
+# Session 1: Foundations of Supervised Learning | 第1节：监督学习基础 {#session1}
+
+## The Fundamental Question | 基本问题
+
+**Can we predict health outcomes accurately?**
+
+**我们能准确预测健康结果吗？**
+
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### Traditional Statistics | 传统统计学
+- Focus on **inference** ($\hat{\beta}$) | 关注**推断**
+- Understanding relationships | 理解关系
+- Hypothesis testing | 假设检验
+- Causal interpretation | 因果解释
+:::
+
+::: {.column width="50%"}
+### Machine Learning | 机器学习
+- Focus on **prediction** ($\hat{y}$) | 关注**预测**
+- Minimizing forecast error | 最小化预测误差
+- Out-of-sample performance | 样本外性能
+- Pattern recognition | 模式识别
+:::
+::::
+
+## Healthcare Prediction Tasks | 医疗保健预测任务
+
+```{r healthcare-examples, fig.width=10, fig.height=6}
+examples <- tibble(
+  Task = c("Readmission Risk", "Disease Onset", "Resource Needs", 
+           "Treatment Response", "Cost Prediction"),
+  Traditional = c("Logistic regression\nwith 5-10 variables", 
+                  "Cox model with\nknown risk factors",
+                  "Time series\nextrapolation", 
+                  "Subgroup analysis\nin RCT",
+                  "Linear model with\nprior costs"),
+  ML_Approach = c("Ensemble methods with\n100s of features", 
+                  "Deep learning on\nEHR sequences",
+                  "Random forests with\ncomplex interactions", 
+                  "Causal forests for\nheterogeneity",
+                  "Gradient boosting with\nall available data"),
+  Benefit = c("30% better prediction", 
+              "Earlier detection",
+              "Captures non-linearity", 
+              "Personalized effects",
+              "Handles missingness")
+)
+
+examples %>%
+  kable(format = "html") %>%
+  kable_styling(font_size = 18) %>%
+  column_spec(1, bold = TRUE, color = "white", background = "#2C3E50") %>%
+  column_spec(4, color = "darkgreen", bold = TRUE)
+```
+
+## The Supervised Learning Framework | 监督学习框架
+
+```{mermaid}
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#3498db', 'primaryTextColor':'#fff', 'primaryBorderColor':'#2c3e50', 'lineColor':'#2c3e50', 'fontSize':'16px'}}}%%
+flowchart LR
+    A["<b>(X, Y)</b><br/>Features &<br/>Outcomes<br/>特征与结果"] 
+    B["<b>Learn f()</b><br/>from data<br/>从数据学习"] 
+    C["<b>f̂(X) → Ŷ</b><br/>Fitted model<br/>拟合模型"]
+    D["<b>New X → Ŷ</b><br/>Forecast<br/>预测"] 
+    E["<b>Compare</b><br/>Ŷ vs Y<br/>比较"]
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    
+    style A fill:#3498db,stroke:#2c3e50,stroke-width:3px,color:#fff
+    style B fill:#3498db,stroke:#2c3e50,stroke-width:3px,color:#fff
+    style C fill:#3498db,stroke:#2c3e50,stroke-width:3px,color:#fff
+    style D fill:#3498db,stroke:#2c3e50,stroke-width:3px,color:#fff
+    style E fill:#3498db,stroke:#2c3e50,stroke-width:3px,color:#fff
+```
+
+::: {.text-center}
+**The Machine Learning Pipeline | 机器学习流程**  
+*From data to predictions | 从数据到预测*
+:::
+
+## A Simple Healthcare Example | 简单的医疗保健示例
+
+```{r simple-example, fig.width=10, fig.height=6}
+set.seed(2025)
+n <- 200
+# Create the data first
+age_values <- round(rnorm(n, 70, 10))
+comorbidities_values <- rpois(n, 2)
+readmitted_values <- rbinom(n, 1, plogis(-2 + 0.03 * (age_values - 70) + 0.5 * comorbidities_values))
+
+simple_data <- data.table(
+  age = age_values,
+  comorbidities = comorbidities_values,
+  readmitted = readmitted_values
+)
+
+p1 <- ggplot(simple_data, aes(x = age, y = readmitted)) +
+  geom_point(alpha = 0.5, position = position_jitter(height = 0.05)) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              se = TRUE, color = "#e74c3c") +
+  labs(title = "Age vs. Readmission Risk | 年龄与再入院风险",
+       x = "Age | 年龄", y = "Readmitted | 再入院") +
+  scale_y_continuous(breaks = c(0, 1), labels = c("No", "Yes"))
+
+p2 <- simple_data[, .(readmission_rate = mean(readmitted)), by = comorbidities] %>%
+  ggplot(aes(x = comorbidities, y = readmission_rate)) +
+  geom_col(fill = "#3498db") +
+  labs(title = "Comorbidities vs. Readmission Rate | 合并症与再入院率",
+       x = "Number of Comorbidities | 合并症数量", 
+       y = "Readmission Rate | 再入院率") +
+  scale_y_continuous(labels = scales::percent)
+
+p1 + p2
+```
+
+## The Central Challenge: Overfitting | 核心挑战：过拟合
+
+```{r overfitting-demo, fig.width=10, fig.height=6}
+set.seed(42)
+n <- 30
+x <- runif(n, 0, 10)
+y <- sin(x) + rnorm(n, 0, 0.3)
+demo_data <- data.table(x = x, y = y)
+
+# Fit different complexity models
+fits <- data.table(
+  x = seq(0, 10, length.out = 200)
+)
+
+# Simple model
+simple_model <- lm(y ~ x, data = demo_data)
+fits[, simple := predict(simple_model, newdata = fits)]
+
+# Complex model
+complex_model <- lm(y ~ poly(x, 15), data = demo_data)
+fits[, complex := predict(complex_model, newdata = data.frame(x = fits$x))]
+
+# Just right model
+justright_model <- lm(y ~ poly(x, 3), data = demo_data)
+fits[, justright := predict(justright_model, newdata = data.frame(x = fits$x))]
+
+# Rename for plotting
+fits[, x_seq := x]
+
+# Create three panels
+p1 <- ggplot(demo_data, aes(x = x, y = y)) +
+  geom_point(size = 3) +
+  geom_line(data = fits, aes(x = x_seq, y = simple), 
+            color = "#3498db", size = 1.5) +
+  labs(title = "Underfitting | 欠拟合", 
+       subtitle = "Too simple (high bias) | 太简单（高偏差）") +
+  theme(plot.title = element_text(color = "#3498db"))
+
+p2 <- ggplot(demo_data, aes(x = x, y = y)) +
+  geom_point(size = 3) +
+  geom_line(data = fits, aes(x = x_seq, y = justright), 
+            color = "#27ae60", size = 1.5) +
+  labs(title = "Just Right | 恰到好处", 
+       subtitle = "Balanced complexity | 平衡的复杂性") +
+  theme(plot.title = element_text(color = "#27ae60"))
+
+p3 <- ggplot(demo_data, aes(x = x, y = y)) +
+  geom_point(size = 3) +
+  geom_line(data = fits, aes(x = x_seq, y = complex), 
+            color = "#e74c3c", size = 1.5) +
+  labs(title = "Overfitting | 过拟合", 
+       subtitle = "Too complex (high variance) | 太复杂（高方差）") +
+  theme(plot.title = element_text(color = "#e74c3c"))
+
+p1 + p2 + p3
+```
+
+## The Bias-Variance Tradeoff | 偏差-方差权衡
+
+```{r bias-variance, fig.width=10, fig.height=6}
+complexity <- seq(1, 20, 0.1)
+bias_squared <- 10 / complexity
+variance <- 0.5 * complexity
+total_error <- bias_squared + variance + 2  # plus irreducible error
+
+error_data <- tibble(
+  Complexity = complexity,
+  `Bias²` = bias_squared,
+  Variance = variance,
+  `Total Error` = total_error
+)
+
+error_long <- error_data %>%
+  pivot_longer(-Complexity, names_to = "Component", values_to = "Error")
+
+ggplot(error_long, aes(x = Complexity, y = Error, color = Component)) +
+  geom_line(size = 2) +
+  geom_vline(xintercept = complexity[which.min(total_error)], 
+             linetype = "dashed", size = 1) +
+  annotate("text", x = complexity[which.min(total_error)] + 0.5, y = 15, 
+           label = "Optimal\nComplexity", hjust = 0, size = 5) +
+  scale_color_manual(values = c("Bias²" = "#3498db", 
+                               "Variance" = "#e74c3c", 
+                               "Total Error" = "#2c3e50")) +
+  labs(title = "The Bias-Variance Tradeoff | 偏差-方差权衡",
+       subtitle = "Finding the sweet spot between underfitting and overfitting | 在欠拟合和过拟合之间找到最佳点",
+       x = "Model Complexity | 模型复杂度", y = "Error | 误差") +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+## Cross-Validation: The Gold Standard | 交叉验证：黄金标准
+
+```{r cv-illustration, fig.width=10, fig.height=6}
+# Create visual for k-fold CV
+set.seed(123)
+n_samples <- 100
+k_folds <- 5
+
+cv_data <- data.table(
+  sample = 1:n_samples,
+  fold = rep(1:k_folds, each = n_samples/k_folds),
+  y = 1
+)
+cv_data[, `:=`(
+  x = (sample - 1) %% 20 + 1,
+  y = ceiling(sample / 20)
+)]
+
+# Create 5 separate plots for each fold
+plots <- list()
+for (i in 1:k_folds) {
+  plots[[i]] <- ggplot(cv_data, aes(x = x, y = y, fill = factor(fold == i))) +
+    geom_tile(color = "white", size = 0.5) +
+    scale_fill_manual(values = c("FALSE" = "#95a5a6", "TRUE" = "#e74c3c"),
+                      labels = c("Training", "Validation")) +
+    labs(title = paste("Fold", i),
+         x = "", y = "") +
+    theme(legend.position = "none",
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          plot.title = element_text(hjust = 0.5))
+}
+
+# Combine plots
+wrap_plots(plots, ncol = 5) +
+  plot_annotation(
+    title = "5-Fold Cross-Validation | 5折交叉验证",
+    subtitle = "Each fold serves as validation once while others train the model | 每个折叠作为验证集一次，其他折叠训练模型"
+  )
+```
+
+## Cross-Validation in Practice | 实践中的交叉验证
+
+```{r cv-performance, fig.width=10, fig.height=6}
+# Simulate CV results for different model complexities
+set.seed(2025)
+complexities <- 1:15
+n_folds <- 5
+
+cv_results <- expand_grid(
+  complexity = complexities,
+  fold = 1:n_folds
+) %>%
+  mutate(
+    validation_error = 10/complexity + 0.3*complexity + rnorm(n(), 0, 0.5),
+    training_error = 10/complexity + rnorm(n(), 0, 0.2)
+  )
+
+cv_summary <- cv_results %>%
+  group_by(complexity) %>%
+  summarise(
+    mean_val_error = mean(validation_error),
+    se_val_error = sd(validation_error) / sqrt(n_folds),
+    mean_train_error = mean(training_error),
+    .groups = "drop"
+  )
+
+optimal_complexity <- cv_summary$complexity[which.min(cv_summary$mean_val_error)]
+
+ggplot(cv_summary) +
+  geom_ribbon(aes(x = complexity, 
+                  ymin = mean_val_error - se_val_error,
+                  ymax = mean_val_error + se_val_error),
+              fill = "#e74c3c", alpha = 0.3) +
+  geom_line(aes(x = complexity, y = mean_val_error), 
+            color = "#e74c3c", size = 2) +
+  geom_line(aes(x = complexity, y = mean_train_error), 
+            color = "#3498db", size = 2) +
+  geom_vline(xintercept = optimal_complexity, linetype = "dashed") +
+  geom_point(data = filter(cv_summary, complexity == optimal_complexity),
+             aes(x = complexity, y = mean_val_error), 
+             size = 5, color = "#e74c3c") +
+  annotate("text", x = 2, y = 8, label = "Training Error | 训练误差", 
+           color = "#3498db", size = 5, hjust = 0) +
+  annotate("text", x = 2, y = 12, label = "Validation Error ± SE | 验证误差 ± 标准误", 
+           color = "#e74c3c", size = 5, hjust = 0) +
+  labs(title = "Cross-Validation for Model Selection | 用于模型选择的交叉验证",
+       subtitle = paste("Optimal complexity | 最优复杂度:", optimal_complexity),
+       x = "Model Complexity | 模型复杂度", 
+       y = "Prediction Error | 预测误差")
+```
+
+## Key Takeaways: Session 1 | 关键要点：第1节
+
+::: {style="font-size: 0.9em;"}
+1. **ML optimizes for prediction accuracy**, not parameter interpretation  
+   **机器学习优化预测准确性**，而非参数解释
+
+2. **Always evaluate on held-out data** to avoid overfitting  
+   **始终在保留数据上评估**以避免过拟合
+
+3. **Balance complexity** through the bias-variance tradeoff  
+   通过偏差-方差权衡**平衡复杂性**
+
+4. **Use cross-validation** to select model parameters  
+   **使用交叉验证**选择模型参数
+:::
+
+::: {.notes}
+Emphasize that these principles apply to all ML methods we'll see today. Take questions before moving to regularization.
+:::
+
+# Session 2: Regularized Regression | 第2节：正则化回归 {#session2}
+
+## The Curse of Dimensionality | 维度诅咒
+
+:::: {.columns}
+::: {.column width="50%"}
+### Traditional Setting | 传统设置
+- n = 10,000 patients | 10,000名患者
+- p = 10 predictors | 10个预测因子
+- OLS works fine | OLS工作良好
+:::
+
+::: {.column width="50%"}
+### Modern Healthcare Data | 现代医疗数据
+- n = 1,000 patients | 1,000名患者
+- p = 10,000 features | 10,000个特征
+- OLS fails completely! | OLS完全失败！
+:::
+::::
+
+. . .
+
+::: {.callout-warning}
+When p > n, traditional methods break down
+
+当 p > n 时，传统方法崩溃
+:::
+
+## High-Dimensional Healthcare Data | 高维医疗保健数据
+
+```{r high-dim-examples}
+hd_examples <- data.table(
+  `Data Type` = c("Electronic Health Records", 
+                  "Genomics", 
+                  "Medical Imaging",
+                  "Wearable Sensors", 
+                  "Claims Data"),
+  `Typical Features` = c("Lab tests, diagnoses, medications, procedures",
+                        "Gene expression, SNPs, methylation patterns",
+                        "Pixel intensities, texture features, radiomics",
+                        "Heart rate variability, activity patterns, sleep",
+                        "All billing codes, provider networks, temporal"),
+  `Dimensionality` = c("1,000 - 50,000",
+                      "10,000 - 1,000,000",
+                      "1,000 - 100,000",
+                      "100 - 10,000",
+                      "1,000 - 100,000"),
+  `Challenge` = c("Sparse, correlated",
+                 "Ultra-high dimension",
+                 "Spatial correlation",
+                 "Time series structure",
+                 "Hierarchical codes")
+)
+
+hd_examples %>%
+  kable(format = "html") %>%
+  kable_styling(font_size = 16) %>%
+  column_spec(1, bold = TRUE, width = "20%") %>%
+  column_spec(3, color = "#e74c3c", bold = TRUE)
+```
+
+## Why Regularization? | 为什么需要正则化？
+
+```{r regularization-need, fig.width=10, fig.height=6}
+# Simulate high-dimensional scenario
+set.seed(2025)
+n <- 100
+p <- 80
+X <- matrix(rnorm(n * p), n, p)
+true_beta <- c(rep(1, 5), rep(0, p - 5))  # Only 5 true predictors
+y <- X %*% true_beta + rnorm(n, 0, 2)
+
+# OLS on full data
+ols_beta <- coef(lm(y ~ X))[-1]
+
+# Create comparison
+beta_comparison <- tibble(
+  index = 1:p,
+  truth = true_beta,
+  ols = ols_beta,
+  is_true_predictor = index <= 5
+)
+
+ggplot(beta_comparison, aes(x = index)) +
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  geom_point(aes(y = truth), color = "#27ae60", size = 3, shape = 16) +
+  geom_point(aes(y = ols), color = "#e74c3c", size = 2, alpha = 0.7) +
+  geom_vline(xintercept = 5.5, linetype = "dotted", size = 1) +
+  annotate("text", x = 3, y = 3, label = "True\nPredictors", size = 5) +
+  annotate("text", x = 40, y = 3, label = "Noise\nVariables", size = 5) +
+  labs(title = "OLS in High Dimensions: Overfitting to Noise | 高维中的OLS：对噪声过拟合",
+       subtitle = "Green = true coefficients, Red = OLS estimates | 绿色 = 真实系数，红色 = OLS估计",
+       x = "Predictor Index | 预测因子索引", 
+       y = "Coefficient Value | 系数值") +
+  ylim(-4, 4)
+```
+
+## The Regularization Solution | 正则化解决方案
+
+**Add a penalty for model complexity**
+**为模型复杂性添加惩罚**
+
+
+$$\min_\beta \underbrace{\frac{1}{n}\sum_{i=1}^n (y_i - x_i^T\beta)^2}_{\text{Fit to data | 拟合数据}} + \underbrace{\lambda \cdot \text{Penalty}(\beta)}_{\text{Complexity control | 复杂性控制}}$$
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+### Ridge (L2 Penalty) | Ridge（L2惩罚）
+$$\text{Penalty} = \sum_{j=1}^p \beta_j^2$$
+- Shrinks all coefficients | 收缩所有系数
+- Keeps all variables | 保留所有变量
+:::
+
+::: {.column width="50%"}
+### LASSO (L1 Penalty) | LASSO（L1惩罚）
+$$\text{Penalty} = \sum_{j=1}^p |\beta_j|$$
+- Shrinks coefficients | 收缩系数
+- Sets many to exactly zero | 将许多设置为恰好零
+:::
+::::
+
+## Geometric Intuition | 几何直觉
+
+```{r regularization-geometry, fig.width=10, fig.height=6}
+# Create contour plot illustration
+theta <- seq(0, 2*pi, length.out = 100)
+ridge_constraint <- tibble(
+  beta1 = cos(theta),
+  beta2 = sin(theta),
+  method = "Ridge (L2)"
+)
+
+lasso_constraint <- tibble(
+  beta1 = c(1, 0, -1, 0, 1),
+  beta2 = c(0, 1, 0, -1, 0),
+  method = "LASSO (L1)"
+)
+
+# Loss function contours
+beta_grid <- expand_grid(
+  beta1 = seq(-2, 2, 0.1),
+  beta2 = seq(-2, 2, 0.1)
+)
+beta_grid$loss <- (beta_grid$beta1 - 1.5)^2 + (beta_grid$beta2 - 0.5)^2
+
+p1 <- ggplot() +
+  geom_contour(data = beta_grid, aes(x = beta1, y = beta2, z = loss), 
+               color = "gray", alpha = 0.5) +
+  geom_polygon(data = ridge_constraint, aes(x = beta1, y = beta2), 
+               fill = "#3498db", alpha = 0.3, color = "#3498db", size = 2) +
+  geom_point(x = 0.9, y = 0.4, size = 5, color = "#e74c3c") +
+  labs(title = "Ridge Regression | Ridge回归",
+       subtitle = "Circular constraint → all coefficients shrink | 圆形约束 → 所有系数收缩",
+       x = expression(beta[1]), y = expression(beta[2])) +
+  coord_equal() +
+  theme_minimal(base_size = 14)
+
+p2 <- ggplot() +
+  geom_contour(data = beta_grid, aes(x = beta1, y = beta2, z = loss), 
+               color = "gray", alpha = 0.5) +
+  geom_polygon(data = lasso_constraint, aes(x = beta1, y = beta2), 
+               fill = "#27ae60", alpha = 0.3, color = "#27ae60", size = 2) +
+  geom_point(x = 1, y = 0, size = 5, color = "#e74c3c") +
+  labs(title = "LASSO Regression | LASSO回归",
+       subtitle = "Diamond constraint → sparse solutions | 菱形约束 → 稀疏解",
+       x = expression(beta[1]), y = expression(beta[2])) +
+  coord_equal() +
+  theme_minimal(base_size = 14)
+
+p1 + p2
+```
+
+## LASSO Path: Variable Selection | LASSO路径：变量选择
+
+```{r lasso-path, fig.width=10, fig.height=6}
+# Generate LASSO path data
+set.seed(2025)
+n <- 200
+p <- 20
+X <- matrix(rnorm(n * p), n, p)
+beta_true <- c(3, -2, 1.5, rep(0, p-3))
+y <- X %*% beta_true + rnorm(n)
+
+# Fit LASSO path
+library(glmnet)
+lasso_fit <- glmnet(X, y, alpha = 1)
+
+# Extract coefficients
+beta_path <- as.matrix(lasso_fit$beta)
+lambda_path <- log(lasso_fit$lambda)
+
+# Create path data
+path_data <- as_tibble(t(beta_path)) %>%
+  mutate(log_lambda = lambda_path) %>%
+  pivot_longer(-log_lambda, names_to = "variable", values_to = "coefficient") %>%
+  mutate(variable = factor(variable, levels = paste0("V", 1:p)),
+         is_true = variable %in% c("V1", "V2", "V3"))
+
+ggplot(path_data, aes(x = log_lambda, y = coefficient, 
+                      color = variable, size = is_true)) +
+  geom_line(aes(group = variable), alpha = 0.8) +
+  scale_size_manual(values = c("FALSE" = 0.5, "TRUE" = 2), guide = "none") +
+  scale_color_manual(values = c(rep("#95a5a6", p-3), 
+                               "#e74c3c", "#3498db", "#27ae60"),
+                     guide = "none") +
+  geom_vline(xintercept = log(lasso_fit$lambda[15]), 
+             linetype = "dashed", alpha = 0.5) +
+  annotate("text", x = log(lasso_fit$lambda[15]) - 0.2, y = 2.5, 
+           label = "λ selected\nby CV", hjust = 1) +
+  labs(title = "LASSO Coefficient Paths | LASSO系数路径",
+       subtitle = "True predictors (colored) enter first and persist | 真实预测因子（彩色）首先进入并持续存在",
+       x = "Log(λ)", y = "Coefficient Value | 系数值") +
+  theme_minimal(base_size = 14)
+```
+
+## Cross-Validation for λ Selection | 用于λ选择的交叉验证
+
+```{r cv-lambda, fig.width=10, fig.height=6}
+# Simulate CV results for LASSO
+set.seed(2025)
+cv_lasso <- cv.glmnet(X, y, alpha = 1, nfolds = 10)
+
+cv_data <- tibble(
+  log_lambda = log(cv_lasso$lambda),
+  mean_error = cv_lasso$cvm,
+  se_error = cv_lasso$cvsd,
+  nzero = cv_lasso$nzero
+)
+
+p1 <- ggplot(cv_data, aes(x = log_lambda)) +
+  geom_ribbon(aes(ymin = mean_error - se_error, 
+                  ymax = mean_error + se_error),
+              fill = "#e74c3c", alpha = 0.2) +
+  geom_line(aes(y = mean_error), color = "#e74c3c", size = 2) +
+  geom_vline(xintercept = log(cv_lasso$lambda.min), 
+             linetype = "dashed", color = "#2c3e50") +
+  geom_vline(xintercept = log(cv_lasso$lambda.1se), 
+             linetype = "dashed", color = "#95a5a6") +
+  labs(title = "Cross-Validated Prediction Error | 交叉验证预测误差",
+       x = "Log(λ)", y = "Mean Squared Error | 均方误差")
+
+p2 <- ggplot(cv_data, aes(x = log_lambda, y = nzero)) +
+  geom_line(size = 2, color = "#3498db") +
+  geom_vline(xintercept = log(cv_lasso$lambda.min), 
+             linetype = "dashed", color = "#2c3e50") +
+  geom_vline(xintercept = log(cv_lasso$lambda.1se), 
+             linetype = "dashed", color = "#95a5a6") +
+  labs(title = "Model Complexity | 模型复杂度",
+       x = "Log(λ)", y = "Number of Selected Variables | 选定变量数")
+
+p1 / p2 +
+  plot_annotation(
+    title = "Selecting λ via Cross-Validation | 通过交叉验证选择λ",
+    subtitle = "λ.min (dark) minimizes error, λ.1se (gray) gives sparser model within 1 SE | λ.min（深色）最小化误差，λ.1se（灰色）在1个标准误内给出更稀疏的模型"
+  )
+```
+
+## Ridge vs. LASSO: Key Differences | Ridge vs. LASSO：关键差异
+
+```{r ridge-lasso-compare, fig.width=10, fig.height=6}
+# Create comparison data
+set.seed(2025)
+comparison_data <- data.table(
+  Feature = c("Coefficient behavior", "Variable selection", 
+              "Correlated predictors", "Solution uniqueness",
+              "Computational speed", "Best use case"),
+  Ridge = c("Shrinks proportionally", "Keeps all variables",
+            "Distributes weight evenly", "Always unique",
+            "Very fast", "Many weak predictors"),
+  LASSO = c("Can shrink to exactly 0", "Automatic selection",
+            "Picks one arbitrarily", "May not be unique", 
+            "Fast (but slower)", "Few strong predictors")
+)
+
+# Create visual comparison
+comparison_data %>%
+  kable(format = "html", escape = FALSE) %>%
+  kable_styling(font_size = 18, full_width = TRUE) %>%
+  column_spec(1, bold = TRUE, width = "30%") %>%
+  column_spec(2, background = "#3498db20") %>%
+  column_spec(3, background = "#27ae6020")
+```
+
+## Elastic Net: Best of Both Worlds | 弹性网：两全其美
+
+$$\min_\beta \frac{1}{n}\sum_{i=1}^n (y_i - x_i^T\beta)^2 + \lambda \left[\alpha \sum_{j=1}^p |\beta_j| + (1-\alpha) \sum_{j=1}^p \beta_j^2\right]$$
+
+- α = 0: Pure Ridge | 纯Ridge
+- α = 1: Pure LASSO | 纯LASSO
+- 0 < α < 1: Elastic Net | 弹性网
+
+::: {.callout-tip}
+Elastic Net handles correlated predictors better than LASSO while maintaining sparsity
+
+弹性网比LASSO更好地处理相关预测因子，同时保持稀疏性
+:::
+
+## Practical Guidance | 实用指导
+
+```{r practical-guidance}
+guidance <- data.table(
+  Scenario = c("p >> n", "Highly correlated predictors", 
+               "Need interpretability", "Grouped variables",
+               "Maximum prediction accuracy"),
+  Recommendation = c("LASSO or Elastic Net", "Ridge or Elastic Net",
+                    "LASSO (but be cautious)", "Elastic Net",
+                    "Try all three, use CV"),
+  Reason = c("Need dimension reduction", "LASSO arbitrarily selects",
+            "Automatic variable selection", "Selects groups together",
+            "No single best method")
+)
+
+guidance %>%
+  kable(format = "html") %>%
+  kable_styling(font_size = 16) %>%
+  column_spec(1, bold = TRUE, width = "35%") %>%
+  column_spec(2, color = "#27ae60", bold = TRUE)
+```
+
+## Warning: Interpretation Challenges | 警告：解释挑战
+
+```{r interpretation-warning, fig.width=10, fig.height=6}
+# Show coefficient instability
+set.seed(2025)
+n_bootstrap <- 50
+selected_vars <- matrix(0, n_bootstrap, p)
+
+for(i in 1:n_bootstrap) {
+  idx <- sample(1:n, n, replace = TRUE)
+  X_boot <- X[idx, ]
+  y_boot <- y[idx]
+  
+  cv_boot <- cv.glmnet(X_boot, y_boot, alpha = 1)
+  beta_boot <- coef(cv_boot, s = "lambda.min")[-1]
+  selected_vars[i, ] <- as.numeric(beta_boot != 0)
+}
+
+selection_freq <- colMeans(selected_vars)
+
+selection_data <- tibble(
+  variable = factor(paste0("V", 1:p)),
+  frequency = selection_freq,
+  is_true = 1:p <= 3
+)
+
+ggplot(selection_data, aes(x = reorder(variable, frequency), 
+                          y = frequency, fill = is_true)) +
+  geom_col() +
+  scale_fill_manual(values = c("FALSE" = "#95a5a6", "TRUE" = "#27ae60"),
+                    labels = c("Noise", "True Predictor")) +
+  coord_flip() +
+  labs(title = "LASSO Selection Instability | LASSO选择不稳定性",
+       subtitle = "Selection frequency across 50 bootstrap samples | 50个自助样本的选择频率",
+       x = "Variable | 变量", y = "Selection Frequency | 选择频率",
+       fill = "Variable Type | 变量类型") +
+  theme_minimal(base_size = 14)
+```
+
+::: {.callout-warning}
+**Key Point**: Regularized regression is for prediction, not inference!
+
+**要点**：正则化回归用于预测，而非推断！
+:::
+
+## Key Takeaways: Session 2 | 关键要点：第2节
+
+<div style="font-size: 0.8em;">
+1. **Regularization prevents overfitting** in high dimensions
+   
+   **正则化防止**高维中的**过拟合**
+
+2. **LASSO provides automatic variable selection** (but unstable)
+   
+   **LASSO提供自动变量选择**（但不稳定）
+
+3. **Ridge handles correlated predictors** better
+   
+   **Ridge更好地处理相关预测因子**
+
+4. **Always use cross-validation** to select λ
+   
+   **始终使用交叉验证**选择λ
+
+5. **Don't interpret coefficients** as causal effects
+   
+   **不要将系数解释**为因果效应
+</div>
+
+# Session 3: Tree-Based Methods | 第3节：基于树的方法 {#session3}
+
+## Beyond Linear Models | 超越线性模型
+
+:::: {.columns}
+::: {.column width="50%"}
+### Linear Methods Assume: | 线性方法假设：
+- Additive effects | 加性效应
+- Same everywhere | 处处相同
+- No interactions | 无交互作用
+- Parametric form | 参数形式
+:::
+
+::: {.column width="50%"}
+### Real Healthcare is: | 真实医疗保健是：
+- Non-linear | 非线性
+- Context-dependent | 依赖于背景
+- Full of interactions | 充满交互作用
+- Unknown form | 未知形式
+:::
+::::
+
+. . .
+
+::: {.callout-note}
+Trees naturally capture these complexities!
+
+树自然地捕获这些复杂性！
+:::
+
+## How Trees Work | 树如何工作
+
+```{r tree-illustration, fig.width=10, fig.height=8}
+# Create simple tree data
+set.seed(2025)
+n <- 500
+tree_demo <- tibble(
+  age = runif(n, 40, 80),
+  comorbidities = rpois(n, 2),
+  cost = ifelse(age < 65,
+                ifelse(comorbidities <= 1, 1000 + rnorm(n, 0, 200),
+                       3000 + rnorm(n, 0, 400)),
+                ifelse(comorbidities <= 2, 2000 + rnorm(n, 0, 300),
+                       5000 + rnorm(n, 0, 500)))
+)
+
+# Fit simple tree
+library(rpart)
+simple_tree <- rpart(cost ~ age + comorbidities, 
+                     data = tree_demo,
+                     control = rpart.control(maxdepth = 3))
+
+# Create regions plot
+p1 <- ggplot(tree_demo, aes(x = age, y = comorbidities, color = cost)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_color_gradient2(low = "#3498db", mid = "#f39c12", high = "#e74c3c",
+                        midpoint = 3000, name = "Cost") +
+  geom_vline(xintercept = 65, size = 2, color = "black") +
+  geom_hline(yintercept = 1.5, size = 2, color = "black", 
+             data = filter(tree_demo, age < 65)) +
+  geom_hline(yintercept = 2.5, size = 2, color = "black",
+             data = filter(tree_demo, age >= 65)) +
+  annotate("text", x = 55, y = 0.5, label = "Low Cost\n$1,000", size = 5) +
+  annotate("text", x = 55, y = 3, label = "Medium\n$3,000", size = 5) +
+  annotate("text", x = 72, y = 1, label = "Medium\n$2,000", size = 5) +
+  annotate("text", x = 72, y = 4, label = "High Cost\n$5,000", size = 5) +
+  labs(title = "Decision Tree Partitions | 决策树分区",
+       x = "Age | 年龄", y = "Number of Comorbidities | 合并症数量") +
+  theme_minimal(base_size = 14)
+
+# Create tree diagram
+library(rpart.plot)
+p2 <- ~rpart.plot(simple_tree, type = 4, extra = 101, 
+                  main = "Tree Structure", cex = 1.2,
+                  box.palette = "Blues")
+
+p1
+```
+
+## Tree Algorithm: Recursive Partitioning | 树算法：递归分区
+
+::: {.panel-tabset}
+
+### Step 1: Find Best Split | 第1步：找到最佳分割
+For each variable and possible split point: | 对于每个变量和可能的分割点：
+- Calculate variance in left child | 计算左子节点中的方差
+- Calculate variance in right child | 计算右子节点中的方差
+- Choose split minimizing weighted sum | 选择最小化加权和的分割
+
+### Step 2: Recurse | 第2步：递归
+Apply same process to each child node | 对每个子节点应用相同的过程
+
+### Step 3: Stop | 第3步：停止
+When nodes are too small or pure enough | 当节点太小或足够纯时
+
+### Step 4: Prune | 第4步：修剪
+Remove branches that don't improve validation error | 删除不改善验证误差的分支
+
+:::
+
+## Trees: Strengths and Weaknesses | 树：优势和劣势
+
+:::: {.columns}
+::: {.column width="50%"}
+### Strengths ✓ | 优势 ✓
+- Handle non-linearity naturally | 自然处理非线性
+- Automatic interaction detection | 自动交互检测
+- No scaling needed | 无需缩放
+- Missing data handling | 缺失数据处理
+- Interpretable (single tree) | 可解释（单树）
+:::
+
+::: {.column width="50%"}
+### Weaknesses ✗ | 劣势 ✗
+- High variance (unstable) | 高方差（不稳定）
+- Poor linear relationships | 线性关系差
+- Discontinuous predictions | 不连续预测
+- Single trees overfit | 单树过拟合
+- Biased variable selection | 有偏的变量选择
+:::
+::::
+
+## From Trees to Forests | 从树到森林
+
+<div style="font-size: 0.9em;">
+**Key Insight**: Average many diverse trees to reduce variance!
+
+**关键洞察**：平均多个不同的树以减少方差！
+</div>
+
+```{r forest-concept, fig.width=10, fig.height=6}
+# Illustrate variance reduction through averaging
+set.seed(2025)
+n_trees <- 100
+x_seq <- seq(0, 10, 0.1)
+
+# Generate many "tree" predictions (step functions with noise)
+tree_preds <- matrix(0, length(x_seq), n_trees)
+for(i in 1:n_trees) {
+  splits <- sort(runif(3, 0, 10))
+  values <- rnorm(4, mean = sin(c(2, 5, 7, 9)), sd = 0.5)
+  tree_preds[, i] <- cut(x_seq, c(-Inf, splits, Inf), labels = FALSE)
+  tree_preds[, i] <- values[tree_preds[, i]]
+}
+
+# Create data for plotting
+tree_data <- tibble(
+  x = rep(x_seq, 10),
+  y = as.vector(tree_preds[, 1:10]),
+  tree = rep(1:10, each = length(x_seq))
+)
+
+forest_data <- tibble(
+  x = x_seq,
+  y = rowMeans(tree_preds),
+  truth = sin(x_seq)
+)
+
+ggplot() +
+  geom_line(data = tree_data, aes(x = x, y = y, group = tree),
+            alpha = 0.3, color = "#95a5a6") +
+  geom_line(data = forest_data, aes(x = x, y = y),
+            size = 2, color = "#e74c3c") +
+  geom_line(data = forest_data, aes(x = x, y = truth),
+            size = 2, color = "#27ae60", linetype = "dashed") +
+  annotate("text", x = 8, y = 1.5, label = "Individual Trees | 单个树", 
+           color = "#95a5a6", size = 5) +
+  annotate("text", x = 8, y = -0.5, label = "Forest Average | 森林平均", 
+           color = "#e74c3c", size = 5) +
+  annotate("text", x = 8, y = -1.5, label = "True Function | 真实函数", 
+           color = "#27ae60", size = 5) +
+  labs(title = "Random Forest: Wisdom of the Crowd | 随机森林：群体智慧",
+       subtitle = "Averaging many trees reduces variance while maintaining flexibility | 平均许多树减少方差同时保持灵活性",
+       x = "X", y = "Y") +
+  theme_minimal(base_size = 14)
+```
+
+## Random Forest Algorithm | 随机森林算法
+
+```{r rf-algorithm}
+rf_steps <- tibble(
+  Step = 1:4,
+  Process = c("Bootstrap Sample", "Random Feature Selection", 
+              "Grow Deep Tree", "Average Predictions"),
+  Details = c("Sample n observations with replacement",
+             "At each split, consider only m < p features",
+             "No pruning - let trees overfit",
+             "Average all trees for final prediction"),
+  Purpose = c("Create diversity through different samples",
+             "Decorrelate trees by limiting features",
+             "Low bias (flexible trees)",
+             "Reduce variance through averaging")
+)
+
+rf_steps %>%
+  kable(format = "html") %>%
+  kable_styling(font_size = 16) %>%
+  column_spec(1, bold = TRUE, width = "10%") %>%
+  column_spec(2, bold = TRUE, color = "#2c3e50") %>%
+  column_spec(4, color = "#27ae60")
+```
+
+## Variable Importance | 变量重要性
+
+```{r variable-importance, fig.width=10, fig.height=6}
+# Simulate variable importance
+set.seed(2025)
+var_names <- c("Prior hospitalizations", "Age", "Comorbidity count",
+               "Medication count", "Lab test abnormal", "Functional status",
+               "Insurance type", "Distance to hospital", "Season", "Day of week")
+
+importance_data <- tibble(
+  variable = factor(var_names, levels = rev(var_names)),
+  importance = c(25, 18, 22, 15, 12, 20, 5, 8, 3, 2),
+  category = c("Utilization", "Demographics", "Clinical", "Clinical",
+               "Clinical", "Functional", "Social", "Access", "Temporal", "Temporal")
+)
+
+ggplot(importance_data, aes(x = importance, y = variable, fill = category)) +
+  geom_col() +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Random Forest Variable Importance | 随机森林变量重要性",
+       subtitle = "Measuring contribution to prediction accuracy | 衡量对预测准确性的贡献",
+       x = "Importance Score | 重要性分数", y = "",
+       fill = "Category | 类别") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "right")
+```
+
+## Out-of-Bag (OOB) Error | 袋外误差
+
+::: {.callout-tip}
+**Free Cross-Validation!** Each tree only sees ~63% of data, so we can test on the remaining ~37%
+
+**免费交叉验证！**每棵树只看到约63%的数据，因此我们可以在剩余的约37%上测试
+:::
+
+```{r oob-illustration, fig.width=10, fig.height=6}
+# Illustrate OOB error convergence
+set.seed(2025)
+n_trees <- 500
+oob_errors <- numeric(n_trees)
+oob_errors[1] <- 100
+
+for(i in 2:n_trees) {
+  oob_errors[i] <- oob_errors[i-1] * 0.99 + rnorm(1, 0, 0.5)
+}
+
+oob_data <- tibble(
+  trees = 1:n_trees,
+  error = oob_errors + 50
+)
+
+ggplot(oob_data, aes(x = trees, y = error)) +
+  geom_line(size = 1.5, color = "#3498db") +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "#e74c3c") +
+  annotate("text", x = 400, y = 52, label = "Converged Error | 收敛误差", 
+           color = "#e74c3c", size = 5) +
+  labs(title = "Out-of-Bag Error vs. Number of Trees | 袋外误差与树数量",
+       subtitle = "Error stabilizes as forest grows - no overfitting! | 误差随森林增长而稳定 - 无过拟合！",
+       x = "Number of Trees | 树的数量", y = "OOB Error | 袋外误差") +
+  theme_minimal(base_size = 14)
+```
+
+## Modern Extensions: Gradient Boosting | 现代扩展：梯度提升
+
+Instead of averaging trees, **sequentially** build trees to correct errors:
+
+不是平均树，而是**顺序地**构建树来纠正错误：
+
+```{r boosting-illustration, fig.width=10, fig.height=6}
+# Illustrate boosting concept
+set.seed(2025)
+x <- seq(0, 10, 0.1)
+y_true <- sin(x)
+y_pred <- rep(0, length(x))
+
+# Show first few boosting iterations
+n_boost <- 4
+boost_data <- list()
+
+for(i in 1:n_boost) {
+  residuals <- y_true - y_pred
+  # Fit simple tree to residuals (simulate with smooth function)
+  tree_fit <- lowess(x, residuals, f = 0.3)$y * 0.1
+  y_pred <- y_pred + tree_fit
+  
+  boost_data[[i]] <- tibble(
+    x = x,
+    residuals = residuals,
+    tree_fit = tree_fit,
+    cumulative = y_pred,
+    iteration = paste("Iteration", i)
+  )
+}
+
+boost_combined <- bind_rows(boost_data)
+
+ggplot(boost_combined, aes(x = x)) +
+  geom_line(aes(y = residuals), color = "#e74c3c", size = 1) +
+  geom_line(aes(y = tree_fit), color = "#3498db", size = 1) +
+  geom_line(aes(y = cumulative), color = "#27ae60", size = 1) +
+  facet_wrap(~iteration, scales = "free_y") +
+  labs(title = "Gradient Boosting: Sequential Error Correction | 梯度提升：顺序误差纠正",
+       subtitle = "Red = residuals, Blue = new tree, Green = cumulative prediction | 红色 = 残差，蓝色 = 新树，绿色 = 累积预测") +
+  theme_minimal(base_size = 12)
+```
+
+## Choosing the Right Method | 选择正确的方法
+
+```{r method-choice, fig.width=10, fig.height=6}
+method_comparison <- data.table(
+  Method = c("Single Tree", "Random Forest", "Gradient Boosting", "XGBoost"),
+  `Prediction Accuracy` = c(2, 4, 5, 5),
+  Interpretability = c(5, 3, 2, 2),
+  `Training Speed` = c(5, 3, 2, 3),
+  `Tuning Required` = c(2, 3, 4, 5),
+  `Handles Missing Data` = c(4, 4, 3, 5)
+)
+
+method_long <- melt(method_comparison, id.vars = "Method", 
+                    variable.name = "Criterion", value.name = "Score")
+
+ggplot(method_long, aes(x = Criterion, y = Score, fill = Method)) +
+  geom_col(position = "dodge") +
+  scale_fill_brewer(palette = "Set1") +
+  coord_flip() +
+  labs(title = "Tree-Based Method Comparison | 基于树的方法比较",
+       subtitle = "Higher scores are better | 分数越高越好",
+       y = "Score (1-5) | 分数（1-5）", x = "") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+## Practical Recommendations | 实用建议
+
+::: {.panel-tabset}
+
+### Start Simple | 从简单开始
+1. Try Random Forest first - robust defaults | 首先尝试随机森林 - 稳健的默认值
+2. Use 500-1000 trees | 使用500-1000棵树
+3. Set mtry = √p for classification, p/3 for regression | 分类设置mtry = √p，回归设置p/3
+4. Check variable importance | 检查变量重要性
+
+### Advanced Tuning | 高级调优
+- Grid search over mtry | 网格搜索mtry
+- Adjust min node size | 调整最小节点大小
+- Try different splitting rules | 尝试不同的分割规则
+- Consider ranger or grf packages | 考虑ranger或grf包
+
+### When to Use Boosting | 何时使用提升
+- Maximum predictive accuracy needed | 需要最大预测准确性
+- Willing to spend time tuning | 愿意花时间调优
+- Have sufficient data | 有足够的数据
+- Can handle complexity | 能够处理复杂性
+
+:::
+
+## Key Takeaways: Session 3 | 关键要点：第3节
+
+<div style="font-size: 0.8em;">
+1. **Trees handle non-linearity and interactions** naturally
+   
+   **树自然地处理非线性和交互作用**
+
+2. **Single trees overfit** - always use ensembles
+   
+   **单树过拟合** - 始终使用集成
+
+3. **Random Forests are robust** with good defaults
+   
+   **随机森林稳健**且有良好的默认值
+
+4. **Boosting can be more accurate** but requires tuning
+   
+   **提升可以更准确**但需要调优
+
+5. **Variable importance ≠ causation** - be careful!
+   
+   **变量重要性 ≠ 因果关系** - 要小心！
+</div>
+
+# Wrapping Up | 总结
+
+## Today's Journey | 今天的旅程
+
+```{r summary-visual, fig.width=10, fig.height=6}
+summary_data <- data.table(
+  Method = c("Linear\nRegression", "LASSO", "Ridge", "Elastic Net",
+             "Decision\nTree", "Random\nForest", "Gradient\nBoosting"),
+  Complexity = c(1, 2, 2, 2.5, 2, 4, 5),
+  Performance = c(2, 3.5, 3.5, 4, 2.5, 4.5, 5),
+  Type = c("Linear", "Linear", "Linear", "Linear", 
+           "Tree", "Tree", "Tree")
+)
+
+ggplot(summary_data, aes(x = Complexity, y = Performance)) +
+  geom_point(aes(color = Type), size = 8) +
+  geom_text(aes(label = Method), size = 3, color = "white") +
+  scale_color_manual(values = c("Linear" = "#3498db", "Tree" = "#27ae60")) +
+  labs(title = "ML Methods: Complexity vs Performance Trade-off | 机器学习方法：复杂性与性能权衡",
+       subtitle = "More complex methods generally perform better but are harder to interpret | 更复杂的方法通常表现更好但更难解释",
+       x = "Model Complexity → | 模型复杂度 →", 
+       y = "Predictive Performance → | 预测性能 →") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+## Remember: Prediction ≠ Causation | 记住：预测 ≠ 因果关系
+
+::: {.callout-warning}
+### What ML gives you: | 机器学习给你的：
+- Accurate predictions ($\hat{y}$) | 准确的预测
+- Pattern recognition | 模式识别
+- Risk stratification | 风险分层
+
+### What ML does NOT give you: | 机器学习不给你的：
+- Causal effects ($\hat{\beta}$) | 因果效应
+- Mechanism understanding | 机制理解
+- Policy counterfactuals | 政策反事实
+:::
+
+## Tomorrow: Causal Machine Learning | 明天：因果机器学习
+
+Bridge prediction and causation: | 连接预测和因果关系：
+
+- Double/debiased machine learning | 双重/去偏机器学习
+- Causal forests | 因果森林
+- Heterogeneous treatment effects | 异质性处理效应
+- Policy learning | 政策学习
+
+## Lab Exercise Time! | 实验练习时间！
+
+Work in pairs to: | 两人一组：
+
+1. Load healthcare utilization data | 加载医疗利用数据
+2. Compare multiple ML methods | 比较多种机器学习方法
+3. Evaluate predictive performance | 评估预测性能
+4. Present your findings | 展示您的发现
+
+::: {.callout-tip}
+Focus on the process, not just accuracy!
+
+关注过程，而不仅仅是准确性！
+:::
+
+# Thank You! | 谢谢！
+
+Questions before the lab? | 实验前有问题吗？

@@ -1,0 +1,37 @@
+General Social Survey Experiment Dataset
+========================================
+
+This dataset comes from a randomized experiment within the General Social Survey (GSS) 
+that tests how question wording affects responses about government spending on social programs.
+
+Variables:
+----------
+- y: Outcome variable (1 = respondent thinks government spends too much, 0 = does not)
+- w: Treatment variable (1 = asked about "welfare", 0 = asked about "assistance to the poor")
+- age: Respondent's age in years
+- polviews: Political views (1 = extremely liberal to 7 = extremely conservative)
+- income: Income level (categorical)
+- educ: Years of education
+- marital: Marital status (categorical)
+- sex: Sex (1 = male, 2 = female)
+
+Experimental Design:
+-------------------
+This is a survey experiment where respondents were randomly assigned to receive one of two 
+versions of a question about government spending. The treatment group was asked if the 
+government spends too much on "welfare" while the control group was asked the same question 
+but with the phrase "assistance to the poor" instead of "welfare."
+
+This experiment demonstrates how framing effects can influence public opinion, as the term 
+"welfare" often carries different connotations than "assistance to the poor" despite 
+referring to similar programs.
+
+Sample Size: ~14,000 observations
+
+Usage in Workshop:
+-----------------
+This dataset is used in Day 5 of the workshop to demonstrate:
+1. Average Treatment Effect (ATE) estimation in randomized experiments
+2. Creating selection bias in observational data
+3. Implementing IPW, AIPW, and causal forest methods
+4. Assessing covariate balance and overlap
