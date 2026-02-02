@@ -35,3 +35,6 @@ Thumbs.db
 
 **/*.quarto_ipynb
 node_modules
+
+# Reference
+reference/
