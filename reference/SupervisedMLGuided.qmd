@@ -1,0 +1,562 @@
+---
+title: "Supervised Machine Learning: Guided Coding | 监督机器学习：引导编码"
+subtitle: "Day 4 Hands-On Practice | 第4天实践练习"
+author: "Your Name Here | 在此输入您的姓名"
+date: 2025-03-20
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false
+---
+
+## Setup and Data Preparation \| 设置和数据准备
+
+Load the necessary packages and create our dataset.
+
+加载必要的包并创建数据集。
+
+```{r setup}
+
+# Remove all existing variables
+rm(list=ls())
+
+# Set random seed for reproducibility
+set.seed(2, kind = "Mersenne-Twister", normal.kind = "Inversion", sample.kind = "Rejection")
+
+# Load required packages
+library(grf)
+library(rpart)
+library(glmnet)
+library(splines)
+library(lmtest)
+library(MASS)
+library(sandwich)
+library(ggplot2)
+library(reshape2)
+library(stringr)
+library(data.table)
+library(caret)
+library(pROC)
+
+# Set theme for plots
+theme_set(theme_minimal(base_size = 12))
+
+# Display settings
+options(digits = 3)
+```
+
+### Simulate Nonlinear Data \| 模拟非线性数据
+
+We'll create a dataset with nonlinear relationships.
+
+我们将创建具有非线性关系的数据集。
+
+```{r simulate-data}
+# Sample size
+n <- 500
+
+# Generate predictor z ~ Unif[-4, 4]
+z <- runif(n, -4, 4)
+
+# Generate outcome with nonlinear relationship
+# if z < 0:
+#   response = cos(2*z) + N(0, 1)
+# else:
+#   response = 1-sin(z) + N(0, 1)
+mu <- ifelse(z < 0, cos(2*z), 1-sin(z)) 
+response <- mu + 1 * rnorm(n)
+
+# Combine into data frame
+sim_data <- data.frame(z=z, response=response)
+
+# Define variable names
+target <- "response"
+predictors <- c("z")
+```
+
+### Visualize the Relationship \| 可视化关系
+
+```{r plot-simulated}
+# Plot data and true relationship
+plot(z, response, col="black", ylim=c(-4, 4), pch=21, bg="red", 
+     ylab = "Response variable", xlab = "Predictor z", las=1) 
+lines(z[order(z)], mu[order(z)], col="black", lwd=3, type="l")
+legend("bottomright", legend=c("True E[Y|Z=z]", "Data"), cex=.8, 
+       lty=c(1, NA), col="black", pch=c(NA, 21), pt.bg=c(NA, "red"))
+```
+
+## Part 1: Key Concepts in Prediction \| 第1部分：预测的关键概念
+
+The prediction problem focuses on accurately estimating Y from X without assuming causality.
+
+预测问题专注于从X准确估计Y，而不假设因果关系。
+
+### Demonstrating Overfitting \| 演示过拟合
+
+```{r overfitting-example}
+# Select only first 30 observations
+subset <- 1:30
+
+# Fit high-degree polynomial (degree 10)
+fmla <- formula(paste0(target, "~ poly(", predictors[1], ", 10)"))
+ols <- lm(fmla, data = sim_data, subset=subset)
+
+# Create prediction grid
+z_grid <- seq(min(z), max(z), length.out=1000)
+new_data <- data.frame(z=z_grid)
+pred_values <- predict(ols, newdata = new_data)
+
+# Plot overfitted model
+plot(sim_data[subset, predictors[1]], sim_data[subset, target], 
+     pch=21, bg="red", xlab=predictors[1], ylim=c(-3, 3), 
+     ylab="Response", las=1)
+lines(z_grid, pred_values, col="green", lwd=2)
+legend("bottomright", legend=c("Estimate", "Data"), 
+       col = c("green", "black"), pch = c(NA, 21), 
+       pt.bg = c(NA, "red"), lty = c(1, NA), lwd = c(2, NA), cex = .8)
+```
+
+### Demonstrating Underfitting \| 演示欠拟合
+
+```{r underfitting-example}
+# Fit simple linear model
+subset <- 1:25
+fmla <- formula(paste0(target, "~", predictors[1]))
+ols <- lm(fmla, sim_data[subset,])
+
+# Predict and plot
+pred_values <- predict(ols, newdata = new_data)
+
+plot(sim_data[subset, predictors[1]], sim_data[subset, target], 
+     pch=21, bg="red", xlab=predictors[1], ylab="Response", las=1)
+lines(z_grid, pred_values, col="green", lwd=2)
+legend("bottomright", legend=c("Estimate", "Data"), 
+       col = c("green", "black"), pch = c(NA, 21), 
+       pt.bg = c(NA, "red"), lty = c(1, NA), lwd = c(2, NA), cex = .8)
+```
+
+### Cross-Validation for Model Selection \| 交叉验证模型选择
+
+```{r cv-model-selection}
+# Polynomial degrees to test
+poly_degree <- seq(3, 20)
+
+# Split data into train/test
+train <- sample(1:n, 0.5*n)
+
+# Evaluate each polynomial degree
+mse_estimates <- lapply(poly_degree, function(q) {
+  # Create formula
+  fmla <- formula(paste0(target, "~ poly(", predictors[1], ",", q,")"))
+  
+  # Fit model on training data
+  ols <- lm(fmla, data=sim_data[train,])
+  
+  # Predictions
+  pred_train <- predict(ols)
+  y_train <- sim_data[train, target]
+  
+  pred_test <- predict(ols, newdata=sim_data[-train,])
+  y_test <- sim_data[-train, target]
+  
+  # Return MSE values
+  data.frame(
+    mse_train=mean((pred_train - y_train)^2),
+    mse_test=mean((pred_test - y_test)^2))
+})
+mse_estimates <- do.call(rbind, mse_estimates)
+
+# Plot results
+matplot(poly_degree, mse_estimates, type="l", 
+        ylab="MSE estimate", xlab="Polynomial degree", las=1)
+text(poly_degree[2], .9*max(mse_estimates), pos=4, 
+     "<-----\nHigh bias\nLow variance") 
+text(max(poly_degree), .9*max(mse_estimates), pos=2, 
+     "----->\nLow bias\nHigh variance") 
+legend("top", legend=c("Training", "Validation"), 
+       bty="n", lty=1:2, col=1:2, cex=.7)
+```
+
+### K-Fold Cross-Validation \| K折交叉验证
+
+```{r kfold-cv-demo}
+# Number of folds
+n_folds <- 5
+
+# Polynomial degrees to test
+poly_degree <- seq(4, 20)
+
+# Create fold indices
+indices <- split(seq(n), sort(seq(n) %% n_folds))
+
+# Cross-validation
+mse_estimates <- sapply(poly_degree, function(q) {
+  # Create formula
+  fmla <- formula(paste0(target, "~ poly(", predictors[1], ",", q,")"))
+  
+  # Get predictions for each fold
+  pred_values <- lapply(indices, function(fold_idx) {
+    # Fit on K-1 folds
+    ols <- lm(fmla, data=sim_data[-fold_idx,])
+    # Predict on held-out fold
+    predict(ols, newdata=sim_data[fold_idx,])
+  })
+  # Combine predictions
+  pred_values <- unname(unlist(pred_values))
+  
+  # Calculate MSE
+  mean((pred_values - sim_data[, target])^2)
+})
+
+# Plot CV results
+plot(poly_degree, mse_estimates, ylab="MSE estimate", 
+     xlab="Polynomial degree", type="l", lty=2, col=2, las = 1)
+legend("top", legend=c("Cross-validated MSE"), 
+       bty="n", lty=2, col=2, cex=.7)
+```
+
+## Part 2: Real Data Analysis \| 第2部分：真实数据分析
+
+Load housing price data for prediction tasks.
+
+加载房价数据进行预测任务。
+
+```{r load-real-data}
+
+# Load housing dataset
+housing_data <- read.csv("https://docs.google.com/uc?id=1kNahFWMGUEB3Qz83s6rMf1l684MSqc_3&export=download")
+
+
+# Define outcome and predictors
+price_outcome <- "LOGVALUE"
+
+# Original features
+housing_features <- c('LOT','UNITSF','BUILT','BATHS','BEDRMS','DINING',
+                     'METRO','CRACKS','REGION','METRO3','PHONE','KITCHEN',
+                     'MOBILTYP','WINTEROVEN','WINTERKESP','WINTERELSP',
+                     'WINTERWOOD','WINTERNONE','NEWC','DISH','WASH','DRY',
+                     'NUNIT2','BURNER','COOK','OVEN','REFR','DENS','FAMRM',
+                     'HALFB','KITCH','LIVING','OTHFN','RECRM','CLIMB',
+                     'ELEV','DIRAC','PORCH','AIRSYS','WELL','WELDUS',
+                     'STEAM','OARSYS')
+n_true_features <- length(housing_features)
+
+# Add synthetic noise features
+n_noise_features <- 20
+noise_features <- paste0('random', seq(n_noise_features))
+all_features <- c(housing_features, noise_features)
+
+# Generate noise columns
+X_noise <- matrix(rnorm(n=nrow(housing_data)*n_noise_features), 
+                  nrow(housing_data), n_noise_features)
+colnames(X_noise) <- noise_features
+housing_data <- cbind(housing_data, X_noise)
+
+# Data dimensions
+n_obs <- nrow(housing_data)
+n_features <- length(all_features)
+
+cat("Dataset size:", n_obs, "observations with", n_features, "features\n")
+cat("True features:", n_true_features, "\n")
+cat("Noise features:", n_noise_features, "\n")
+```
+
+### Explore Feature Correlations \| 探索特征相关性
+
+```{r feature-correlation}
+# Show correlation matrix for first 8 features
+round(cor(housing_data[,all_features[1:8]]), 3)
+```
+
+## Part 3: Regularized Linear Models \| 第3部分：正则化线性模型
+
+LASSO and Ridge regression add penalties to coefficient magnitudes.
+
+LASSO和Ridge回归对系数大小添加惩罚。
+
+### LASSO Regression \| LASSO回归
+
+```{r lasso-regression}
+# Create model matrix (without intercept)
+fmla <- formula(paste(" ~ 0 + ", paste0(all_features, collapse=" + ")))
+X_matrix <- model.matrix(fmla, housing_data)
+y_values <- housing_data[, price_outcome]
+
+# Fit LASSO with cross-validation
+lasso_model <- cv.glmnet(
+  x=X_matrix, y=y_values,
+  family="gaussian",
+  alpha=1  # alpha=1 for LASSO
+)
+
+# Plot cross-validation results
+par(oma=c(0,0,3,0))
+plot(lasso_model, las=1)
+mtext('Number of Non-Zero Coefficients', side=3, line = 3)
+
+# Show selected coefficients
+lasso_coefs <- coef(lasso_model, s = "lambda.min")
+print(paste("Number of selected features:", 
+            sum(lasso_coefs[-1] != 0), "out of", length(lasso_coefs)-1))
+
+# Display first few coefficients
+lasso_coefs[1:10,]
+```
+
+### Ridge Regression \| Ridge回归
+
+```{r ridge-regression}
+# Fit Ridge with cross-validation
+ridge_model <- cv.glmnet(
+  x=X_matrix, y=y_values,
+  family="gaussian",
+  alpha=0  # alpha=0 for Ridge
+)
+
+# Compare LASSO and Ridge coefficients
+ridge_coefs <- coef(ridge_model, s = "lambda.min")
+
+# Show coefficient comparison for selected features
+selected_features <- c('BATHS', 'UNITSF', 'BEDRMS', 'DINING')
+coef_comparison <- data.frame(
+  Feature = selected_features,
+  LASSO = as.numeric(lasso_coefs[selected_features,]),
+  Ridge = as.numeric(ridge_coefs[selected_features,])
+)
+print(coef_comparison)
+```
+
+### Coefficient Paths \| 系数路径
+
+```{r coefficient-paths}
+# Fit LASSO for multiple lambda values
+lasso_full <- glmnet(X_matrix, y_values, alpha=1)
+
+# Plot coefficient paths
+par(oma=c(0,0,3,0))
+plot(lasso_full, xvar="lambda")
+mtext('Number of Non-Zero Coefficients', side=3, line = 3)
+```
+
+### Elastic Net \| 弹性网
+
+```{r elastic-net}
+# Try different alpha values
+alpha_values <- seq(0, 1, by = 0.25)
+en_results <- list()
+
+for (alpha in alpha_values) {
+  cv_fit <- cv.glmnet(X_matrix, y_values, 
+                      alpha = alpha,
+                      nfolds = 10)
+  
+  en_results[[paste0("alpha_", alpha)]] <- list(
+    alpha = alpha,
+    min_cvm = min(cv_fit$cvm),
+    n_selected = sum(coef(cv_fit, s = "lambda.min")[-1] != 0)
+  )
+}
+
+# Display results
+en_df <- do.call(rbind, lapply(en_results, function(x) {
+  data.frame(
+    Alpha = x$alpha,
+    `CV_Error` = x$min_cvm,
+    `Selected_Features` = x$n_selected
+  )
+}))
+print(en_df)
+```
+
+## Part 4: Tree-Based Methods \| 第4部分：基于树的方法
+
+Decision trees partition the feature space into regions.
+
+决策树将特征空间划分为区域。
+
+### Decision Trees \| 决策树
+
+```{r decision-tree-housing}
+# Fit decision tree
+tree_formula <- formula(paste(price_outcome, "~", 
+                             paste(all_features, collapse=" + ")))
+tree_model <- rpart(tree_formula, data=housing_data, 
+                   cp=0, method="anova")
+
+# Plot complexity parameter
+plotcp(tree_model)
+
+# Find optimal CP
+cp_min <- which.min(tree_model$cptable[,"xerror"])
+cp_idx <- which(tree_model$cptable[,"xerror"] - 
+                tree_model$cptable[cp_min,"xerror"] < 
+                tree_model$cptable[,"xstd"])[1]
+cp_best <- tree_model$cptable[cp_idx,"CP"]
+
+# Prune tree
+pruned_tree <- prune(tree_model, cp=cp_best)
+
+# Plot pruned tree
+plot(pruned_tree, uniform=TRUE, margin = .05)
+text(pruned_tree, cex=.7)
+
+# Get MSE estimate
+tree_mse <- mean((xpred.rpart(tree_model)[,cp_idx] - 
+                  housing_data[,price_outcome])^2, na.rm=TRUE)
+print(paste("Tree MSE (cross-validated):", round(tree_mse, 4)))
+```
+
+### Random Forests \| 随机森林
+
+```{r random-forest-housing}
+# Prepare data for forest
+X_forest <- housing_data[,all_features]
+Y_forest <- housing_data[,price_outcome]
+
+# Fit regression forest (using fewer trees for speed)
+forest_model <- regression_forest(
+  X=X_forest, 
+  Y=Y_forest, 
+  num.trees=200
+)
+
+# Get predictions and OOB error
+forest_pred <- predict(forest_model)
+mse_oob <- mean(forest_pred$debiased.error)
+print(paste("Forest MSE (out-of-bag):", round(mse_oob, 4)))
+
+# Variable importance
+var_importance <- variable_importance(forest_model)
+names(var_importance) <- all_features
+
+# Show top 10 important features
+top_features <- sort(var_importance, decreasing = TRUE)[1:10]
+print("Top 10 important features:")
+print(round(top_features, 4))
+```
+
+## Part 5: Model Comparison \| 第5部分：模型比较
+
+Compare performance across different methods.
+
+比较不同方法的性能。
+
+```{r model-comparison}
+# Create train/test split
+set.seed(123)
+train_idx <- createDataPartition(housing_data[,price_outcome], 
+                                p = 0.7, list = FALSE)
+train_data <- housing_data[train_idx,]
+test_data <- housing_data[-train_idx,]
+
+# Prepare matrices
+X_train <- model.matrix(~.-1, data=train_data[,all_features])
+y_train <- train_data[,price_outcome]
+X_test <- model.matrix(~.-1, data=test_data[,all_features])
+y_test <- test_data[,price_outcome]
+
+# Fit models
+# 1. Linear regression
+lm_model <- lm(formula(paste(price_outcome, "~", 
+                            paste(all_features, collapse="+"))), 
+               data=train_data)
+lm_pred <- predict(lm_model, newdata=test_data)
+
+# 2. LASSO
+lasso_cv <- cv.glmnet(X_train, y_train, alpha=1)
+lasso_pred <- predict(lasso_cv, X_test, s="lambda.min")[,1]
+
+# 3. Ridge
+ridge_cv <- cv.glmnet(X_train, y_train, alpha=0)
+ridge_pred <- predict(ridge_cv, X_test, s="lambda.min")[,1]
+
+# 4. Decision tree
+tree_train <- rpart(formula(paste(price_outcome, "~", 
+                                 paste(all_features, collapse="+"))), 
+                   data=train_data)
+tree_pred <- predict(tree_train, newdata=test_data)
+
+# 5. Random forest
+rf_train <- regression_forest(X=train_data[,all_features], 
+                             Y=train_data[,price_outcome],
+                             num.trees=200)
+rf_pred <- predict(rf_train, newdata=test_data[,all_features])$predictions
+
+# Calculate performance metrics
+calc_metrics <- function(pred, actual) {
+  data.frame(
+    RMSE = sqrt(mean((pred - actual)^2)),
+    MAE = mean(abs(pred - actual)),
+    R2 = 1 - sum((pred - actual)^2) / sum((actual - mean(actual))^2)
+  )
+}
+
+# Compare all models
+model_results <- rbind(
+  Linear = calc_metrics(lm_pred, y_test),
+  LASSO = calc_metrics(lasso_pred, y_test),
+  Ridge = calc_metrics(ridge_pred, y_test),
+  Tree = calc_metrics(tree_pred, y_test),
+  Forest = calc_metrics(rf_pred, y_test)
+)
+
+print("Model Performance Comparison:")
+print(round(model_results, 4))
+
+# Plot predictions vs actual
+par(mfrow=c(2,3))
+models <- list(Linear=lm_pred, LASSO=lasso_pred, Ridge=ridge_pred,
+               Tree=tree_pred, Forest=rf_pred)
+for (name in names(models)) {
+  plot(y_test, models[[name]], main=name,
+       xlab="Actual", ylab="Predicted", pch=20, col="blue", alpha=0.5)
+  abline(0, 1, col="red", lty=2)
+}
+```
+
+## Key Takeaways \| 关键要点
+
+1.  **Bias-variance tradeoff is fundamental \| 偏差-方差权衡是基础**
+    -   Simple models underfit (high bias), complex models overfit (high variance)
+    -   简单模型欠拟合（高偏差），复杂模型过拟合（高方差）
+2.  **Cross-validation helps select model complexity \| 交叉验证帮助选择模型复杂度**
+    -   Use K-fold CV to estimate out-of-sample performance
+    -   使用K折CV估计样本外性能
+3.  **Regularization controls overfitting \| 正则化控制过拟合**
+    -   LASSO promotes sparsity, Ridge shrinks coefficients
+    -   LASSO促进稀疏性，Ridge缩小系数
+4.  **Ensemble methods often perform best \| 集成方法通常表现最佳**
+    -   Random forests combine many trees to reduce variance
+    -   随机森林结合多棵树以减少方差
+5.  **Prediction ≠ Causation \| 预测 ≠ 因果**
+    -   Good predictive models may not reveal causal relationships
+    -   良好的预测模型可能不会揭示因果关系
+
+## Save Workspace \| 保存工作空间
+
+```{r save-workspace}
+# Save key objects for lab exercises
+save(
+  housing_data,
+  lasso_model,
+  ridge_model,
+  forest_model,
+  model_results,
+  file = "day4_workspace.RData"
+)
+
+cat("Workspace saved! Load with: load('day4_workspace.RData')\n")
+cat("工作空间已保存！加载命令：load('day4_workspace.RData')\n")
+```
+
+------------------------------------------------------------------------
+
+*End of guided coding session \| 引导编码会话结束*
