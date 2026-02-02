@@ -55,7 +55,9 @@ website:
           - href: day-1/slides-ml-foundations.qmd
             text: "Slides: ML Foundations"
           - href: day-1/notebook-setup.qmd
-            text: "Hands-on: Setup + ML Demo"
+            text: "Hands-on: Setup (Python)"
+          - href: day-1/notebook-setup-r.qmd
+            text: "Hands-on: Setup (R)"
       - section: "Day 2: Machine Learning"
         contents:
           - href: day-2/index.qmd
@@ -65,10 +67,22 @@ website:
           #   text: "Slides: LASSO & Ridge"
           # - href: day-2/slides-trees.qmd
           #   text: "Slides: Trees & Ensembles"
-          # - href: day-2/notebook-lasso.qmd
-          #   text: "Hands-on: Regularized Regression"
-          # - href: day-2/notebook-forecasting.qmd
-          #   text: "Hands-on: Demand Forecasting"
+          - href: day-2/notebook-lasso.qmd
+            text: "LASSO & Ridge (Python)"
+          - href: day-2/notebook-lasso-r.qmd
+            text: "LASSO & Ridge (R)"
+          - href: day-2/notebook-forecasting.qmd
+            text: "Demand Forecasting (Python)"
+          - href: day-2/notebook-forecasting-r.qmd
+            text: "Demand Forecasting (R)"
+          - href: day-2/notebook-tuning.qmd
+            text: "Model Tuning (Python)"
+          - href: day-2/notebook-tuning-r.qmd
+            text: "Model Tuning (R)"
+          - href: day-2/notebook-shortage.qmd
+            text: "Shortage Prediction (Python)"
+          - href: day-2/notebook-shortage-r.qmd
+            text: "Shortage Prediction (R)"
       - section: "Day 3: Integration"
         contents:
           - href: day-3/index.qmd

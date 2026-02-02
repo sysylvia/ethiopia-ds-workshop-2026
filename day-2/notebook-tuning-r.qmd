@@ -1,0 +1,115 @@
+---
+title: "Hands-on: Model Tuning (R)"
+subtitle: "Day 2 | Hyperparameter Optimization with tidymodels"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-model-tuning-r.ipynb)
+
+::: {.callout-important}
+## R Runtime Required
+After opening in Colab, change the runtime to R: **Runtime > Change runtime type > R**
+:::
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Understand the difference between hyperparameters and learned parameters
+2. Use `vfold_cv()` for robust cross-validation
+3. Perform grid search with `tune_grid()` and `grid_regular()`
+4. Perform random search with `grid_random()`
+5. Select and finalize the best model
+
+## Prerequisites
+
+- Completed Demand Forecasting notebook
+- Familiarity with Random Forest and XGBoost
+- Understanding of cross-validation
+
+## tidymodels Tuning Workflow
+
+```r
+# 1. Mark parameters for tuning
+spec <- rand_forest(trees = tune(), mtry = tune()) %>%
+  set_engine("ranger") %>%
+  set_mode("regression")
+
+# 2. Create CV folds
+folds <- vfold_cv(train_data, v = 5)
+
+# 3. Define parameter grid
+grid <- grid_regular(trees(), mtry(), levels = 5)
+
+# 4. Tune!
+results <- tune_grid(workflow, resamples = folds, grid = grid)
+
+# 5. Select best and finalize
+best <- select_best(results, metric = "rmse")
+final_wf <- finalize_workflow(workflow, best)
+```
+
+## Exercise Overview
+
+### Part 1: Cross-Validation Deep Dive (20 min)
+
+- Understand K-fold cross-validation
+- Implement with `vfold_cv()`
+- Visualize fold-by-fold performance
+
+### Part 2: Grid Search (30 min)
+
+- Define hyperparameter grid with `grid_regular()`
+- Tune Random Forest parameters
+- Visualize tuning results with `autoplot()`
+
+### Part 3: Random Search (15 min)
+
+- When grid search is too slow
+- Use `grid_random()` for larger search spaces
+- Compare to grid search results
+
+### Part 4: Feature Importance (15 min)
+
+- Extract importance from tuned model
+- Use `vip()` for visualization
+- Interpret which features matter
+
+### Part 5: Final Evaluation (20 min)
+
+- Finalize workflow with `finalize_workflow()`
+- Evaluate on held-out test set
+- Save model with `saveRDS()`
+
+## Key Functions
+
+| Task | Function |
+|------|----------|
+| Mark for tuning | `tune()` |
+| Create CV folds | `vfold_cv()` |
+| Regular grid | `grid_regular()` |
+| Random grid | `grid_random()` |
+| Run tuning | `tune_grid()` |
+| View best | `show_best()` |
+| Select best | `select_best()` |
+| Finalize | `finalize_workflow()` |
+
+## Connection to Day 3
+
+The tuned model you save in this notebook will be used for:
+
+- ML-to-ABM integration
+- Feeding predictions into agent-based models
+- Scenario analysis
+
+## Python Version
+
+Looking for Python? See the [Python version](notebook-tuning.qmd) of this notebook.
