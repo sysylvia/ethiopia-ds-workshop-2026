@@ -118,7 +118,7 @@ Note down examples they mention for later reference.
 :::: {.columns}
 
 ::: {.column width="60%"}
-![](images/adri-v2-leapfrog-final.jpg){fig-align="center" width="100%"}
+![](/images/adri-v2-leapfrog-final.jpg){fig-align="center" width="100%"}
 :::
 
 ::: {.column width="40%"}
@@ -160,7 +160,7 @@ How do we capture the leapfrog opportunity while managing the risk?
 
 ## AI is Different {.center}
 
-![](images/adri-v2-sociotechnical-loop.svg){fig-align="center" width="90%"}
+![](/images/adri-v2-sociotechnical-loop.svg){fig-align="center" width="90%"}
 
 :::: {.columns}
 
@@ -233,7 +233,7 @@ Each row represents millions in investment and thousands of lives affected. The 
 :::: {.columns}
 
 ::: {.column width="20%"}
-![](images/adri-v2-ecam-cycle.svg){fig-align="center" width="100%"}
+![](/images/adri-v2-ecam-cycle.svg){fig-align="center" width="100%"}
 :::
 
 ::: {.column width="20%"}
