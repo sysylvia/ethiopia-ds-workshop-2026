@@ -1,0 +1,112 @@
+---
+title: "Hands-on: Shortage Prediction (R)"
+subtitle: "Day 2 | Classification with tidymodels"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/05-shortage-prediction-r.ipynb)
+
+::: {.callout-important}
+## R Runtime Required
+After opening in Colab, change the runtime to R: **Runtime > Change runtime type > R**
+:::
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Apply Random Forest for classification tasks
+2. Handle multi-class prediction (shortage duration, cause)
+3. Use stratified sampling with `strata` argument
+4. Evaluate with accuracy, F1-score, and confusion matrices
+5. Compare results to published research (Roe et al., 2025)
+
+## Background: Korean Drug Shortage Study
+
+We replicate the approach from:
+
+> Roe et al. (2025). "Drug shortage in South Korea: machine learning-based prediction models and analysis of duration and causal factors." *Frontiers in Pharmacology*.
+
+**Their findings:**
+- 62% accuracy for duration prediction
+- >70% F1-score for cause classification
+- Shortage frequency was the top predictor
+
+## tidymodels for Classification
+
+| Task | Approach |
+|------|----------|
+| Classification mode | `set_mode("classification")` |
+| Stratified split | `initial_split(strata = outcome)` |
+| Stratified CV | `vfold_cv(strata = outcome)` |
+| Accuracy | `accuracy()` |
+| F1 score | `f_meas()` |
+| Confusion matrix | `conf_mat()` |
+
+## Exercise Overview
+
+### Part 1: Data Preparation (15 min)
+
+- Load data with shortage columns
+- Filter to shortage events only
+- Explore class distributions
+
+### Part 2: Duration Prediction - Model 1 (30 min)
+
+- Predict Short/Medium/Long duration
+- Train Random Forest classifier
+- Evaluate with accuracy and F1
+- Compare to Korean study (62%)
+
+### Part 3: Cause Classification - Model 2 (30 min)
+
+- Predict cause categories
+- Handle multi-class imbalance
+- Evaluate with confusion matrix
+- Compare to Korean study (>70% F1)
+
+### Part 4: Feature Importance (15 min)
+
+- Compare importance across models
+- Validate against Korean study findings
+- Discuss implications for supply chain
+
+### Part 5: Discussion (10 min)
+
+- How do our results compare?
+- What would improve predictions?
+- How could these models be deployed?
+
+## Key Differences from Regression
+
+| Regression | Classification |
+|------------|----------------|
+| Continuous target | Categorical target |
+| RMSE, R-squared | Accuracy, F1, AUC |
+| `set_mode("regression")` | `set_mode("classification")` |
+| `metrics(truth, estimate)` | `accuracy()`, `f_meas()` |
+
+## Connection to WISE Project
+
+These classification models can help:
+
+- Predict which facilities are at risk
+- Estimate how long disruptions will last
+- Identify root causes for intervention
+- Prioritize resources proactively
+
+## Python Version
+
+Looking for Python? See the [Python version](notebook-shortage.qmd) of this notebook.
+
+## Reference
+
+Roe, Y., Lee, S., Kim, C., & Lee, J. (2025). Drug shortage in South Korea: machine learning-based prediction models and analysis of duration and causal factors. *Frontiers in Pharmacology*, 16, 1608843. [DOI: 10.3389/fphar.2025.1608843](https://doi.org/10.3389/fphar.2025.1608843)

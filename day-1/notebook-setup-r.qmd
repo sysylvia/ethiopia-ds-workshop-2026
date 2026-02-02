@@ -1,0 +1,57 @@
+---
+title: "Hands-on: Setup + ML Demo (R)"
+subtitle: "Day 1 | Setting Up Your Analysis Environment with tidymodels"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/01-project-setup-r.ipynb)
+
+::: {.callout-important}
+## R Runtime Required
+After opening in Colab, change the runtime to R: **Runtime > Change runtime type > R**
+:::
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Set up a Google Colab notebook with R and tidymodels
+2. Load and explore the workshop dataset using tidyverse
+3. Create initial visualizations with ggplot2
+4. See overfitting in action
+5. Understand why train/test splits and cross-validation matter
+
+## Prerequisites
+
+- Google account with Colab access
+- Completed [Computing Setup](../computing.qmd) guide
+- Basic familiarity with R (helpful but not required)
+
+## Key R Packages
+
+| Package | Purpose |
+|---------|---------|
+| tidymodels | ML framework (recipes, parsnip, rsample, tune) |
+| tidyverse | Data manipulation and visualization |
+| ggplot2 | Visualization |
+
+## After This Session
+
+You will have:
+
+- A working R environment in Colab
+- Familiarity with the workshop dataset
+- Visual intuition for overfitting
+- Understanding of why we need validation strategies
+
+## Python Version
+
+Looking for Python? See the [Python version](notebook-setup.qmd) of this notebook.

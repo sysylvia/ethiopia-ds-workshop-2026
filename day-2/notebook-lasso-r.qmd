@@ -1,0 +1,95 @@
+---
+title: "Hands-on: Regularized Regression (R)"
+subtitle: "Day 2 Morning | LASSO, Ridge, and Elastic Net with tidymodels"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/02-lasso-ridge-r.ipynb)
+
+::: {.callout-important}
+## R Runtime Required
+After opening in Colab, change the runtime to R: **Runtime > Change runtime type > R**
+:::
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Apply LASSO and Ridge regression using `glmnet` engine
+2. Visualize coefficient paths as penalty changes
+3. Use `tune_grid()` with cross-validation to select optimal penalty
+4. Compare model performance across regularization methods
+5. Identify which features LASSO selects
+
+## Prerequisites
+
+- Completed Day 1 hands-on (including sine wave demo)
+- Understanding of bias-variance tradeoff
+- Familiarity with the workshop dataset
+
+## tidymodels Approach
+
+| Concept | tidymodels Function |
+|---------|---------------------|
+| Ridge regression | `linear_reg(mixture = 0)` |
+| LASSO regression | `linear_reg(mixture = 1)` |
+| Elastic Net | `linear_reg(mixture = 0.5)` |
+| Feature preprocessing | `recipe()`, `step_normalize()` |
+| Hyperparameter tuning | `tune_grid()` |
+| Cross-validation | `vfold_cv()` |
+
+## Exercise Overview
+
+### Part 1: Data Preparation (15 min)
+
+- Load supply chain data
+- Create features using `recipe()` and `step_*()` functions
+- Train/test split with `initial_split()`
+
+### Part 2: Ridge Regression (20 min)
+
+- Fit Ridge with `mixture = 0`
+- Visualize coefficient shrinkage
+- Cross-validation for optimal penalty
+- Evaluate on test set
+
+### Part 3: LASSO Regression (25 min)
+
+- Fit LASSO with `mixture = 1`
+- Visualize coefficient paths (some go to zero!)
+- Observe automatic feature selection
+- Cross-validation for optimal penalty
+- Compare selected features
+
+### Part 4: Elastic Net (15 min)
+
+- Combine L1 and L2 penalties with `mixture` parameter
+- When to use Elastic Net
+- Quick comparison
+
+### Part 5: Model Comparison (25 min)
+
+- Compare LASSO, Ridge, Elastic Net, OLS
+- Cross-validated RMSE for each
+- Which performs best on test data?
+- Feature importance from LASSO
+
+## Connection to Afternoon
+
+After this session, you'll:
+
+- Understand how regularization controls complexity
+- Be ready for tree-based methods (which use different regularization)
+- Have a LASSO baseline to compare against Random Forest and XGBoost
+
+## Python Version
+
+Looking for Python? See the [Python version](notebook-lasso.qmd) of this notebook.
