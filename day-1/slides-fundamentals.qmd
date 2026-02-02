@@ -127,7 +127,7 @@ Note down examples they mention for later reference.
 :::
 
 ::: {.column width="50%"}
-![](images/mobile.png){width="500"}
+![](/images/mobile.png){width="500"}
 
 *Mobile leapfrogging precedent: LMICs bypassed landline infrastructure*
 :::
@@ -203,7 +203,7 @@ Technical validation ≠ Sustainable real-world success
 CORE INSIGHT
 :::
 
-![](images/crisp-dm-slide2.svg){fig-align="center" width="80%"}
+![](/images//crisp-dm-slide2.svg){fig-align="center" width="80%"}
 
 ::: {.fragment}
 ::: {.callout-note}
@@ -221,7 +221,7 @@ AI deployment changes the data-generating process it depends on
 
 ## Six Challenges to AI Adoption 
 
-![](images/six-challenges.png){width="100%"}
+![](/images/six-challenges.png){width="100%"}
 
 ---
 
