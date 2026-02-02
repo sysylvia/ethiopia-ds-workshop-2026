@@ -16,6 +16,8 @@ format:
     scrollable: true
     smaller: true
     footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+    toc: true
+    toc-depth: 1
 ---
 
 # Learning Objectives {.center}
