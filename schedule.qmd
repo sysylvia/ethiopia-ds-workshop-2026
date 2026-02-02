@@ -11,7 +11,7 @@ subtitle: "February 2-7, 2026 | Addis Ababa University"
 | 8:30-9:30 | Registration, Welcome, Introductions | Ozawa | [Slides](day-1/slides-welcome.qmd) |
 | 9:30-10:30 | Fundamentals of Data Science | Sylvia | [Slides](day-1/slides-fundamentals.qmd) |
 | 10:30-10:50 | *Break* | | |
-| 10:50-12:30 | **Data Science in Public Health Policy** | Ozawa | |
+| 10:50-12:30 | **Data Science in Public Health Policy** | Ozawa | [Slides](https://docs.google.com/presentation/d/1aN0CbT5a0AL4FMN5dShZhbyfaVPqvsMV/edit?slide=id.p1#slide=id.p1) |
 | 12:30-1:30 | *Lunch* | | |
 | 1:30-3:00 | **ML Foundations: Core Concepts** | Sylvia | [Slides](day-1/slides-ml-foundations.qmd) |
 | 3:00-3:20 | *Break* | | |
