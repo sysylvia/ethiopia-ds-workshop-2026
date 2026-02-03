@@ -1,0 +1,838 @@
+---
+title: "Integrating Machine Learning and Agent-Based Models"
+subtitle: "Day 3 | WISE Workshop — Addis Ababa 2026"
+author: "Sean Sylvia, Ph.D. & Sachiko Ozawa, Ph.D."
+date: 2026-02-04
+format:
+  revealjs:
+    theme: [default, ../style/workshop.scss]
+    slide-number: true
+    chalkboard: true
+    transition: fade
+    progress: true
+    incremental: false
+    center: true
+    scrollable: true
+    footer: "WISE Workshop | Data Sciences for Modeling & HTA"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+# Section 1: Introduction {background-color="#4A7C59"}
+
+## Why Integrate ML and ABM?
+
+:::: {.columns}
+::: {.column width="50%"}
+### Machine Learning
+- **Strength**: Pattern recognition
+- Learns from historical data
+- Excellent at prediction
+- "Black box" — limited interpretability
+:::
+
+::: {.column width="50%"}
+### Agent-Based Models
+- **Strength**: Mechanistic understanding
+- Simulates individual behavior
+- Captures emergence
+- Transparent — clear causal mechanisms
+:::
+::::
+
+. . .
+
+> **Together**: ML provides *data-driven predictions* that inform *mechanistic simulations*
+
+---
+
+## The Integration Challenge
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│   Machine Learning                Agent-Based Model         │
+│   ─────────────────               ────────────────────      │
+│   • Predicts outcomes             • Simulates dynamics      │
+│   • Needs training data           • Needs parameters        │
+│   • Static predictions            • Dynamic interactions    │
+│                                                             │
+│                    ┌─────────────┐                          │
+│                    │   Bridge?   │                          │
+│                    └─────────────┘                          │
+│                                                             │
+│   How do we connect predictions to simulation parameters?   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Four Integration Approaches
+
+![ML-ABM Integration Taxonomy](images/integration-taxonomy.png){fig-align="center" width="85%"}
+
+---
+
+## Overview of Today
+
+| Section | Topic | Time |
+|---------|-------|------|
+| 1 | Introduction (this section) | 10 min |
+| 2 | Integration approaches in depth | 30 min |
+| 3 | Case study: Supply chain + RL | 25 min |
+| 4 | Reinforcement learning concepts | 15 min |
+| 5 | Application to WISE project | 10 min |
+| 6 | Wrap-up and discussion | ~5 min |
+
+---
+
+# Section 2: Integration Approaches {background-color="#4A7C59"}
+
+## Integration Workflows Overview
+
+![Data flow for each integration approach](images/ml-abm-workflows.png){fig-align="center" width="95%"}
+
+---
+
+## Approach 1: ML for Calibration
+
+### The Problem
+
+- ABM parameters are **unknown** or hard to estimate
+- Traditional calibration is **computationally expensive**
+- Need to match simulation outputs to real-world data
+
+. . .
+
+### The Solution
+
+Use ML to learn the **inverse mapping**:
+
+$$\text{Observed Data} \xrightarrow{\text{ML Model}} \text{ABM Parameters}$$
+
+---
+
+## ML Calibration Workflow
+
+```
+┌──────────────┐    Run ABM     ┌──────────────┐
+│   Initial    │ ─────────────► │  Simulated   │
+│  Parameters  │                │    Output    │
+└──────────────┘                └──────────────┘
+                                       │
+                                       │ Compare
+                                       ▼
+┌──────────────┐    ML learns   ┌──────────────┐
+│   Updated    │ ◄───────────── │  Real-World  │
+│  Parameters  │   inverse map  │    Data      │
+└──────────────┘                └──────────────┘
+```
+
+. . .
+
+### Example Results
+
+**Neural calibration** achieves:
+
+- 195-390x speedup over traditional methods
+- Comparable accuracy to Bayesian inference
+- Automatic uncertainty quantification
+
+::: {.aside}
+Gaskin et al. (2023). *PNAS*
+:::
+
+---
+
+## When to Use ML Calibration
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good Fit
+
+- Many unknown parameters
+- Rich observational data
+- Need fast calibration
+- Want uncertainty estimates
+:::
+
+::: {.column width="50%"}
+### Challenges
+
+- Requires many ABM runs for training
+- May not generalize to new scenarios
+- Identifiability issues (multiple parameter sets → same output)
+:::
+::::
+
+---
+
+## Approach 2: ML-Driven Agent Behaviors
+
+### The Problem
+
+- Agent **decision rules** are complex or unknown
+- Rules may change over time (adaptive behavior)
+- Hard to specify rules from first principles
+
+. . .
+
+### The Solution
+
+Let ML/RL **learn** agent decision rules from data or experience:
+
+$$\text{Agent State} \xrightarrow{\text{ML Model}} \text{Agent Decision}$$
+
+---
+
+## ML-Driven Behaviors in Practice
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    ABM Environment                       │
+│  ┌────────────┐   ┌────────────┐   ┌────────────┐       │
+│  │  Agent A   │   │  Agent B   │   │  Agent C   │       │
+│  │ ┌────────┐ │   │ ┌────────┐ │   │ ┌────────┐ │       │
+│  │ │   ML   │ │   │ │   RL   │ │   │ │  Rules │ │       │
+│  │ │ Model  │ │   │ │ Policy │ │   │ │ (Fixed)│ │       │
+│  │ └────────┘ │   │ └────────┘ │   │ └────────┘ │       │
+│  └────────────┘   └────────────┘   └────────────┘       │
+│         ▲               ▲                               │
+│         │               │                               │
+│         └───────────────┴──── Interact ─────────────────│
+└─────────────────────────────────────────────────────────┘
+```
+
+. . .
+
+### Example
+
+**Cholera ABM** (Zhang et al., 2019):
+
+- ML derived behavioral rules from household survey data
+- Rules adapt based on water quality perceptions
+- More realistic than fixed decision rules
+
+---
+
+## When to Use ML-Driven Behaviors
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good Fit
+
+- Complex decision-making
+- Behavioral data available
+- Adaptive agents needed
+- Policy optimization
+:::
+
+::: {.column width="50%"}
+### Challenges
+
+- Need training data or environment
+- Computational overhead per agent
+- Interpretability concerns
+:::
+::::
+
+---
+
+## Approach 3: Surrogate Models
+
+### The Problem
+
+- ABMs are **computationally expensive**
+- Can't run thousands of scenarios for sensitivity analysis
+- Real-time decisions need fast predictions
+
+. . .
+
+### The Solution
+
+Train ML to **approximate** ABM input→output mapping:
+
+$$\text{ABM Inputs} \xrightarrow{\text{Neural Network}} \text{ABM Outputs (Approximate)}$$
+
+---
+
+## Surrogate Model Speedup
+
+![Runtime comparison: Full ABM vs ML Surrogate](images/surrogate-speedup.png){fig-align="center" width="90%"}
+
+---
+
+## Training a Surrogate Model
+
+```
+Phase 1: Generate Training Data
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   Sample     │────►│   Run ABM    │────►│   Collect    │
+│  Parameters  │     │ (Many times) │     │   Outputs    │
+└──────────────┘     └──────────────┘     └──────────────┘
+
+Phase 2: Train Surrogate
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│  Input-Output│────►│  Train ML    │────►│   Validate   │
+│    Pairs     │     │   Model      │     │   Accuracy   │
+└──────────────┘     └──────────────┘     └──────────────┘
+
+Phase 3: Deploy
+┌──────────────┐     ┌──────────────┐
+│  New Inputs  │────►│ Fast Predict │  (1000x+ faster)
+└──────────────┘     └──────────────┘
+```
+
+---
+
+## When to Use Surrogate Models
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good Fit
+
+- Sensitivity analysis
+- Policy optimization
+- Real-time applications
+- Uncertainty quantification
+:::
+
+::: {.column width="50%"}
+### Challenges
+
+- Approximation error
+- Extrapolation risks
+- Need representative training scenarios
+- May miss rare events
+:::
+::::
+
+---
+
+## Approach 4: Hybrid / Differentiable ABMs
+
+### The Problem
+
+- Can't optimize ABM **end-to-end**
+- Gradient-based optimization needs derivatives
+- Traditional ABMs use discrete, non-differentiable operations
+
+. . .
+
+### The Solution
+
+Make ABM **differentiable** — enable gradient descent:
+
+$$\frac{\partial \text{Loss}}{\partial \text{Parameters}} \xrightarrow{\text{Gradient Descent}} \text{Optimal Policy}$$
+
+---
+
+## GradABM: A Differentiable Epidemic Model
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              Differentiable ABM (GradABM)               │
+│                                                         │
+│  ┌─────────┐    ┌───────────┐    ┌─────────────┐        │
+│  │ Initial │───►│  Neural   │───►│ Epidemic    │        │
+│  │  State  │    │  Network  │    │ Dynamics    │        │
+│  └─────────┘    └───────────┘    └─────────────┘        │
+│                      ▲                   │              │
+│                      │                   ▼              │
+│                      │           ┌─────────────┐        │
+│                      └───────────│    Loss     │        │
+│                     Backprop     │  Function   │        │
+│                                  └─────────────┘        │
+└─────────────────────────────────────────────────────────┘
+```
+
+. . .
+
+### COVID-19 Application
+
+- Validated **UK vaccine prioritization strategy**
+- Explored counterfactual policies
+- 100x faster than traditional calibration
+
+::: {.aside}
+Chopra et al. (2023). *AAMAS*
+:::
+
+---
+
+## When to Use Hybrid/Differentiable ABMs
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good Fit
+
+- Policy optimization
+- End-to-end learning
+- Complex interventions
+- Counterfactual analysis
+:::
+
+::: {.column width="50%"}
+### Challenges
+
+- Implementation complexity
+- Requires differentiable operations
+- Not all ABMs can be made differentiable
+- Specialized frameworks needed
+:::
+::::
+
+---
+
+## Summary: Choosing an Approach
+
+| Approach | Use When | Key Benefit |
+|----------|----------|-------------|
+| **Calibration** | Parameters unknown, have observational data | Automated parameter estimation |
+| **ML Behaviors** | Decision rules complex, have behavioral data | Realistic agent decisions |
+| **Surrogate** | Need many fast runs, computational bottleneck | 1000x+ speedup |
+| **Hybrid/Diff.** | Need end-to-end optimization | Gradient-based policy learning |
+
+. . .
+
+> **Often combine approaches**: e.g., ML calibration + surrogate for sensitivity analysis
+
+---
+
+# Section 3: Case Study — Supply Chain {background-color="#4A7C59"}
+
+## The Beer Game: A Classic Supply Chain Problem
+
+:::: {.columns}
+::: {.column width="60%"}
+### Setup
+
+- 4-echelon supply chain:
+  - **Retailer** → **Wholesaler** → **Distributor** → **Manufacturer**
+- Each node places orders to upstream supplier
+- Information delays (orders take time)
+- No global visibility
+
+### The Challenge
+
+Manage inventory with **only local information**
+:::
+
+::: {.column width="40%"}
+```
+┌───────────┐
+│Manufacturer│
+└─────┬─────┘
+      │
+      ▼
+┌───────────┐
+│Distributor│
+└─────┬─────┘
+      │
+      ▼
+┌───────────┐
+│ Wholesaler│
+└─────┬─────┘
+      │
+      ▼
+┌───────────┐
+│  Retailer │
+└─────┬─────┘
+      │
+      ▼
+  Consumer
+   Demand
+```
+:::
+::::
+
+---
+
+## The Bullwhip Effect
+
+### What Happens
+
+Small demand fluctuations at retail level **amplify** up the supply chain.
+
+```
+Consumer demand:     ~~~~~  (small variation)
+Retailer orders:     ~~~~~~  (larger)
+Wholesaler orders:   ~~~~~~~~  (even larger)
+Distributor orders:  ~~~~~~~~~~  (much larger)
+Manufacturer orders: ~~~~~~~~~~~~  (extreme!)
+```
+
+. . .
+
+### Why It Matters
+
+- Excess inventory (waste)
+- Stockouts (shortages)
+- Inefficient resource use
+- **Direct relevance to pharmaceutical supply chains**
+
+---
+
+## Bullwhip Effect: Before and After RL
+
+![Order variance amplification with traditional vs DQN-learned policies](images/bullwhip-effect.png){fig-align="center" width="95%"}
+
+---
+
+## Deep Q-Network (DQN) for Ordering Policy
+
+### The Integration
+
+1. **ABM Environment**: Multi-echelon supply chain simulation
+2. **RL Agent**: Deep Q-Network at each node
+3. **State**: Local inventory, orders, backlog
+4. **Action**: How much to order
+5. **Reward**: Minimize holding + backlog costs
+
+. . .
+
+### Key Result
+
+DQN learns to **smooth orders** even without global information
+
+- Reduces bullwhip effect by ~60%
+- Matches centralized optimal within 1%
+- Generalizes to demand patterns not seen in training
+
+::: {.aside}
+Oroojlooyjadid et al. (2021). *Manufacturing & Service Operations Management*
+:::
+
+---
+
+## ML-Enhanced Inventory Management
+
+### Connecting ML Forecasts to Inventory Policy
+
+![Demand forecast driving inventory reorder decisions](images/demand-inventory.png){fig-align="center" width="95%"}
+
+---
+
+## The ML → Inventory Pipeline
+
+```
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ Historical    │   │ ML Model      │   │ Demand        │
+│ Demand Data   │──►│ (Day 2)       │──►│ Forecast      │
+└───────────────┘   └───────────────┘   └───────┬───────┘
+                                                │
+                    ┌───────────────────────────┘
+                    │
+                    ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ Safety Stock  │◄──│ Forecast      │   │ Reorder       │
+│ Calculation   │   │ Uncertainty   │──►│ Point         │
+└───────────────┘   └───────────────┘   └───────────────┘
+```
+
+. . .
+
+### Key Insight
+
+**Forecast uncertainty** (prediction intervals) directly informs **safety stock levels**
+
+- Higher uncertainty → more safety stock
+- Facility-specific forecasts → tailored inventory policies
+
+---
+
+## GradABM: Epidemiology Example
+
+### Differentiable Epidemic Simulation
+
+:::: {.columns}
+::: {.column width="50%"}
+### Application
+
+- COVID-19 vaccine prioritization
+- UK national strategy evaluation
+- Counterfactual policy analysis
+
+### Method
+
+- Neural networks encode transmission
+- Gradients flow through simulation
+- Learn optimal intervention timing
+:::
+
+::: {.column width="50%"}
+### Results
+
+- Validated age-based prioritization
+- Showed timing matters more than coverage
+- 100x faster than Bayesian calibration
+:::
+::::
+
+. . .
+
+> **Takeaway**: Differentiable ABMs enable rapid policy optimization
+
+::: {.aside}
+Chopra et al. (2023). *AAMAS*
+:::
+
+---
+
+# Section 4: Reinforcement Learning Concepts {background-color="#4A7C59"}
+
+## RL + ABM: The Big Picture
+
+### Core Idea
+
+ABM serves as the **environment** in which an RL agent learns
+
+![RL-ABM Interaction Loop](images/rl-abm-loop.png){fig-align="center" width="70%"}
+
+---
+
+## The RL Framework
+
+### Key Components
+
+| Component | In RL | In Supply Chain ABM |
+|-----------|-------|---------------------|
+| **State** | Current observation | Inventory levels, pending orders |
+| **Action** | Decision | Order quantity |
+| **Reward** | Feedback signal | -(holding cost + stockout cost) |
+| **Policy** | Decision rule | Ordering strategy |
+
+. . .
+
+### Learning Process
+
+Agent explores actions → observes rewards → updates policy → improves over time
+
+---
+
+## RL Learning: Policy Improvement Over Time
+
+![RL agent learning to optimize inventory policy](images/rl-learning-curve.png){fig-align="center" width="90%"}
+
+---
+
+## When to Use RL with ABMs
+
+:::: {.columns}
+::: {.column width="50%"}
+### Good Fit
+
+- **Sequential decisions**: Actions now affect future
+- **Complex dynamics**: Hard to derive optimal policy
+- **Uncertain environment**: Need adaptive behavior
+- **Policy optimization**: Finding best intervention
+:::
+
+::: {.column width="50%"}
+### Examples
+
+- Inventory management
+- Epidemic interventions
+- Resource allocation
+- Traffic control
+:::
+::::
+
+---
+
+## Advanced Topics (Brief Mention)
+
+### Multi-Agent RL (MARL)
+
+- Multiple learning agents interact
+- Example: **AI Economist** — agents + government learn together
+- Challenge: Non-stationary environment
+
+. . .
+
+### Inverse RL
+
+- Learn decision rules from **observed behavior**
+- "What reward function explains this behavior?"
+- Useful for calibrating agent rules from real data
+
+. . .
+
+> These are active research areas — resources provided at end for those interested
+
+---
+
+# Section 5: Application to WISE Project {background-color="#4A7C59"}
+
+## WISE Integration Pipeline
+
+![Project workflow from data to policy insights](images/wise-pipeline.png){fig-align="center" width="95%"}
+
+---
+
+## Our Integration Strategy
+
+### What We're Doing
+
+| Day | Component | Output |
+|-----|-----------|--------|
+| **Days 1-2** | ML for demand forecasting | Predictions by facility, medication |
+| **Day 3** | Integration design (today) | Interface specification |
+| **Day 4** | ABM simulation | Supply chain model |
+| **Day 5** | Policy analysis | Intervention recommendations |
+
+. . .
+
+### Integration Type
+
+**Approach 2** (ML-driven behaviors) + elements of **Approach 1** (calibration):
+
+- ML forecasts → Agent ordering parameters
+- Uncertainty bounds → Safety stock rules
+
+---
+
+## The Interface: ML → ABM
+
+```python
+# ML Model Output (from Days 1-2)
+forecast = {
+    'facility_id': 'F001',
+    'medication': 'Amoxicillin 500mg',
+    'period': '2026-03',
+    'predicted_demand': 450,
+    'lower_bound': 380,      # 95% CI
+    'upper_bound': 520
+}
+
+# ABM Agent Input (for Day 4)
+agent_params = {
+    'facility_id': 'F001',
+    'reorder_point': 520,    # upper_bound for safety
+    'order_quantity': 450,   # predicted demand
+    'lead_time': 14,         # days
+    'review_period': 30      # days
+}
+```
+
+---
+
+## Hands-On Preview
+
+### In the notebook exercise, you will:
+
+1. **Load** your trained ML model from Day 2
+2. **Generate** demand forecasts for multiple facilities
+3. **Calculate** inventory parameters from forecasts
+4. **Format** outputs for ABM input
+5. **Visualize** the forecast → policy connection
+
+. . .
+
+### Key Questions to Consider
+
+- How does forecast uncertainty affect safety stock?
+- What happens when forecasts are wrong?
+- How should we update forecasts over time?
+
+---
+
+# Section 6: Wrap-Up {background-color="#4A7C59"}
+
+## Key Takeaways
+
+### 1. Four Integration Approaches
+
+- **Calibration**: ML estimates ABM parameters
+- **Behaviors**: ML/RL drives agent decisions
+- **Surrogates**: ML approximates ABM for speed
+- **Hybrid**: End-to-end differentiable optimization
+
+. . .
+
+### 2. Choose Based on Your Need
+
+- Unknown parameters → Calibration
+- Complex decisions → ML behaviors
+- Computational bottleneck → Surrogate
+- Policy optimization → Hybrid/RL
+
+. . .
+
+### 3. WISE Project Approach
+
+ML forecasts → ABM parameters → Policy simulation
+
+---
+
+## Resources
+
+### Key Papers
+
+| Topic | Reference |
+|-------|-----------|
+| Integration review | Zhang et al. (2021). *IEEE TNNLS* |
+| Differentiable ABM | Chopra et al. (2023). *AAMAS* |
+| Surrogate modeling | Angione et al. (2022). *PLOS ONE* |
+| Neural calibration | Gaskin et al. (2023). *PNAS* |
+| Beer Game DQN | Oroojlooyjadid et al. (2021). *M&SOM* |
+
+### Tools
+
+- **Mesa**: Python ABM framework ([mesa.readthedocs.io](https://mesa.readthedocs.io))
+- **Covasim**: COVID-19 ABM ([covasim.org](https://covasim.org))
+- **Stable Baselines3**: RL library ([stable-baselines3.readthedocs.io](https://stable-baselines3.readthedocs.io))
+
+---
+
+## Looking Ahead
+
+### This Afternoon (1:30-5:00)
+
+**Supply Chain Simulation Foundations**
+
+- Introduction to ABM concepts
+- Building your first Mesa model
+- Hands-on: Simple supply chain agent
+
+. . .
+
+### Day 4
+
+**Full ABM Development**
+
+- Multi-facility supply chain model
+- Connecting ML forecasts
+- Policy experiments
+
+---
+
+## Questions & Discussion
+
+### Discussion Prompts
+
+1. For the WISE project supply chain, which integration approach seems most promising? Why?
+
+2. What data would we need to train an RL agent for inventory management?
+
+3. How might we validate that our ML → ABM integration produces realistic results?
+
+. . .
+
+### Let's discuss before the hands-on session!
+
+---
+
+## References
+
+::: {#refs}
+:::
+
+- Angione, C., et al. (2022). Using ML as a surrogate model for ABM. *PLOS ONE*.
+- Chopra, A., et al. (2023). Differentiable Agent-based Epidemiology. *AAMAS*.
+- Gaskin, T., et al. (2023). Neural parameter calibration for ABMs. *PNAS*.
+- Oroojlooyjadid, A., et al. (2021). Deep Q-Network for the Beer Game. *M&SOM*.
+- Zhang, L., et al. (2021). Synergistic integration between ML and ABM. *IEEE TNNLS*.
