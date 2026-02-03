@@ -16,6 +16,11 @@ $link-color: $primary;
 
 /*-- scss:rules --*/
 
+// Make all reveal.js slides scrollable
+.reveal .slides section {
+  overflow-y: auto !important;
+}
+
 // Navigation
 .sidebar-title {
   font-weight: 600;
