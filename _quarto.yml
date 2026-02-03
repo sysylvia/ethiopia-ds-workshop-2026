@@ -1,6 +1,12 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - "*.qmd"
+    - "day-*/**/*.qmd"
+    - "resources/**/*.qmd"
+    - "notebooks/**/*.ipynb"
+    - "!reference/"
 
 format:
   html:
