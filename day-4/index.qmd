@@ -3,10 +3,12 @@ title: "Day 4: ABM Deep Dive"
 subtitle: "Thursday, February 5, 2026"
 ---
 
-::: {.callout-note}
-## Materials Coming Soon
-Day 4 materials will be available on February 5, 2026.
+::: {.callout-tip}
+## Main Notebook Available
+The primary ABM exercise notebook is now available! Click below to launch.
 :::
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/06-antibiotic-supply-chain-abm.ipynb)
 
 ## Overview
 
@@ -38,7 +40,23 @@ By the end of Day 4, you will be able to:
 
 ## Materials
 
-*Materials will be provided by Dr. Ozawa via the shared Google Drive folder.*
+### Main Notebook
+
+**[Antibiotic Supply Chain ABM](../notebooks/06-antibiotic-supply-chain-abm.ipynb)** — Comprehensive agent-based model simulating Ethiopia's antibiotic supply chain with 8 policy scenarios.
+
+The notebook includes:
+
+- 100 Community Health Centers with ML-driven demand forecasts
+- Patient generation by age group (children, adults, elderly)
+- Health worker absenteeism modeling
+- Medicine expiry and wastage tracking
+- 8 scenarios: base, weather delays, disease outbreak, advance ordering, manufacturer failure, optimization challenge, AMR substitution, private sector diversion
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/06-antibiotic-supply-chain-abm.ipynb)
+
+### Additional Resources
+
+*Additional materials will be provided by Dr. Ozawa via the shared Google Drive folder.*
 
 [Access Shared Drive](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link){.btn .btn-primary}
 
