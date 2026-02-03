@@ -74,7 +74,7 @@ website:
             text: "LASSO & Ridge (Python)"
           - href: day-2/notebook-lasso-r.qmd
             text: "LASSO & Ridge (R)"
-          - href: day-2/notebook-forecasting.qmd
+          - href: notebooks/03b-demand-forecasting-antibiotics.ipynb
             text: "Demand Forecasting (Python)"
           - href: day-2/notebook-forecasting-r.qmd
             text: "Demand Forecasting (R)"
