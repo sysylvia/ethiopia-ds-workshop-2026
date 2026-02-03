@@ -6,6 +6,7 @@ project:
     - "day-*/**/*.qmd"
     - "resources/**/*.qmd"
     - "notebooks/**/*.ipynb"
+    - "!notebooks/06-antibiotic-supply-chain-abm.ipynb"
     - "!reference/"
 
 format:
