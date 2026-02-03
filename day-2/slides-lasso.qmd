@@ -1,6 +1,6 @@
 ---
-title: "Regularization: LASSO & Ridge"
-subtitle: "Day 2 Morning | WISE Workshop — Addis Ababa 2026"
+title: "Tree-based Methods"
+subtitle: "Day 2 Afternoon | WISE Workshop — Addis Ababa 2026"
 author: "Sean Sylvia, Ph.D."
 date: 2026-02-03
 format:
@@ -20,520 +20,662 @@ execute:
   message: false
 ---
 
-# Welcome to Day 2!
+## Unit 2: Basic ML Crash Course
 
-## Day 2 Structure: Learn → Apply
+1.  Introduction to ML
 
-:::: {.columns}
-::: {.column width="50%"}
-### Morning
-**Regularization (Now)**
+2.  Lasso and friends (Linear High-dimensional Regression)
 
-- Ridge regression
-- LASSO
-- Elastic Net
+3.  Tree-based methods (Nonlinear)
 
-**Hands-on (10:50)**
+# Review
 
-- Apply LASSO/Ridge to data
+## Basic ML Setup
+
+1.  Flexible functional forms
+
+2.  Limit expressiveness via **regularization**
+
+3.  Learn how much to regularize **tuning**
+
+::: fragment
+-   What do the features imply about properties of $\hat{f}$ ?
+-   How can we use $\hat{f}$ in applied data analyses?
 :::
 
-::: {.column width="50%"}
-### Afternoon
-**Trees & Ensembles (1:30)**
+## The Approximation-Overfit Tradeoff
 
-- Decision trees
-- Random Forests
-- Gradient Boosting
+::::: columns
+::: {.column width="45%"}
+**The Fundamental Challenge**
 
-**Hands-on (3:20)**
+As model complexity increases, we face two competing forces:
 
-- Full ML pipeline
-:::
-::::
+1.  **Approximation error decreases** as we better capture the true underlying function
+2.  **Estimation error increases** as we begin to fit noise in our training data
 
----
+This creates the **bias-variance tradeoff** that defines machine learning:
 
-# Recap: Day 1 Foundations
-
-## The Central Challenge
-
-**Bias-Variance Tradeoff**:
-
-- Simple models → High bias, low variance (underfit)
-- Complex models → Low bias, high variance (overfit)
-
-. . .
-
-**Yesterday's sine wave demo** showed this visually:
-
-- Low-degree polynomial: Too simple, missed the curve
-- High-degree polynomial: Fit training data perfectly, terrible on test data
-- Sweet spot: Captured the pattern without memorizing noise
-
----
-
-## Today's Question
-
-**What if we have MANY features?**
-
-. . .
-
-Imagine predicting demand with:
-
-- 50 facility characteristics
-- 12 monthly lags
-- 100+ potential interactions
-
-. . .
-
-> With many features, overfitting becomes almost guaranteed without constraints
-
----
-
-# The Problem with OLS in High Dimensions
-
-## Why OLS Fails
-
-Standard OLS minimizes:
-
-$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2$$
-
-. . .
-
-**Problems when p (features) is large:**
-
-| Issue | Consequence |
-|-------|-------------|
-| More features than observations (p > n) | OLS has no unique solution |
-| Many correlated features | Coefficients explode in magnitude |
-| Fitting to noise | Perfect training fit, terrible test performance |
-
----
-
-## A Supply Chain Example
-
-Predicting monthly medication demand:
-
-| Feature Category | Example Features | Count |
-|------------------|------------------|-------|
-| Facility info | Type, size, region, distance to warehouse | 8 |
-| Historical demand | Lag-1, Lag-2, ..., Lag-12 | 12 |
-| Seasonal factors | Month dummies, holiday indicators | 15 |
-| Disease patterns | Malaria incidence, TB rates, ... | 10 |
-| **Total** | | **45+** |
-
-. . .
-
-> With limited data points, we need to constrain model complexity
-
----
-
-# Regularization: The Solution
-
-## Key Idea
-
-**Add a penalty** that constrains coefficient magnitudes:
-
-$$\text{minimize } \underbrace{\sum_{i=1}^n (y_i - X_i\beta)^2}_{\text{Fit the data}} + \underbrace{\lambda \cdot \text{Penalty}(\beta)}_{\text{Keep it simple}}$$
-
-. . .
-
-- **λ = 0**: No penalty → Standard OLS
-- **λ → ∞**: Full penalty → All coefficients shrink to zero
-- **λ optimal**: Balance fit and simplicity
-
----
-
-# Ridge Regression (L2)
-
-## The L2 Penalty
-
-Ridge regression adds the **sum of squared coefficients**:
-
-$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p \beta_j^2$$
-
-. . .
-
-**Effect:**
-
-- All coefficients shrink toward zero
-- Coefficients never reach exactly zero
-- Correlated features share influence
-
----
-
-## Ridge: Geometric Intuition
-
-:::: {.columns}
-::: {.column width="50%"}
-### The Constraint Region
-- Ridge constrains $\sum \beta_j^2 \leq c$
-- This is a **circle** (or sphere) in parameter space
-- OLS solution must stay inside
+-   **Simple models**: High bias, low variance
+-   **Complex models**: Low bias, high variance
 :::
 
-::: {.column width="50%"}
-### The Result
-- Coefficients shrink proportionally
-- Correlated variables: effect spread across both
-- No variable is completely eliminated
+::: {.column width="55%"}
+![Bias-variance tradeoff visualization. The blue curve represents test error, while the red curve shows training error. The gap widens as model complexity increases, indicating overfitting.](../images/bias_variance_tradeoff.png)
+:::
+:::::
+
+## Supervised Learning
+
+For supervised learners, we need three things:
+
+1.  Function Class
+2.  A regularizer
+3.  Optimization algorithms to guide us
+
+## Choosing a regularization parameter using k-fold Cross-validation
+
+![](../images/k-fold.png)
+
+## Full ML Exercise
+
+![](../images/ml-exercise.png)
+
+## The Regularization Spectrum: How We Control Complexity
+
+Every model class has its own unique form of regularization that controls the bias-variance tradeoff. Understanding this spectrum reveals the fundamental unity behind seemingly diverse machine learning approaches.
+
+:::: columns
+::: {.column width="100%"}
+| Function Class | Regularization Parameters |
+|-------------------------|-----------------------------------------------|
+| Linear | LASSO, ridge, elastic net |
+| Decision/regression trees | Depth, leaves, leaf size, info gain |
+| Random forest | Trees, variables per tree, sample sizes, complexity |
+| Nearest neighbors | Number of neighbors |
+| Kernel regression | Bandwidth |
+| Splines | Number of knots, order |
+| Neural nets | Layers, sizes, connectivity, drop-out, early stopping |
 :::
 ::::
 
-. . .
+::: fragment
+> **Cross-cutting insight**: While the specific mechanisms differ, regularization always involves restricting a model's capacity to memorize training data, instead encouraging it to generalize underlying patterns. Tree-based methods share this fundamental principle with linear models, but implement it through structural constraints rather than coefficient penalties.
+:::
 
-> **Analogy**: Ridge is "socialist" — everyone contributes, no one is eliminated
+## Lasso Regression: Constrained Minimization to Regularize
 
----
+::: nonincremental
+**Objective**: Minimize the sum of squared errors while keeping coefficients small
+:::
 
-## When to Use Ridge
+::::: columns
+::: {.column width="40%"}
+### Constrained Form
 
-**Best for:**
+$$
+\begin{align}
+\min_{\beta} &\sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}\right)^2\\
+\text{subject to } &\sum_{j=1}^{p} |\beta_j| \leq t
+\end{align}
+$$
 
-- Many correlated features (multicollinearity)
-- You want to keep all predictors
-- Prior belief that all features matter
+-   $t \geq 0$ is the constraint parameter
+-   Smaller $t$ means more regularization
+-   $t = 0$ forces all $\beta_j = 0$
+:::
 
-**Limitations:**
+::: {.column width="60%"}
+![](../images/lasso-contours.png){width="150%"}
 
-- Doesn't perform feature selection
-- All coefficients remain in model
-- Less interpretable with many features
+*Contours of RSS function and lasso constraint region (diamond). Solution occurs at corners, forcing coefficients to zero.*
+:::
+:::::
 
----
+## Lasso: Lagrangian Form
 
-# LASSO (L1)
+$$
+\min_{\beta} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}\right)^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+$$
 
-## The L1 Penalty
+-   $\lambda \geq 0$ is the penalty parameter
+-   $\lambda$ and $t$ have an inverse relationship
+-   As $\lambda \rightarrow \infty$, all $\beta_j \rightarrow 0$
 
-LASSO uses the **sum of absolute coefficients**:
+## Geometric Interpretation
 
-$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \sum_{j=1}^p |\beta_j|$$
-
-. . .
-
-**Key difference from Ridge:**
-
-- Can set coefficients **exactly to zero**
-- Performs **automatic feature selection**
-- Identifies the "important" variables
-
----
-
-## LASSO: Geometric Intuition
-
-:::: {.columns}
+::::: columns
 ::: {.column width="50%"}
-### The Constraint Region
-- LASSO constrains $\sum |\beta_j| \leq c$
-- This is a **diamond** in parameter space
-- Diamond has **corners** at axes
+-   **The constraint region**: $\sum_{j=1}^{p} |\beta_j| \leq t$ forms a diamond (L1 norm)
+-   Unlike ridge regression's circular constraint (L2 norm)
+-   **Key insight**: The corners of the diamond often intersect with axes
+-   This means some coefficients become exactly zero
 :::
 
 ::: {.column width="50%"}
-### The Result
-- OLS contours often hit corners first
-- Corner = one coefficient is zero
-- Sparse solutions emerge naturally
+![](../images/lasso-contours.png){width="150%"}
+
+*Contours of RSS function and lasso constraint region (diamond). Solution occurs at corners, forcing coefficients to zero.*
 :::
-::::
+:::::
 
-![](../images/lasso-contours.png){fig-align="center" width=50%}
+## Lasso Lambda and coefficient paths (relaxing constraint)
 
----
+![Each line is a coefficient. Lambda is "relaxed" moving from left to right](../images/lambda.png)
 
-## LASSO: The Coefficient Path
+## Why Lasso Performs Variable Selection
 
-As λ increases, coefficients shrink:
+::: nonincremental
+The L1 penalty's diamond shape makes it likely for solutions to occur at corners where some $\beta_j = 0$
+:::
 
-![](../images/lambda.png){fig-align="center" width=70%}
+::::: columns
+::: {.column width="35%"}
+-   Solution occurs where RSS contours touch constraint region
+-   Corners of diamond intersect with coordinate axes
+-   When solution is at a corner, some coefficients equal zero
+-   **Result**: Automatic variable selection
+:::
 
-. . .
+::: {.column width="65%"}
+![](../images/lasso_vs_ridge_vs_en.png){width="125%"}
 
-- **Small λ**: Many non-zero coefficients
-- **Large λ**: Few non-zero coefficients
-- **Path shows**: Which features are "strongest"
+*Comparison of lasso (diamond) vs. ridge (circle) vs. elastic net (fat diamond thingy) constraint regions.*
+:::
+:::::
 
----
+## The Lasso Selection Problem
 
-## LASSO = Automatic Feature Selection
+::: nonincremental
+**Challenge**: Different regularization paths can lead to different selected variables
+:::
 
-```
-λ increasing →
+::: fragment
+**OLS:**\
+Health = β₀ + β₁·Age + β₂·Income + β₃·Education + β₄·SES + ... + βₙ·X_n + ε
+:::
 
-Feature 1:  ═══════════════════════════■──────────▶ 0
-Feature 2:  ═════════════════■──────────────────────▶ 0
-Feature 3:  ═══════■────────────────────────────────▶ 0
-Feature 4:  ═══════════════════════════════════■────▶ 0
+::: fragment
+**Lasso (1):**\
+Health = β₀ + β₁·Age + β₂·Income + β₃·Education \color{grey}{+ β₄·SES} + ... + βₙ·X_n + ε
+:::
 
-■ = coefficient becomes exactly zero
-```
+::: fragment
+**Lasso (2):**\
+Health = β₀ + β₁·Age + \color{grey}{β₂·Income + β₃·Education} + β₄·SES + ... + βₙ·X_n + ε
+:::
 
-. . .
+## Lasso Selection Problem
 
-**Interpretation:**
+**Key implications:**
 
-- Features that stay non-zero longest are "most important"
-- LASSO selects a sparse subset of predictors
-- Useful when you want a simple, interpretable model
+-   Variable selection depends heavily on choice of λ
+-   Highly correlated predictors compete for selection
+-   Different random seeds in cross-validation → different final models
+-   Selection can be unstable with small changes in data
 
----
+## Lasso Selection Instability
 
-## When to Use LASSO
+::::: columns
+::: {.column width="60%"}
+Lasso variable selection often exhibits **instability** across different runs, even on the same dataset:
 
-**Best for:**
+-   Small changes in data can lead to completely different sets of selected variables
+-   Highly correlated predictors compete for selection
+-   Cross-validation randomness affects final model composition
+-   Bootstrapping or repeated CV shows selection frequencies
 
-- Suspected sparsity (only some features matter)
-- Feature selection is desired
-- High-dimensional data (p >> n possible with additional considerations)
-- Want interpretable model with fewer variables
+**Implications for practice:** - Single Lasso runs may miss important variables - Ensemble approaches can provide more stable selection - Variable selection consistency is not guaranteed
+:::
 
-**Limitations:**
+::: {.column width="40%"}
+![Variable selection across 10 iterations of Lasso on the same dataset. Black indicates selected; white indicates excluded. Notice the inconsistent pattern of selection.](../images/lasso_stability.png)
+:::
+:::::
 
-- With correlated features, selects one arbitrarily
-- Selected features may change with data perturbations
-- Not stable under resampling
+## Tree-Based Methods: Overview
 
----
+-   Previously: linear models, regularization (ridge, lasso, elastic net)
+-   Now: flexible, non-parametric approaches for prediction and classification
 
-# Ridge vs LASSO
+### **Key Question:**
 
-## Side-by-Side Comparison
+How can we model non-linear relationships without assuming functional form?
 
-| Aspect | Ridge (L2) | LASSO (L1) |
-|--------|------------|------------|
-| **Penalty** | $\sum \beta_j^2$ | $\sum |\beta_j|$ |
-| **Geometry** | Circle | Diamond |
-| **Zero coefficients** | Never | Yes, performs selection |
-| **Correlated features** | Shares across all | Picks one arbitrarily |
-| **Interpretation** | Less sparse | Sparse, easier to explain |
+::: fragment
+Decision trees and (mostly) their extensions...
 
-![](../images/lasso_vs_ridge_vs_en.png){fig-align="center" width=60%}
+Tree-based methods include random forests, bagged trees, boosted trees, which combine many decision trees in different ways (called an ensemble)..
+:::
 
----
+## Why Tree-Based Methods?
 
-## A Warning: LASSO Instability
+-   Powerful non-parametric approaches that:
+    -   Make no assumptions about functional form
+    -   Automatically model interactions between predictors
+    -   Handle different types of predictors (continuous, categorical)
+    -   Are highly interpretable (single trees)
+    -   Can achieve excellent predictive performance (ensembles)
 
-**From the transcripts (HPM 883):**
+::: fragment
+Perfect for health services research, where relationships are often complex and non-linear!
+:::
 
-If `BEDRMS` and `BATHS` are both correlated with price:
+## Decision Trees: Intuition
 
-- LASSO might select one or the other
-- Re-running on slightly different data can flip the choice
-- **Prediction may be stable, but selected features are not**
+::::: columns
+::: {.column width="40%"}
+-   Trees reflect human decision-making processes
+-   We navigate a series of yes/no questions
+-   Arrive at a prediction based on answers to those questions
+:::
 
-. . .
+::: {.column width="60%"}
+Trees segment predictor space into regions, then:
 
-> **Implication**: Don't over-interpret which features LASSO selects
+-   **For regression**: Predict mean outcome value in that region
+-   **For classification**: Predict most common class in that region
 
----
+The beauty is in the simplicity: - **No formula needed** - Can capture complex relationships without parametric assumptions
+:::
+:::::
 
-# Elastic Net
+## Example: Surviving the Titanic
 
-## Best of Both Worlds
+![](../images/titanic.png){width="150%"}
 
-Elastic Net combines L1 and L2 penalties:
+## Example: Surviving the Titanic
 
-$$\text{minimize } \sum_{i=1}^n (y_i - X_i\beta)^2 + \lambda \left[ \alpha \sum_{j=1}^p |\beta_j| + (1-\alpha) \sum_{j=1}^p \beta_j^2 \right]$$
+![](../images/titanic2.png){width="150%"}
 
-. . .
+## Age, Class and Survival
 
-| α Value | Behavior |
-|---------|----------|
-| α = 1 | Pure LASSO |
-| α = 0 | Pure Ridge |
-| 0 < α < 1 | Mix of both |
+![](../images/age_class.png){width="150%"}
 
----
+## Age, Class and Survival
 
-## When to Use Elastic Net
+![](../images/age_class2.png){width="150%"}
 
-**Best for:**
+## Age, Class and Survival
 
-- Groups of correlated features
-- Want some feature selection
-- LASSO alone is too unstable
+![](../images/age_class3.png){width="150%"}
 
-. . .
+## Age, Class and Survival
 
-**Practical default:**
+![](../images/age_class4.png){width="150%"}
 
-- Start with α = 0.5 (equal mix)
-- Use cross-validation to tune both λ and α
+## Age, Class and Survival: Tree
 
----
+```{mermaid}
+flowchart TD
+    A[Age > 60?] --> |Yes| B[Did not survive]
+    A --> |No| C[Pclass = 1?]
+    C --> |Yes| D[Survived]
+    C --> |No| E[Pclass = 2?]
+    E --> |Yes| F[Age > 20?]
+    F --> |Yes| G[Did not survive]
+    F --> |No| H[Did not survive]
+    E --> |No| I[Age < 10?]
+    I --> |Yes| J[Survived]
+    I --> |No| K[Did not survive]
 
-# Choosing λ: Cross-Validation
+    %% Styling
+    classDef survived fill:#a8d5e5,stroke:#333,stroke-width:1px;
+    classDef notSurvived fill:#f8cecc,stroke:#333,stroke-width:1px;
 
-## The Key Question
-
-How do we choose the penalty strength λ?
-
-. . .
-
-**Too small λ** → Overfitting (not enough regularization)
-
-**Too large λ** → Underfitting (too much regularization)
-
-. . .
-
-> **Solution**: Cross-validation to find the λ that minimizes test error
-
----
-
-## Cross-Validation for λ
-
-```
-For each candidate λ:
-    1. Split training data into K folds
-    2. For each fold:
-       - Train on K-1 folds
-       - Evaluate on held-out fold
-    3. Average CV error across folds
-
-Select λ with lowest CV error
-```
-
-. . .
-
-Most software does this automatically:
-
-- `sklearn.linear_model.LassoCV` in Python
-- `glmnet` with `cv.glmnet()` in R
-
----
-
-## The λ Path with CV
-
-![](../images/lambda.png){fig-align="center" width=70%}
-
-**Two common choices:**
-
-- **λ.min**: Minimum CV error
-- **λ.1se**: Largest λ within 1 SE of minimum (more regularization)
-
----
-
-# Practical Implementation
-
-## Python: scikit-learn
-
-```python
-from sklearn.linear_model import Lasso, LassoCV, Ridge, RidgeCV
-
-# LASSO with cross-validation for lambda
-lasso_cv = LassoCV(cv=5)
-lasso_cv.fit(X_train, y_train)
-
-# Best lambda
-print(f"Optimal alpha: {lasso_cv.alpha_}")
-
-# Coefficients (many will be zero)
-print(lasso_cv.coef_)
-
-# Prediction
-y_pred = lasso_cv.predict(X_test)
+    class D,J survived;
+    class B,G,H,K notSurvived;
 ```
 
----
+## How to Grow a Tree?
 
-## Feature Selection with LASSO
+The general approach:
 
-```python
-# Which features were selected?
-import pandas as pd
+1.  **Split**: Choose a predictor and value to split data
+2.  **Recurse**: Apply the same process to resulting regions
+3.  **Prune**: Simplify the tree to prevent overfitting
 
-coef_df = pd.DataFrame({
-    'feature': feature_names,
-    'coefficient': lasso_cv.coef_
-})
+The key challenge: **Finding the optimal splits**
 
-# Non-zero coefficients
-selected = coef_df[coef_df['coefficient'] != 0]
-print(f"Selected {len(selected)} of {len(feature_names)} features")
+## Growing a Regression Tree
+
+Goal: Partition predictor space into non-overlapping regions $R_1, R_2, ..., R_J$ to minimize:
+
+$$RSS = \sum_{j=1}^{J} \sum_{i \in R_j} (y_i - \hat{y}_{R_j})^2$$
+
+Where $\hat{y}_{R_j}$ is the mean response for observations in region $R_j$
+
+::: notes
+We aim to create regions where the observations within each region are as homogeneous as possible with respect to the response variable.
+:::
+
+## Recursive Binary Splitting
+
+::: incremental
+1.  Consider all predictors $X_j$ and all possible cut points $s$
+2.  For each combination, split predictor space into two regions: $$R_1(j,s) = \{X|X_j < s\} \text{ and } R_2(j,s) = \{X|X_j \geq s\}$$
+3.  Choose split that minimizes: $$\sum_{i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 + \sum_{i \in R_2(j,s)} (y_i - \hat{y}_{R_2})^2$$
+4.  Repeat recursively on each resulting region
+:::
+
+## Classification Trees
+
+-   Used when predicting categorical outcomes
+-   Same recursive splitting approach, but different splitting criteria
+-   Instead of RSS, we use measures of node **purity**
+
+::: fragment
+Common impurity measures: - **Classification Error Rate**: $1 - \max_k(p_{mk})$ - **Gini Index**: $\sum_{k=1}^K p_{mk}(1-p_{mk})$ - **Entropy**: $-\sum_{k=1}^K p_{mk}\log(p_{mk})$
+
+Where $p_{mk}$ is the proportion of observations in node $m$ that belong to class $k$
+:::
+
+## Prediction with Trees
+
+Once the tree is built:
+
+-   **Regression**: Predict the mean response value in the leaf node
+-   **Classification**: Predict the most common class in the leaf node
+
+::: fragment
+Trees can also provide probability estimates (proportions of classes in each node)
+:::
+
+## Advantages of Trees
+
+::: incremental
+-   **Interpretability**: Easy to explain and visualize
+-   **No preprocessing needed**: No normalization or dummy variables required
+-   **Handle mixed data types**: Both numerical and categorical predictors
+-   **Automatically model interactions**
+-   **No distributional assumptions**
+-   **Handle missing data** (with appropriate implementation)
+:::
+
+## Disadvantages of Trees
+
+::: incremental
+-   **High variance**: Small changes in data can result in very different trees
+-   **Can overfit**: Tend to learn noise in the data if not constrained
+-   **Greedy algorithm**: May not find global optimum
+-   **Limited predictive accuracy** (for single trees)
+-   **Biased toward predictors with many possible splits**
+:::
+
+## The Overfitting Challenge
+
+-   Deep trees fit training data perfectly but generalize poorly
+-   Need a way to find right-sized trees
+
+## Tree Pruning
+
+-   **Idea**: Grow a large tree, then prune it back to prevent overfitting
+-   **Approach**: Cost-complexity pruning with a penalty for tree complexity
+
+::: fragment
+Find subtree $T \subset T_0$ that minimizes:
+
+$$\sum_{m=1}^{|T|} \sum_{i:x_i \in R_m} (y_i - \hat{y}_{R_m})^2 + \alpha|T|$$
+
+where $|T|$ is the number of terminal nodes and $\alpha$ is the complexity parameter
+:::
+
+## Cross-Validation for Optimal Tree Size
+
+1.  Grow a large tree $T_0$
+2.  For range of $\alpha$ values, find best subtree $T_\alpha$
+3.  Use K-fold cross-validation to select optimal $\alpha$
+4.  Return the subtree $T_\alpha$ that corresponds to the optimal $\alpha$
+
+::: fragment
+Remember: We're using the same cross-validation framework we learned with lasso!
+:::
+
+## The Fundamental Problem of Trees
+
+Single trees have: - High interpretability - Limited predictive performance
+
+::: fragment
+Can we keep the flexibility of trees while improving predictive performance?
+:::
+
+## Ensemble Methods to the Rescue!
+
+The core idea: Combine many trees to reduce variance and improve predictions
+
+::: incremental
+Key ensemble approaches:
+
+1.  **Bagging**: Bootstrap aggregation of trees
+2.  **Random Forests**: Bagging with random feature selection
+3.  **Boosting**: Sequential tree building to correct errors
+:::
+
+## Bagging Trees
+
+![](../images/bag_titanic.png){width="150%"}
+
+## Bagging Trees
+
+![](../images/bag_titanic2.png){width="150%"}
+
+## Bagging (Bootstrap Aggregation)
+
+1.  Create $B$ bootstrap samples from training data
+2.  Fit a deep, unpruned tree to each bootstrap sample
+3.  Average predictions across all trees (for regression)
+4.  Take majority vote (for classification)
+
+::: fragment
+Key insight: Averaging many high-variance, low-bias estimators gives a lower-variance, low-bias ensemble
+:::
+
+## Ensemble Prediction
+
+**By averaging over many low bias but high variance models, we reduce the overall variance ⇒ more accurate model.**
+
+-   the average of all $B$ predictions for regression trees: $\hat{y}_{bag}(X) = \frac{1}{B} \sum_{i=1}^{B} \hat{y}^i(X)$
+
+-   the majority vote by all $B$ predictions for classification trees: $\hat{y}_{bag}(X) = \underset{k}{\arg\max} \sum_{i=1}^{B} I\{\hat{y}^i(X) = k\}$
+
+```{mermaid}
+%%| fig-width: 8
+flowchart TB
+    Forecast["Forecast for any new X"] --> DT1["DT 1<br>sample 1<br>random S%"]
+    Forecast --> DT2["DT 2<br>sample 2<br>random S%"]
+    Forecast --> dots1["..."]
+    Forecast --> dots2["..."]
+    Forecast --> dots3["..."]
+    Forecast --> DTB["DT B<br>sample B<br>random S%"]
 ```
 
-. . .
+## Majority Vote
 
-> LASSO often reduces dozens of features to a handful
+![](../images/bag_titanic3.png){width="150%"}
 
----
+## Out-of-Bag Error Estimation
 
-# Application to Supply Chains
+-   Each bootstrap sample only uses \~2/3 of observations
+-   Remaining \~1/3 ("out-of-bag" or OOB) can be used as validation data
+-   For each observation, average predictions from trees that didn't use it in training
+-   Provides honest error estimate without separate validation set
 
-## Supply Chain Feature Selection
+## Random Forests: Decorrelating Trees
 
-With LASSO, we can identify which factors most predict demand:
+Random forests address a weakness of bagging:
 
-| Feature Category | Likely Selected? | Why |
-|------------------|------------------|-----|
-| Recent demand (Lag-1) | ✅ Yes | Strong predictor |
-| Distant lags (Lag-10) | ❌ Maybe not | Weaker signal |
-| Facility size | ✅ Yes | Core determinant |
-| Obscure indicators | ❌ No | Noise |
+-   In bagging, trees can be highly correlated if strong predictors dominate splits
 
-. . .
+::: fragment
+Random forests solution:
 
-> LASSO helps build parsimonious forecasting models
+-   At each split, consider only a random subset of $m$ predictors
 
----
+-   Typically $m \approx \sqrt{p}$ for classification, $m \approx p/3$ for regression
 
-## Connecting to Simulation
+-   For example, with sample of 100 predictors, sample 10 in each split for class.
 
-**Day 2 → Days 3-4:**
+-   Decorrelates trees, further reducing variance
+:::
 
-1. Use LASSO to build demand forecast model
-2. Select key predictive features
-3. Generate facility-level demand predictions
-4. Feed predictions into ABM as inputs
+::: fragment
+Random Forest are Particularly useful when there is one strong predictor or a set of predictors that are highly correlated with each other. (Why?)
+:::
 
-. . .
+## Boosting: Sequential Learning
 
-```
-LASSO Model: f(facility_features) → Demand Forecast
-                                       ↓
-ABM Simulation: Demand → Inventory → Stockouts
-```
+Unlike bagging/random forests (parallel tree building), boosting:
 
----
+-   Fits trees sequentially
 
-# Key Takeaways
+-   Each tree focuses on errors of previous trees
 
-## Summary: Regularization
+-   Combines many "weak learners" into a strong ensemble
 
-1. **Regularization** adds penalties to prevent overfitting in high dimensions
+::: fragment
+**Key insight**: Rather than averaging many independent predictions, we build an additive model of trees
+:::
 
-2. **Ridge (L2)**: Shrinks all coefficients, keeps all features
+## Gradient Boosting Algorithm
 
-3. **LASSO (L1)**: Shrinks and selects features, sets some to zero
+For regression (simplified):
 
-4. **Elastic Net**: Combines both, handles correlated features
+1.  Initialize $\hat{f}(x) = 0$
 
-5. **Cross-validation**: Use CV to choose the penalty strength λ
+2.  For $b = 1$ to $B$:
 
-6. **Supply chains**: LASSO helps identify which features matter for forecasting
+    -   Compute residuals $r_i = y_i - \hat{f}(x_i)$
 
----
+    -   Fit a small tree to the residuals, get predictions $\hat{h}_b(x)$
 
-## Discussion: Before Hands-on
+    -   Update model: $\hat{f}(x) = \hat{f}(x) + \lambda \hat{h}_b(x)$
 
-1. In your experience, which features might predict medication demand?
+    -   Where $\lambda$ is the learning rate (shrinkage parameter)
 
-2. Why might feature selection be valuable for supply chain planning?
+## Boosting Tuning Parameters
 
-3. What's the risk of trusting LASSO's selected features too literally?
+Three key parameters control the model:
 
----
+1.  **Number of trees** $B$: More trees can improve performance but may lead to overfitting
 
-## Next: Hands-on Practice
+2.  **Tree depth** $d$: Controls complexity of individual trees (often shallow, 1-6 nodes)
 
-Apply LASSO and Ridge to real supply chain data:
+3.  **Learning rate** $\lambda$: How quickly model adapts to errors (smaller values need more trees)
 
-- Load the dataset
-- Fit regularized models
-- Visualize coefficient paths
-- Compare predictive performance
-- Identify selected features
+::: fragment
+As with other regularization approaches, cross-validation helps select optimal parameters
+:::
 
-[Open LASSO Hands-on Notebook](notebook-lasso.qmd){.btn .btn-primary}
+## Gradient Boosting vs. Random Forests
+
+::: incremental
+**Random Forests**
+
+-   Trees built independently
+
+-   Try to average out errors
+
+-   Less prone to overfitting
+
+-   Easier to tune
+
+**Gradient Boosting** - Trees built sequentially
+
+-   Try to correct previous errors
+
+-   More prone to overfitting
+
+-   Often higher accuracy, if tuned properly
+:::
+
+## XGBoost: State-of-the-Art Boosting
+
+-   eXtreme Gradient Boosting (XGBoost) is a highly optimized boosting implementation
+
+-   Regularization term in objective function
+
+-   Efficient handling of sparse data
+
+-   Parallel processing
+
+-   Often wins machine learning competitions
+
+::: fragment
+**XGBoost Objective**:
+
+$$\text{Obj} = \sum_{i=1}^n l(y_i, \hat{y}_i) + \sum_{k=1}^K \Omega(f_k)$$
+
+Where $\Omega(f) = \gamma T + \frac{1}{2}\lambda ||\omega||^2$ penalizes complex trees
+:::
+
+## Applications in Health Services Research
+
+-   **Predicting hospital readmissions**: Capturing complex interactions between comorbidities
+-   **Identifying high-risk patients**: Finding non-linear patterns in health indicators
+-   **Claims data analysis**: Handling mixed data types from administrative datasets
+-   **Medical imaging**: Feature extraction and classification
+-   **Treatment effect heterogeneity**: Identifying subgroups with different responses to interventions
+
+## Tuning Tree-Based Methods
+
+-   **Single trees**: Prune using cross-validation to select complexity parameter
+-   **Bagging**: Typically only need to set number of trees (usually 100-500)
+-   **Random Forests**: Number of trees and mtry (predictors per split)
+-   **Boosting**: Number of trees, learning rate, tree depth
+
+::: fragment
+Remember: Cross-validation is essential for all these models!
+:::
+
+## Key Takeaways
+
+::: incremental
+1.  Tree-based methods offer flexible, non-parametric modeling
+2.  Single trees prioritize interpretability
+3.  Ensemble methods dramatically improve predictive performance
+4.  Random Forests: Easy to tune, robust performance
+5.  Boosting: Often highest accuracy, but requires careful tuning
+6.  Tree ensembles provide variable importance and partial dependence for interpretation
+:::
+
+## Next Steps
+
+-   **Lab exercise**: Implementing tree-based methods in R
+-   **Readings**: Chapter 8 in "Introduction to Statistical Learning"
+-   **Coming up**: Causal trees and forests - using tree-based methods for causal inference!
+
+# Prediction vs. Estimation
+
+-   Prediction: Out-of-sample loss minimization $\rightarrow$ $\hat{y}$
+-   Estimation: Coefficient inference $\rightarrow$ $\hat{\beta}$
+-   In high dimensions:
+    -   Good predictions possible even if $\hat{\beta}$ is unstable/biased
+    -   Multiple functions can predict similarly; distinguishing is hard
+    -   Regularization & tuning help prediction but complicate estimation
+
+# Prediction $(\hat{y})$
+
+-   ML prediction aims for a good fit of $\hat{y}$ to $y$ on the **same distribution**
+-   Not necessarily about policy counterfactuals or structural knowledge
+-   Counterfactual analysis requires causal modeling
+
+# Estimation $(\hat{\beta})$
+
+-   Some ML approaches estimate $f(x) \approx \mathbb{E}[y \mid x]$
+-   Achieving minimal loss does not guarantee consistent $\hat{\beta}$ for inference
+-   Consistency depends on the distribution of $x$
+-   Structural parameters require more than just good fit
+
+# Key Takeaways for Applied Work
+
+-   ML excels at predicting $\hat{y}$
+-   Hold-out or cross-validation validate prediction quality
+-   Typically no consistency for $\hat{\beta}$
+-   Limited causal interpretation or counterfactual extrapolation
+-   Inference can be tricky; bootstrap may fail in high dimensions
+
+# Application Areas for a $\hat{y}$ Tool
+
+1.  Data pre-processing
+2.  $\hat{y}$ tasks (prediction policy problems)
+3.  $\hat{y}$ in service of $\hat{\beta}$
