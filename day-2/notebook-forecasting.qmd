@@ -7,7 +7,7 @@ subtitle: "Day 2 Afternoon | Full ML Pipeline with Trees & Ensembles"
 
 Click the badge below to open this notebook directly in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03-demand-forecasting.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/03b-demand-forecasting-antibiotics.ipynb)
 
 ::: {.callout-tip}
 ## Save Your Work
