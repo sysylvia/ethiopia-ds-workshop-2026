@@ -35,10 +35,13 @@ By the end of Day 2, you will be able to:
 
 ## Materials
 
-::: {.callout-note}
-## Materials Available on Day 2
-Lecture slides and hands-on notebooks will be made available at the start of each session on Tuesday, February 3rd.
-:::
+### Slides
+
+- [ML & Tree-based Methods](slides-lasso.qmd) — Covers LASSO review, decision trees, Random Forest, and Gradient Boosting
+
+### Hands-on Notebooks
+
+Available in both Python and R versions (see sidebar).
 
 ## Day Structure: Alternating Pattern
 

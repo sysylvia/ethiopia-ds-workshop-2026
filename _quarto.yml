@@ -62,11 +62,8 @@ website:
         contents:
           - href: day-2/index.qmd
             text: "Overview"
-          # Materials available on Day 2
-          # - href: day-2/slides-lasso.qmd
-          #   text: "Slides: LASSO & Ridge"
-          # - href: day-2/slides-trees.qmd
-          #   text: "Slides: Trees & Ensembles"
+          - href: day-2/slides-lasso.qmd
+            text: "Slides: ML & Tree-based Methods"
           - href: day-2/notebook-lasso.qmd
             text: "LASSO & Ridge (Python)"
           - href: day-2/notebook-lasso-r.qmd
