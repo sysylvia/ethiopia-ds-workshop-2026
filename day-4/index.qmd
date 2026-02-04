@@ -37,6 +37,10 @@ By the end of Day 4, you will be able to:
 
 - [Supply Chain ABM Notebook](notebook-abm.qmd) - Build and run the Ethiopia antibiotic supply chain model
 
+### Interactive Dashboard
+
+- [Ethiopia ABM Dashboard](https://huggingface.co/spaces/sysylvia/ethiopia-abm-dashboard){target="_blank"} - Animated visualization of supply chain scenarios
+
 ### Shared Resources
 
 [Access Shared Drive](https://drive.google.com/drive/folders/1Z9H4SpAsRT6HqCe1pT82WyX93xiKeBe5?usp=drive_link){.btn .btn-primary}
