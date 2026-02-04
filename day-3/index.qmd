@@ -23,7 +23,7 @@ By the end of Day 3, you will be able to:
 |------|---------|------|-----------|
 | 8:30-10:30 | Modeling Concepts (SD vs ABM) | Ozawa | [Slides](https://docs.google.com/presentation/d/1mExPSrpkTDc9qyMVfpQxlS_tJ9KW75hL/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) |
 | 10:30-10:50 | *Break* | | |
-| 10:50-12:30 | Integration: ML to Simulation | Joint | *Coming soon* |
+| 10:50-12:30 | Integration: ML to Simulation | Joint | [Slides](slides-ml-abm-integration.qmd) |
 | 12:30-1:30 | *Lunch* | | |
 | 1:30-3:00 | Supply Chain Simulation Foundations | Ozawa | [Slides](https://docs.google.com/presentation/d/171A5lanQATnGRdY0dIIJYDbjyb7MEHn4/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) |
 | 3:00-3:20 | *Break* | | |
@@ -34,7 +34,7 @@ By the end of Day 3, you will be able to:
 ### Slides
 
 - [Modeling Concepts](https://docs.google.com/presentation/d/1mExPSrpkTDc9qyMVfpQxlS_tJ9KW75hL/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) - System Dynamics vs Agent-Based approaches
-- ML-ABM Integration - *Coming soon*
+- [ML-ABM Integration](slides-ml-abm-integration.qmd) - Integrating Machine Learning and Agent-Based Models
 
 ### Hands-on Exercise
 
