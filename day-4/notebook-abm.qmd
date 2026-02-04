@@ -1,0 +1,117 @@
+---
+title: "Hands-on: Supply Chain Agent-Based Model"
+subtitle: "Day 4 | Building and Running the Ethiopia ABM"
+---
+
+## Open in Google Colab
+
+Click the badge below to open this notebook directly in Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sysylvia/ethiopia-ds-workshop-2026/blob/main/notebooks/06-antibiotic-supply-chain-abm.ipynb)
+
+::: {.callout-tip}
+## Save Your Work
+After opening, go to **File > Save a copy in Drive** to save your progress.
+:::
+
+## Learning Objectives
+
+In this hands-on session, you will:
+
+1. Build a comprehensive agent-based model using Mesa
+2. Model Ethiopia's antibiotic supply chain (manufacturers → central store → hospitals → CHCs)
+3. Connect ML predictions from Day 2 as the demand drivers
+4. Run and compare 8 different scenarios
+5. Analyze policy implications for supply chain resilience
+
+## Prerequisites
+
+- Completed Day 2 notebooks (understanding of demand forecasting)
+- Completed Day 3 integration notebook (ML-ABM connection concepts)
+
+## The Model
+
+The ABM simulates Ethiopia's antibiotic supply chain:
+
+| Entity | Count | Role |
+|--------|-------|------|
+| Manufacturers | 2 | Produce antibiotics |
+| Central Medical Store (EPSA) | 1 | National distribution hub |
+| Regional Hospitals | 3 | Intermediate distribution |
+| Community Health Centers | 100 | Point of care delivery |
+| Health Workers | 100 | Service delivery (with absenteeism) |
+
+**Key concept:** The ML forecasts from Day 2 directly drive demand in this model. We test: *Given this predicted demand, how well can the supply chain respond under various scenarios?*
+
+## Exercise Overview
+
+### Part 1: Model Setup (20 min)
+
+- Install Mesa and dependencies
+- Define agent classes (manufacturers, stores, hospitals, CHCs)
+- Initialize the supply chain structure
+
+### Part 2: Base Scenario (20 min)
+
+- Run 60-month baseline simulation
+- Analyze shortages, wastage, and deaths
+- Visualize the 4-panel dashboard
+
+### Part 3: Scenario Comparison (40 min)
+
+Run and compare 8 scenarios:
+
+| Scenario | Description |
+|----------|-------------|
+| Base | Default parameters |
+| Weather Delays | Double transit time (4 months) |
+| Disease Outbreak | 25 CHCs with 3x demand |
+| Advance Ordering | Order 4 months ahead |
+| Manufacturer Failure | One manufacturer fails for 12 months |
+| Optimized Policy | Student-tuned parameters |
+| AMR Substitution | 30% Penicillin resistance emerges |
+| Private Sector | 25% demand diverted to private sector |
+
+### Part 4: Policy Analysis (20 min)
+
+- Interpret results for policymakers
+- Identify key leverage points
+- Discuss equity implications
+
+## Key Concepts
+
+### ML Predictions as Demand
+
+```
+Day 2 ML Model → Demand Forecasts → ABM Input
+                                   ↓
+                         Supply Chain Response
+                                   ↓
+                         Shortages / Wastage / Deaths
+```
+
+### Age-Stratified Outcomes
+
+The model tracks outcomes by age group:
+
+| Age Group | Population % | Mortality if Untreated |
+|-----------|--------------|------------------------|
+| Children (<15) | 35% | 5% |
+| Adults (15-64) | 55% | 2% |
+| Elderly (65+) | 10% | 8% |
+
+### Supply Chain Metrics
+
+- **Shortages**: Demand not met (leads to deaths)
+- **Wastage**: Medicines expired before use
+- **Missed opportunities**: Health worker absent
+
+## After This Session
+
+You will have:
+
+- Experience building agent-based models with Mesa
+- Understanding of supply chain dynamics and resilience
+- Insight into how ML predictions integrate with simulations
+- Policy recommendations based on scenario analysis
+- Foundation for the WISE project's integrated modeling approach

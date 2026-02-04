@@ -6,7 +6,6 @@ project:
     - "day-*/**/*.qmd"
     - "resources/**/*.qmd"
     - "notebooks/**/*.ipynb"
-    - "!notebooks/06-antibiotic-supply-chain-abm.ipynb"
     - "!reference/"
 
 format:
@@ -91,10 +90,14 @@ website:
         contents:
           - href: day-3/index.qmd
             text: "Overview"
+          - href: day-3/notebook-integration.qmd
+            text: "ML to ABM Integration (Python)"
       - section: "Day 4: ABM Deep Dive"
         contents:
           - href: day-4/index.qmd
             text: "Overview"
+          - href: day-4/notebook-abm.qmd
+            text: "Supply Chain ABM (Python)"
       - section: "Days 5-6: HTA & Economic Evaluation"
         contents:
           - href: day-5/index.qmd

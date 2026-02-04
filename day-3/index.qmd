@@ -27,7 +27,7 @@ By the end of Day 3, you will be able to:
 | 12:30-1:30 | *Lunch* | | |
 | 1:30-3:00 | Supply Chain Simulation Foundations | Ozawa | [Slides](https://docs.google.com/presentation/d/171A5lanQATnGRdY0dIIJYDbjyb7MEHn4/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) |
 | 3:00-3:20 | *Break* | | |
-| 3:20-5:00 | Hands-on: Introduction to ABM | Joint | *Coming soon* |
+| 3:20-5:00 | Hands-on: Introduction to ABM | Joint | [Notebook](notebook-integration.qmd) |
 
 ## Materials
 
