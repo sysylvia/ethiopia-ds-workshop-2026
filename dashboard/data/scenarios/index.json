@@ -1,0 +1,66 @@
+{
+  "base": {
+    "name": "Base Case",
+    "totals": {
+      "shortages": 88925,
+      "deaths": 2577,
+      "wastage": 1265802
+    }
+  },
+  "weather_delays": {
+    "name": "Weather Delays",
+    "totals": {
+      "shortages": 216388,
+      "deaths": 6626,
+      "wastage": 1390132
+    }
+  },
+  "disease_outbreak": {
+    "name": "Disease Outbreak",
+    "totals": {
+      "shortages": 500642,
+      "deaths": 14937,
+      "wastage": 74273
+    }
+  },
+  "advance_ordering": {
+    "name": "Advance Ordering",
+    "totals": {
+      "shortages": 88925,
+      "deaths": 2577,
+      "wastage": 1265802
+    }
+  },
+  "manufacturer_failure": {
+    "name": "Manufacturer Failure",
+    "totals": {
+      "shortages": 103484,
+      "deaths": 2910,
+      "wastage": 708201
+    }
+  },
+  "optimization_challenge": {
+    "name": "Optimized Policy",
+    "totals": {
+      "shortages": 88925,
+      "deaths": 2577,
+      "wastage": 1265802
+    }
+  },
+  "amr_substitution": {
+    "name": "AMR Substitution",
+    "totals": {
+      "shortages": 89956,
+      "deaths": 2606,
+      "wastage": 1351162
+    }
+  },
+  "private_sector": {
+    "name": "Private Sector",
+    "totals": {
+      "shortages": 47532,
+      "deaths": 1310,
+      "wastage": 2151263
+    }
+  }
+}
