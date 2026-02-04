@@ -13,6 +13,8 @@ format:
     incremental: false
     center: true
     scrollable: true
+    toc: true
+    toc-depth: 1
     footer: "WISE Workshop | Data Sciences for Modeling & HTA"
 execute:
   echo: false
@@ -64,7 +66,6 @@ By the end of this session, you will be able to...
 :::
 ::::
 
-. . .
 
 > **Together**: ML provides *data-driven predictions* that inform *mechanistic simulations*
 
@@ -113,7 +114,6 @@ Train ML on **real-world data** → use predictions to **parameterize agent deci
 
 $$\text{Real Data} \xrightarrow{\text{Train ML}} \text{Model} \xrightarrow{\text{Predict}} \text{Agent Parameters}$$
 
-. . .
 
 ### Example: Cholera ABM (Zhang et al., 2019)
 
@@ -171,7 +171,6 @@ Zhang et al. (2019). *Environmental Modelling & Software*
 - Traditional calibration is **computationally expensive**
 - Need to match simulation outputs to real-world data
 
-. . .
 
 ### The Solution
 
@@ -185,7 +184,6 @@ $$\text{Observed Data} \xrightarrow{\text{ML Model}} \text{ABM Parameters}$$
 
 ![ML learns the inverse mapping from outputs to parameters](images/ml-calibration-workflow.png){fig-align="center" width="90%"}
 
-. . .
 
 ### Example Results
 
@@ -232,7 +230,6 @@ Gaskin et al. (2023). *PNAS*
 - Rules may change over time (adaptive behavior)
 - Hard to specify rules from first principles
 
-. . .
 
 ### The Solution
 
@@ -246,7 +243,6 @@ $$\text{Agent State} \xrightarrow{\text{ML Model}} \text{Agent Decision}$$
 
 ![Agents with different decision-making approaches interacting in ABM](images/ml-driven-behaviors.png){fig-align="center" width="90%"}
 
-. . .
 
 ### Example
 
@@ -289,7 +285,6 @@ $$\text{Agent State} \xrightarrow{\text{ML Model}} \text{Agent Decision}$$
 - Can't run thousands of scenarios for sensitivity analysis
 - Real-time decisions need fast predictions
 
-. . .
 
 ### The Solution
 
@@ -343,7 +338,6 @@ $$\text{ABM Inputs} \xrightarrow{\text{Neural Network}} \text{ABM Outputs (Appro
 - Gradient-based optimization needs derivatives
 - Traditional ABMs use discrete, non-differentiable operations
 
-. . .
 
 ### The Solution
 
@@ -357,7 +351,6 @@ $$\frac{\partial \text{Loss}}{\partial \text{Parameters}} \xrightarrow{\text{Gra
 
 ![End-to-end differentiable ABM with backpropagation through simulation](images/gradabm-flow.png){fig-align="center" width="90%"}
 
-. . .
 
 ### COVID-19 Application
 
@@ -405,7 +398,6 @@ Chopra et al. (2023). *AAMAS*
 | **Hybrid/Diff.** | Need end-to-end optimization | Gradient-based policy learning |
 | **LLM Agents** | Cognitive realism, no training budget | Natural reasoning, zero-shot |
 
-. . .
 
 > **Often combine approaches**: e.g., ML calibration + surrogate for sensitivity analysis
 
@@ -445,7 +437,6 @@ Small demand fluctuations at retail level **amplify** up the supply chain.
 
 ![Order variance amplifies upstream in supply chains](images/bullwhip-ascii.png){fig-align="center" width="80%"}
 
-. . .
 
 ### Why It Matters
 
@@ -472,7 +463,6 @@ Small demand fluctuations at retail level **amplify** up the supply chain.
 4. **Action**: How much to order
 5. **Reward**: Minimize holding + backlog costs
 
-. . .
 
 ### Key Result
 
@@ -500,7 +490,6 @@ Oroojlooyjadid et al. (2021). *Manufacturing & Service Operations Management*
 
 ![Forecast uncertainty drives safety stock and reorder decisions](images/ml-inventory-pipeline.png){fig-align="center" width="95%"}
 
-. . .
 
 ### Key Insight
 
@@ -539,7 +528,6 @@ Oroojlooyjadid et al. (2021). *Manufacturing & Service Operations Management*
 :::
 ::::
 
-. . .
 
 > **Takeaway**: Differentiable ABMs enable rapid policy optimization
 
@@ -572,7 +560,6 @@ ABM serves as the **environment** in which an RL agent learns
 | **Reward** | Feedback signal | -(holding cost + stockout cost) |
 | **Policy** | Decision rule | Ordering strategy |
 
-. . .
 
 ### Learning Process
 
@@ -618,7 +605,6 @@ Agent explores actions → observes rewards → updates policy → improves over
 - Example: **AI Economist** — agents + government learn together
 - Challenge: Non-stationary environment
 
-. . .
 
 ### Inverse RL
 
@@ -626,7 +612,6 @@ Agent explores actions → observes rewards → updates policy → improves over
 - "What reward function explains this behavior?"
 - Useful for calibrating agent rules from real data
 
-. . .
 
 > These are active research areas — resources provided at end for those interested
 
@@ -663,7 +648,6 @@ Agent explores actions → observes rewards → updates policy → improves over
 :::
 ::::
 
-. . .
 
 ### Key Result
 
@@ -742,7 +726,6 @@ Piao et al. (2025). AgentSociety.
 | **Cost** | Training upfront | Per-inference API calls |
 | **Behavioral realism** | Optimized | Cognitively plausible |
 
-. . .
 
 > **Tradeoff**: RL gives optimal behavior; LLM gives realistic behavior
 
@@ -754,7 +737,6 @@ Piao et al. (2025). AgentSociety.
 
 ![Hybrid approach: LLM for world modeling, Q-learning for optimization](images/hybrid-mlaq.png){fig-align="center" width="90%"}
 
-. . .
 
 ### The Idea
 
@@ -799,7 +781,6 @@ Piao et al. (2025). AgentSociety.
 :::
 ::::
 
-. . .
 
 > **Future direction** for WISE project: LLM agents for scenario exploration
 
@@ -824,7 +805,6 @@ Piao et al. (2025). AgentSociety.
 | **Day 4** | ABM simulation | Supply chain model |
 | **Day 5** | Policy analysis | Intervention recommendations |
 
-. . .
 
 ### Integration Type
 
@@ -870,7 +850,6 @@ agent_params = {
 4. **Format** outputs for ABM input
 5. **Visualize** the forecast → policy connection
 
-. . .
 
 ### Key Questions to Consider
 
@@ -906,7 +885,6 @@ We'll build a **supply chain ABM** where agents make ordering decisions
 :::
 ::::
 
-. . .
 
 ### Discussion Questions (5 min with neighbor)
 
@@ -932,7 +910,6 @@ We'll build a **supply chain ABM** where agents make ordering decisions
 | Policy optimization, gradient-based | **Hybrid/Differentiable** (Approach 5) |
 | Cognitive realism, no training budget | **LLM Agents** (emerging) |
 
-. . .
 
 > **WISE Project**: Approach 1 (ML forecasts → ordering parameters) + potential Surrogate for sensitivity
 
@@ -1021,7 +998,6 @@ We'll build a **supply chain ABM** where agents make ordering decisions
 :::
 ::::
 
-. . .
 
 > This workflow combines multiple integration approaches for robust policy analysis
 
@@ -1039,7 +1015,6 @@ We'll build a **supply chain ABM** where agents make ordering decisions
 - **Hybrid/Diff.**: End-to-end differentiable optimization
 - **LLM Agents**: Natural language reasoning (emerging)
 
-. . .
 
 ### 2. Choose Based on Your Need
 
@@ -1049,7 +1024,6 @@ We'll build a **supply chain ABM** where agents make ordering decisions
 - Policy optimization → Hybrid/RL
 - Cognitive realism, no training → LLM Agents
 
-. . .
 
 ### 3. WISE Project Approach
 
@@ -1089,7 +1063,6 @@ ML forecasts → ABM parameters → Policy simulation
 - Building your first Mesa model
 - Hands-on: Simple supply chain agent
 
-. . .
 
 ### Day 4
 
@@ -1111,7 +1084,6 @@ ML forecasts → ABM parameters → Policy simulation
 
 3. How might we validate that our ML → ABM integration produces realistic results?
 
-. . .
 
 ### Let's discuss before the hands-on session!
 
