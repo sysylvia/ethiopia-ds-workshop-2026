@@ -60,7 +60,7 @@ subtitle: "February 2-7, 2026 | Addis Ababa University"
 
 | Time | Session | Lead | Materials |
 |------|---------|------|-----------|
-| 8:30-10:30 | Agent-Based Modeling for Supply Chains | Ozawa | |
+| 8:30-10:30 | Agent-Based Modeling for Supply Chains | Ozawa | [Slides](https://docs.google.com/presentation/d/1OQIBfM16WmXo60O_tVTvD1DCavP6ZE2v/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) |
 | 10:30-10:50 | *Break* | | |
 | 10:50-12:30 | ABM Implementation | Ozawa | |
 

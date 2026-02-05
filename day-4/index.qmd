@@ -25,7 +25,7 @@ By the end of Day 4, you will be able to:
 
 | Time | Session | Lead | Materials |
 |------|---------|------|-----------|
-| 8:30-10:30 | Agent-Based Modeling for Supply Chains | Ozawa | Slides |
+| 8:30-10:30 | Agent-Based Modeling for Supply Chains | Ozawa | [Slides](https://docs.google.com/presentation/d/1OQIBfM16WmXo60O_tVTvD1DCavP6ZE2v/edit?usp=sharing&ouid=100050086690745501372&rtpof=true&sd=true) |
 | 10:30-10:50 | *Break* | | |
 | 10:50-12:30 | ABM Implementation Workshop | Joint | [Notebook](notebook-abm.qmd) |
 | 12:30-1:30 | *Lunch* | | |
